@@ -1,62 +1,49 @@
-# Configuration file for the Sphinx documentation builder.
-#
-# For the full list of built-in configuration values, see the documentation:
-# https://www.sphinx-doc.org/en/master/usage/configuration.html
-
 # -- Path setup --------------------------------------------------------------
 
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-#
 # import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
 
 # -- Project information -----------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = "LESSON NAME"
-html_title = project
-copyright = "2020, The contributors"
-author = "The contributors"
-github_user = "coderefinery"
+project = "Practical Machine Learning"
+copyright = "2026 Yonglei Wang"
+author = "Yonglei Wang"
+github_user = "BlackJack's Nook"
 github_repo_name = ""  # auto-detected from dirname if blank
 github_version = "main"
 conf_py_path = "/content/"  # with leading and trailing slash
 
-# -- General configuration ---------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
+# -- General configuration ---------------------------------------------------
 # Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
+# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = [
     # githubpages just adds a .nojekyll file
     "sphinx.ext.githubpages",
     "sphinx_lesson",
     # remove once sphinx_rtd_theme updated for contrast and accessibility:
     "sphinx_rtd_theme_ext_color_contrast",
+    "sphinx.ext.todo",
 ]
 
-# Settings for myst_nb:
-# https://myst-nb.readthedocs.io/en/latest/use/execute.html#triggering-notebook-execution
-# jupyter_execute_notebooks = "off"
-# jupyter_execute_notebooks = "auto"   # *only* execute if at least one output is missing.
-# jupyter_execute_notebooks = "force"
-nb_execution_mode = "cache"
 
-# https://myst-parser.readthedocs.io/en/latest/syntax/optional.html
+# Settings for myst_nb:
+nb_execution_mode = "cache"
+jupyter_execute_notebooks = "off"
 myst_enable_extensions = [
     "colon_fence",
 ]
 
+
 # Settings for sphinx-copybutton
 copybutton_exclude = ".linenos, .gp"
 
-# Add any paths that contain templates here, relative to this directory.
-# templates_path = ['_templates']
+
+
+html_title = project
+
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -76,12 +63,19 @@ exclude_patterns = [
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-#
+
+html_static_path = ['_static']
+html_css_files = ["overrides.css"]
+
 html_theme = "sphinx_rtd_theme"
+html_logo = "./_static/blackjack-s-nook.png"
+html_favicon = "./_static/favicon.ico"
+
 html_theme_options = {
     #"prev_next_buttons_location": False,
     "style_external_links": True,
 }
+
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -101,17 +95,25 @@ html_context = {
     "conf_py_path": conf_py_path,
 }
 
-# Intersphinx mapping.  For example, with this you can use
-# :py:mod:`multiprocessing` to link straight to the Python docs of that module.
-# List all available references:
-#   python -msphinx.ext.intersphinx https://docs.python.org/3/objects.inv
-# extensions.append('sphinx.ext.intersphinx')
-# intersphinx_mapping = {
-#    #'python': ('https://docs.python.org/3', None),
-#    #'sphinx': ('https://www.sphinx-doc.org/', None),
-#    #'numpy': ('https://numpy.org/doc/stable/', None),
-#    #'scipy': ('https://docs.scipy.org/doc/scipy/reference/', None),
-#    #'pandas': ('https://pandas.pydata.org/docs/', None),
-#    #'matplotlib': ('https://matplotlib.org/', None),
-#    'seaborn': ('https://seaborn.pydata.org/', None),
-# }
+
+# add few new directives
+from sphinx_lesson.directives import _BaseCRDirective
+
+class SignatureDirective(_BaseCRDirective):
+    extra_classes = ["toggle-shown", "dropdown"]
+
+class ParametersDirective(_BaseCRDirective):
+    extra_classes = ["dropdown"]
+
+class TypealongDirective(_BaseCRDirective):
+    extra_classes = ["toggle-shown", "dropdown"]
+
+
+DIRECTIVES = [SignatureDirective, ParametersDirective, TypealongDirective]
+
+def setup(app):
+    for obj in DIRECTIVES:
+        app.add_directive(obj.cssname(), obj)
+
+
+
