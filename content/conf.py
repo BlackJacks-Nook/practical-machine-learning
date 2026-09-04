@@ -72,7 +72,7 @@ html_logo = "./_static/blackjack-s-nook.png"
 html_favicon = "./_static/favicon.ico"
 
 html_theme_options = {
-    #"prev_next_buttons_location": False,
+    "prev_next_buttons_location": True,
     "style_external_links": True,
 }
 
