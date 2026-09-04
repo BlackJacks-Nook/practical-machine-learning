@@ -1,5 +1,6 @@
 ## Practical Machine Learning
 
+
 Machine learning (ML) is a rapidly growing field within artificial intelligence (AI) that focuses on building systems capable of learning from data. Instead of being explicitly programmed with detailed rules, ML models identify patterns and make predictions or decisions based on historical data. This approach has revolutionized many industries, including healthcare, finance, marketing, and technology, enabling applications like personalized recommendations, fraud detection, and speech recognition. As volume of data continues to grow, understanding ML concepts and techniques becomes increasingly important for anyone interested in working with data or building intelligent systems.
 
 This course provides a gentle introduction to fundamental principles and techniques of ML. We begin with fundamentals of ML, covering main types of ML, essential learning tasks, general workflow, commonly used libraries, and key steps in data preparation and processing. Then we dive into four core learning tasks (classification and regression in supervised learning, and clustering and dimensionality reduction in unsupervised learning) and demonstrate how to apply differnet algorithms to construct learning models, train them on datasets, evaluate their performance, visualize results, and fine-tune hyperparameters to improve model’s accuracy and efficiency.
@@ -36,10 +37,10 @@ This course is intended for researchers and engineers transitioning into ML lear
 :caption: Lesson Episodes
 :maxdepth: 1
 
-1-intro-to-ml
-2-fundamentals-of-ml.ipynb
-3-scientific-data-for-ml.md
-4-data-preparation-for-ml.ipynb
+episodes/1-intro-to-ml
+episodes/2-fundamentals-of-ml
+episodes/3-scientific-data-for-ml
+episodes/4-data-preparation-for-ml
 :::
 ::::
 

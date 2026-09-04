@@ -26,7 +26,7 @@ ML is a field of computer science that studies algorithms and techniques enablin
 - Choice between them depends on problem, data availability, and complexity.
 
 
-:::{figure} ./images/fundamentals/classic-programming-vs-ml.jpg
+:::{figure} ../images/fundamentals/classic-programming-vs-ml.jpg
 :align: center
 :width: 80%
 
@@ -48,7 +48,7 @@ In addition, ML empowers automation of complex tasks that were previously depend
 ## 3. Relation with AI and DL
 
 
-:::{figure} ./images/fundamentals/relationship-ai-ml-dl.png
+:::{figure} ../images/fundamentals/relationship-ai-ml-dl.png
 :align: center
 :width: 50%
 
@@ -83,7 +83,7 @@ ML has been evolving in stages of increasing complexity in following four clearl
 - Following diagram represents these four stages of development towards real AI applications.
 
 
-:::{figure} /images/fundamentals/ml-in-big-picture.png
+:::{figure} ../images/fundamentals/ml-in-big-picture.png
 :align: center
 :width: 80%
 
@@ -131,7 +131,7 @@ AI从20世纪中叶至今经历了**三次高潮(起)和两次低谷(落)**
 	- 第三次起：数据、算力、算法三要素齐备，推动深度学习爆发
 
 
-:::{figure} ./images/fundamentals/three-booms-two-winters-of-ai.jpg
+:::{figure} ../images/fundamentals/three-booms-two-winters-of-ai.jpg
 :align: center
 :width: 80%
 
@@ -153,3 +153,4 @@ ML is used across a wide range of industries and real-world problems in healthca
 | Natural language processing (NLP) | Chatbots and virtual assistants, sentiment analysis, <br>language translation |
 | Manufacturing & industry | Predictive maintenance, quality control, <br>supply chain optimization |
 | Computer Vision | Facial recognition, object detection, image classification |
+
