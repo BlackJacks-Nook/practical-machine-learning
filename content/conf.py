@@ -8,9 +8,9 @@
 # -- Project information -----------------------------------------------------
 
 project = "Practical Machine Learning"
-copyright = "2026 Yonglei Wang"
+copyright = "| BlackJack's Nook | 2026"
 author = "Yonglei Wang"
-github_user = "BlackJack's Nook"
+github_user = "BlackJacks-Nook"
 github_repo_name = ""  # auto-detected from dirname if blank
 github_version = "main"
 conf_py_path = "/content/"  # with leading and trailing slash
@@ -72,7 +72,7 @@ html_logo = "./_static/blackjack-s-nook.png"
 html_favicon = "./_static/favicon.ico"
 
 html_theme_options = {
-    "prev_next_buttons_location": True,
+    "prev_next_buttons_location": "both",
     "style_external_links": True,
 }
 

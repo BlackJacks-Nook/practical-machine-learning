@@ -5,9 +5,6 @@ Machine learning (ML) is a rapidly growing field within artificial intelligence 
 
 This course provides a gentle introduction to fundamental principles and techniques of ML. We begin with fundamentals of ML, covering main types of ML, essential learning tasks, general workflow, commonly used libraries, and key steps in data preparation and processing. Then we dive into four core learning tasks (classification and regression in supervised learning, and clustering and dimensionality reduction in unsupervised learning) and demonstrate how to apply differnet algorithms to construct learning models, train them on datasets, evaluate their performance, visualize results, and fine-tune hyperparameters to improve model’s accuracy and efficiency.
 
-Through a combination of theory and hands-on exercises with Python and popular libraries, attendees will build a solid foundation in ML, and then apply essential knowledge in a capstone project, developing a complete pipeline to solve real-world problems. In addition, this knowledge will serve as a valuable stepping stone for those wishing to explore more advanced topics or specialize in areas such as deep learning (DL), natural language processing (NLP), or computer vision (CV).
-
-
 This course is intended for researchers and engineers transitioning into ML learning domain with no prior experience, beginners in data science or machine learning who want a practical starting point, and software developers and data professionals looking to add machine learning to their skillset. Whether you’re new to ML or looking to strengthen your foundations and practical skills, this course will help you get started quickly and confidently through a computationally-intensive approach.
 
 
