@@ -1,0 +1,485 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scientific Data for Machine Learning &mdash; Practical Machine Learning</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx_lesson.css?v=e9df6548" />
+      <link rel="stylesheet" type="text/css" href="../../_static/term_role_formatting.css?v=4194e21c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx_rtd_theme_ext_color_contrast.css?v=8e8ea19f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/overrides.css?v=77c0d755" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=187304be"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=35a8b989"></script>
+      <script src="../../_static/minipres.js?v=a0d29692"></script>
+      <script>let toggleHintShow = 'Click to show';</script>
+      <script>let toggleHintHide = 'Click to hide';</script>
+      <script>let toggleOpenOnPrint = 'true';</script>
+      <script src="../../_static/togglebutton.js?v=b8b12719"></script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex/" />
+    <link rel="search" title="Search" href="../../search/" />
+    <link rel="next" title="Data Preparation for Machine Learning" href="../4-data-preparation-for-ml/" />
+    <link rel="prev" title="Fundamentals of Machine Learning" href="../2-fundamentals-of-ml/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../" class="icon icon-home">
+            Practical Machine Learning
+              <img src="../../_static/blackjack-s-nook.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Lesson Episodes</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../1-intro-to-ml/">Introduction to Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2-fundamentals-of-ml/">Fundamentals of Machine Learning</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Scientific Data for Machine Learning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#big-data">1. Big Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#understanding-scientific-data">2. Understanding Scientific Data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#types-of-scientific-data">2.1 Types of scientific data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#forms-of-scientific-data">2.2 Forms of scientific data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#data-storage-format">3. Data Storage Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-structures-for-ml-dl">4. Data Structures for ML/DL</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../4-data-preparation-for-ml/">Data Preparation for Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../5-classification/">Classification</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../">Practical Machine Learning</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Scientific Data for Machine Learning</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/BlackJacks-Nook/content/blob/main/content/episodes/3-scientific-data-for-ml.ipynb" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="../2-fundamentals-of-ml/" class="btn btn-neutral float-left" title="Fundamentals of Machine Learning" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../4-data-preparation-for-ml/" class="btn btn-neutral float-right" title="Data Preparation for Machine Learning" accesskey="n">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="scientific-data-for-machine-learning">
+<h1>Scientific Data for Machine Learning<a class="headerlink" href="#scientific-data-for-machine-learning" title="Link to this heading"></a></h1>
+<div class='alert alert-info'>
+<div class="admonition-objectives objectives admonition" id="objectives-0">
+<p class="admonition-title">Objectives</p>
+<ul class="simple">
+<li><p>Describe key characteristics of big data – 4Vs.</p></li>
+<li><p>Gain an overview of scientific data with types and forms of data.</p></li>
+<li><p>Explain representative data storage formats and their pros and cons.</p></li>
+<li><p>Understand data structures for ML/DL.</p></li>
+</ul>
+</div>
+</div><div class='alert alert-success'>
+<div class="admonition-instructor-note instructor-note admonition" id="instructor-note-0">
+<p class="admonition-title">Instructor note</p>
+<ul class="simple">
+<li><p>20 min teaching</p></li>
+<li><p>20 min exercises/discussion</p></li>
+</ul>
+</div>
+</div><section id="big-data">
+<h2>1. Big Data<a class="headerlink" href="#big-data" title="Link to this heading"></a></h2>
+<p>Big Data refers to datasets that are so large, complex, or fast-changing that traditional data processing tools cannot handle them efficiently.</p>
+<ul class="simple">
+<li><p>It encompasses not only sheer <strong>volume</strong> of data but also its <strong>variety</strong>, <strong>velocity</strong>, and <strong>veracity</strong> — often summarized as <strong>4 Vs</strong> of big data.</p>
+<ul>
+<li><p>These datasets can come from numerous sources, including social media, sensor networks, scientific experiments, and transactional systems.</p></li>
+<li><p>Ability to collect and analyze such massive amounts of information allows organizations and researchers to uncover trends, correlations, and insights that would be impossible to detect with smaller datasets.</p></li>
+</ul>
+</li>
+<li><p>Emergence of big data has transformed multiple domains, from business analytics and healthcare to climate science and genomics.</p>
+<ul>
+<li><p>Advanced computational methods, distributed storage systems, and parallel processing frameworks such as Hadoop and Spark have become essential for managing and analyzing these vast datasets.</p></li>
+<li><p>Efficient handling of big data enables organizations to make data-driven decisions, optimize operations, and identify opportunities for innovation.</p></li>
+</ul>
+</li>
+</ul>
+<p>In context of ML, big data provides raw material that fuels learning process.</p>
+<ul class="simple">
+<li><p>Large and diverse datasets allow ML models to capture complex patterns, generalize well to unseen data, and improve predictive performance.</p>
+<ul>
+<li><p>Without sufficient and high-quality data, even most sophisticated algorithms cannot perform effectively.</p></li>
+<li><p>From image recognition to NLP, every ML application depends on properly curated datasets for training, validation, and testing.</p></li>
+</ul>
+</li>
+<li><p>Therefore, data is backbone of ML as it serves as foundation for training models to recognize patterns, make predictions, and generate insights.</p>
+<ul>
+<li><p>In addition, data determines applicability and scalability of ML solutions across domains, from scientific research to real-world applications.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="understanding-scientific-data">
+<h2>2. Understanding Scientific Data<a class="headerlink" href="#understanding-scientific-data" title="Link to this heading"></a></h2>
+<p>Scientific data refers to any form of data that is collected, observed, measured, or generated as part of scientific research or experimentation.</p>
+<ul class="simple">
+<li><p>This data is used to support scientific analysis, develop theories, and validate hypotheses.</p></li>
+<li><p>It can come from a wide range of sources, including experiments, simulations, observations, or surveys across various scientific fields.</p></li>
+<li><p>In general, scientific data can be described ty two terms: <strong>types of data</strong> and <strong>forms of data</strong>.</p></li>
+<li><p>They are related but distinct</p>
+<ul>
+<li><p>types describe nature of the data</p></li>
+<li><p>forms describe how data is structured and formatted (and stored, which will be discussed below)</p></li>
+</ul>
+</li>
+</ul>
+<section id="types-of-scientific-data">
+<h3>2.1 Types of scientific data<a class="headerlink" href="#types-of-scientific-data" title="Link to this heading"></a></h3>
+<p>Types of scientific data refer to what data represents, and it focuses on nature or category of data content.</p>
+<ul class="simple">
+<li><p>At lowest level (Hardware- and system-level view), all data are represented as <strong>bits</strong> and <strong>bytes</strong>.</p>
+<ul>
+<li><p>smallest unit of storage in a computer is a <strong>bit</strong>, which holds either a 0 or a 1</p></li>
+<li><p>typically, eight bits are grouped together to form a <strong>byte</strong></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">01000001</span></code> → <code class="docutils literal notranslate"><span class="pre">A</span></code> → a character in text</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">01000001</span></code> → <code class="docutils literal notranslate"><span class="pre">65</span></code> → an integer</p></li>
+</ul>
+</li>
+<li><p>At a higher, semantic level, data can take forms such as numerical data, text data, and metadata.</p></li>
+</ul>
+<p><strong>Numerical data</strong> are commonly represented as integers and floating-point numbers.</p>
+<ul class="simple">
+<li><p><em>Integers</em> are used to represent exact, discrete quantities, such as counts, indices, labels, or class identifiers, and they support precise arithmetic without rounding error.</p></li>
+<li><p><em>Floating-point numbers</em>, by contrast, represent real-valued quantities with fractional components and are essential for modeling continuous phenomena. Because floating-point representations are finite approximations of real numbers, they introduce rounding errors, making numerical stability an important consideration in scientific and ML computations.</p>
+<ul>
+<li><p>In ML/DL, <strong>numerical precision plays a critical role in balancing accuracy, memory usage, and computational efficiency</strong>.</p></li>
+<li><p>Common floating-point precisions include half-accurate, single precision (32-bit), double precision (64-bit).</p>
+<ul>
+<li><p><em>Single precision</em> is most widely used format in ML and DL, as it provides sufficient numerical accuracy while enabling efficient computation on modern hardware such as GPUs.</p></li>
+<li><p><em>Half precision</em> reduces memory consumption and increases training speed, particularly for large NNs, but requires careful handling to avoid numerical underflow or overflow.</p></li>
+<li><p><em>Double precision</em> offers higher numerical accuracy and stability, making it valuable for scientific simulations and sensitive calculations, though it is generally more computationally expensive.</p></li>
+</ul>
+</li>
+<li><p>In practice, ML and DL systems balance these precision levels to achieve an optimal trade-off between performance and accuracy.</p></li>
+<li><p>Many modern frameworks, like TensorFlow and PyTorch, support mixed precision training, combining half and single precision to optimize performance while maintaining stability.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Text data</strong> represent information in form of characters, words, and symbols and are one of most prevalent data types in modern data analysis.</p>
+<ul class="simple">
+<li><p>They arise in a wide range of scientific and real-world contexts, including research articles, medical records, social media content, system logs, and biological sequences.</p></li>
+<li><p>Although text data are naturally meaningful to humans, they are inherently unstructured from a computational perspective and must be systematically processed (converted into numerical representations) before they can be used in ML/DL models.</p></li>
+<li><p>Such process usually starts with basic text preprocessing steps such as tokenization, normalization, and building a vocabulary, and then moves on to feature extraction methods like <strong>bag-of-words</strong> or <strong>TF-IDF</strong>.</p>
+<ul>
+<li><p>More advanced approaches use <strong>embeddings</strong>, where words, subwords, or even characters are represented as dense numerical vectors that capture semantic and syntactic relationships.</p></li>
+<li><p>These representations allow models to understand patterns in language beyond simple keyword matching.</p></li>
+</ul>
+</li>
+<li><p>Modern DL models, particularly NNs such as RNNs, transformers, and LLMs, learn rich and contextualized representations of text directly from data.</p>
+<ul>
+<li><p>These models can capture long-range dependencies, contextual meaning, and linguistic structure, making them effective for tasks such as text classification, information retrieval, machine translation, summarization, and question answering.</p></li>
+<li><p>As a result, text data play a central role in ML and DL, bridging human language and computational intelligence through carefully designed representations and models.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Metadata</strong> are <em>data about data</em>, and they provide information that describes, explains, or gives context to primary data, such as units (<code class="docutils literal notranslate"><span class="pre">°C</span></code>), timestamps (<code class="docutils literal notranslate"><span class="pre">2026-01-03</span> <span class="pre">10:00:00</span></code>), identifiers (<code class="docutils literal notranslate"><span class="pre">Sensor_ID</span> <span class="pre">=</span> <span class="pre">T-017</span></code>), and other descriptive attributes.</p>
+<ul class="simple">
+<li><p>Metadata do not represent main content itself, but instead tell us what data are, how they were generated, and how they should be interpreted.</p></li>
+<li><p>In ML/DL, metadata play a critical role throughout data and model lifecycle. They help define features and labels, document dataset structure, and record how data are split into training, validation, and testing sets.</p></li>
+<li><p>Contextual information such as timestamps, locations, device types, or user attributes can complement primary data like images, text, or signals and significantly improve model performance.</p></li>
+<li><p>As a result, metadata are not only foundational for data governance and transparency but also an important source of contextual knowledge in modern machine learning and deep learning systems.</p></li>
+</ul>
+</section>
+<section id="forms-of-scientific-data">
+<h3>2.2 Forms of scientific data<a class="headerlink" href="#forms-of-scientific-data" title="Link to this heading"></a></h3>
+<p>Forms of scientific data refer to a way data are organized, represented, and stored, which affects how they can be accessed, analyzed, and processed. Depending on their structure and format, scientific data are typically classified into three main forms: structured data, semi-structured data, and unstructured data. Each form has different characteristics, advantages, and challenges for storage, analysis, and application in scientific research and machine learning.</p>
+<ul class="simple">
+<li><p><strong>Structured data</strong> are highly organized and follow a predefined schema, usually stored in rows and columns in databases or spreadsheets.</p>
+<ul>
+<li><p>Each data element has a fixed data type and format, which makes it easy to search, sort, and analyze using standard statistical methods or ML algorithms.</p></li>
+</ul>
+</li>
+<li><p><strong>Semi-structured data</strong> have some organizational structure but do not conform strictly to a fixed schema.</p>
+<ul>
+<li><p>They contain tags, labels, or metadata that make them partially organized, enabling flexible storage and processing.</p></li>
+<li><p>Examples: JSON or XML files storing experimental logs</p></li>
+<li><p>A Jupyter NB (.ipynb) is primarily a file format that stores code, outputs, text, and metadata in JSON format, so NB itself is essentially semi-structured data.</p></li>
+</ul>
+</li>
+<li><p><strong>Unstructured data</strong> lack a predefined structure or schema and are not organized in rows or columns.</p>
+<ul>
+<li><p>They often consist of raw, complex data that require special processing techniques to extract meaningful information.</p></li>
+<li><p>Examples: Text documents, Images, Audios, Video, Raw sensor signals</p></li>
+<li><p>They are rich in information but require advanced processing to extract meaningful features for ML and DL tasks.</p></li>
+</ul>
+</li>
+</ul>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Form</p></th>
+<th class="head text-center"><p>Characteristics</p></th>
+<th class="head text-center"><p>Examples</p></th>
+<th class="head text-center"><p>Typical Use in ML/DL</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>Structured</p></td>
+<td class="text-center"><p>Highly organized, fixed schema</p></td>
+<td class="text-center"><p>Tables, CSV, spreadsheets</p></td>
+<td class="text-center"><p>Most classical ML algorithms</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>Semi-structured</p></td>
+<td class="text-center"><p>Partially organized, flexible schema</p></td>
+<td class="text-center"><p>JSON, XML, logs</p></td>
+<td class="text-center"><p>Integrated date</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>Unstructured</p></td>
+<td class="text-center"><p>No fixed structure</p></td>
+<td class="text-center"><p>Text, images, audio, video</p></td>
+<td class="text-center"><p>DL, NLP, CV</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="data-storage-format">
+<h2>3. Data Storage Format<a class="headerlink" href="#data-storage-format" title="Link to this heading"></a></h2>
+<p>A data storage format defines how data is structured, stored, and represented so it can be efficiently read, processed, and shared between systems or applications.</p>
+<ul class="simple">
+<li><p>There are many types of storage formats used in scientific computing and data analysis.</p></li>
+<li><p><strong>There isn’t one data storage format that works in all cases, so choose a file format that best suits your data</strong>.</p></li>
+<li><p>Choice of format affects storage efficiency, speed of access, compatibility with tools, and ease of use for humans.</p></li>
+</ul>
+<p>Below is an overview of common data formats (✅ for <em>good</em>, 🟨 for <em>ok/depends on a case</em>, and ❌ for <em>bad</em>) adapted from Aalto university’s <a class="reference external" href="https://aaltoscicomp.github.io/python-for-scicomp/work-with-data/#what-is-a-data-format"><strong>Python for scientific computing</strong></a>.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Name</p></th>
+<th class="head text-center"><p>Human <br>readable</p></th>
+<th class="head text-center"><p>Space <br>efficiency</p></th>
+<th class="head text-center"><p>Arbitrary <br>data</p></th>
+<th class="head text-center"><p>Tidy <br>data</p></th>
+<th class="head text-center"><p>Array <br>data</p></th>
+<th class="head text-center"><p>Long term <br>storage/sharing</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>CSV</p></td>
+<td class="text-center"><p>✅</p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-center"><p>✅</p></td>
+<td class="text-center"><p>🟨</p></td>
+<td class="text-center"><p>✅</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>Excel</p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-center"><p>🟨</p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-center"><p>🟨</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>JSON</p></td>
+<td class="text-center"><p>✅</p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-center"><p>🟨</p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-center"><p>✅</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>Pickle</p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-center"><p>🟨</p></td>
+<td class="text-center"><p>✅</p></td>
+<td class="text-center"><p>🟨</p></td>
+<td class="text-center"><p>🟨</p></td>
+<td class="text-center"><p>❌</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>npy</p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-center"><p>🟨</p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-center"><p>✅</p></td>
+<td class="text-center"><p>❌</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>Feather</p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-center"><p>✅</p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-center"><p>✅</p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-center"><p>❌</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>HDF5</p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-center"><p>✅</p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-center"><p>✅</p></td>
+<td class="text-center"><p>✅</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>NetCDF4</p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-center"><p>✅</p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-center"><p>✅</p></td>
+<td class="text-center"><p>✅</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>Parquet</p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-center"><p>✅</p></td>
+<td class="text-center"><p>🟨</p></td>
+<td class="text-center"><p>✅</p></td>
+<td class="text-center"><p>🟨</p></td>
+<td class="text-center"><p>✅</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>Graph formats</p></td>
+<td class="text-center"><p>🟨</p></td>
+<td class="text-center"><p>🟨</p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-center"><p>✅</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="data-structures-for-ml-dl">
+<h2>4. Data Structures for ML/DL<a class="headerlink" href="#data-structures-for-ml-dl" title="Link to this heading"></a></h2>
+<p>Data structures form backbone of ML tasks, and main data structure for ML/DL is <strong>tensor</strong>.</p>
+<ul class="simple">
+<li><p>A tensor is a multi-dimensional array that provides a unified way to represent and manipulate data of different shapes and complexities.</p>
+<ul>
+<li><p><strong>It generalizes scalars, vectors, and matrices to higher dimensions, serving as fundamental data structure in frameworks like TensorFlow and PyTorch</strong>.</p></li>
+<li><p><em>Scalars</em> (single numbers) are considered 0-dimensional tensors, <em>vectors</em> are 1-dimensional tensors, and <em>matrices</em> are 2-dimensional tensors.</p></li>
+<li><p>When extended to higher dimensions, tensors can naturally model more complex data types such as color images (3D: height × width × channels), videos (4D: frames × height × width × channels), or batches of training samples.</p></li>
+</ul>
+</li>
+<li><p>Tensors are central to ML/DL because they align closely with mathematics that underpins most algorithms.</p>
+<ul>
+<li><p>They serve as format for both input data (such as feature vectors or images) and model parameters (such as weights in a NN).</p></li>
+<li><p>Furthermore, operations on tensors, such as addition, multiplication, reshaping, and convolution, are implemented in highly optimized ways by libraries such as NumPy, PyTorch, and TensorFlow.</p></li>
+<li><p>These frameworks make it possible to process large datasets efficiently by leveraging hardware acceleration on GPUs and TPUs.</p></li>
+</ul>
+</li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">display</span>
+<span class="n">display</span><span class="p">(</span><span class="n">Image</span><span class="p">(</span><span class="s1">'../images/data/varied-data-structures.png'</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">1240</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../../_images/6bfe29682bb8fc13c251fc8542e60f772ac3fc79523825aa07cb826e6791e3c7.png"><img alt="../../_images/6bfe29682bb8fc13c251fc8542e60f772ac3fc79523825aa07cb826e6791e3c7.png" src="../../_images/6bfe29682bb8fc13c251fc8542e60f772ac3fc79523825aa07cb826e6791e3c7.png" style="width: 1240px;" />
+</a>
+</div>
+</div>
+<p>Why to use tensors in ML/DL (advantages of Tensor)?</p>
+<ul class="simple">
+<li><p>Generalization of scalars/vectors/matrices: tensors extend these concepts to any number of dimensions, which is essential for handling complex data like images (3D) and videos (4D+).</p></li>
+<li><p>Consistency: tensors unify data structures across ML/DL frameworks, simplifying model building, training, and deployment.</p></li>
+<li><p>Efficient computation: frameworks like TensorFlow and PyTorch optimize tensor operations for speed (using GPUs/TPUs).</p></li>
+<li><p>NN representations: input data (images, text) is converted to tensors.</p></li>
+<li><p>Automatic differentiation: tensors support gradient tracking, which is vital for <strong>backpropagation</strong> in NNs.</p></li>
+</ul>
+<div class='alert alert-success'>
+<div class="admonition-exercise exercise important admonition" id="exercise-0">
+<p class="admonition-title">Exercise</p>
+<p>In <a class="reference internal" href="../../tutorials/3-tensor/"><span class="std std-doc"><strong>Jupyter Notebook</strong></span></a>, we provide a tutorial about tensors including</p>
+<ul class="simple">
+<li><p>tensor creation</p></li>
+<li><p>tensor’s properties (<code class="docutils literal notranslate"><span class="pre">shape</span></code>, <code class="docutils literal notranslate"><span class="pre">dtype</span></code>, <code class="docutils literal notranslate"><span class="pre">ndim</span></code>)</p></li>
+<li><p>tensor operations</p>
+<ul>
+<li><p>indexing, slicing, transposing</p></li>
+<li><p>element-wise operations: addition, subtraction, <em>etc.</em></p></li>
+<li><p>matrix multiplication(<code class="docutils literal notranslate"><span class="pre">np.dot</span></code>, <code class="docutils literal notranslate"><span class="pre">torch.matmul</span></code>)</p></li>
+<li><p>reshaping, flattening, squeezing, unsqueezing</p></li>
+<li><p>reduction operations: <code class="docutils literal notranslate"><span class="pre">sum</span></code>, <code class="docutils literal notranslate"><span class="pre">mean</span></code>, <code class="docutils literal notranslate"><span class="pre">max</span></code> along axes</p></li>
+<li><p>broadcasting: rules and examples</p></li>
+</ul>
+</li>
+<li><p>tensors in DL frameworks</p>
+<ul>
+<li><p>moving tensors between CPUs and GPUs (suppose that you can access to GPU cards)</p></li>
+</ul>
+</li>
+<li><p>converting images (grayscale and color) into tensors</p></li>
+</ul>
+</div>
+</div></section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../2-fundamentals-of-ml/" class="btn btn-neutral float-left" title="Fundamentals of Machine Learning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../4-data-preparation-for-ml/" class="btn btn-neutral float-right" title="Data Preparation for Machine Learning" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright | BlackJack&#39;s Nook | 2026.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

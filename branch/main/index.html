@@ -1,0 +1,158 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Practical Machine Learning &mdash; Practical Machine Learning</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+      <link rel="stylesheet" type="text/css" href="_static/sphinx_lesson.css?v=e9df6548" />
+      <link rel="stylesheet" type="text/css" href="_static/term_role_formatting.css?v=4194e21c" />
+      <link rel="stylesheet" type="text/css" href="_static/sphinx_rtd_theme_ext_color_contrast.css?v=8e8ea19f" />
+      <link rel="stylesheet" type="text/css" href="_static/overrides.css?v=77c0d755" />
+
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=187304be"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=35a8b989"></script>
+      <script src="_static/minipres.js?v=a0d29692"></script>
+      <script>let toggleHintShow = 'Click to show';</script>
+      <script>let toggleHintHide = 'Click to hide';</script>
+      <script>let toggleOpenOnPrint = 'true';</script>
+      <script src="_static/togglebutton.js?v=b8b12719"></script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex/" />
+    <link rel="search" title="Search" href="search/" />
+    <link rel="next" title="Introduction to Machine Learning" href="episodes/1-intro-to-ml/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            Practical Machine Learning
+              <img src="_static/blackjack-s-nook.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Lesson Episodes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="episodes/1-intro-to-ml/">Introduction to Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="episodes/2-fundamentals-of-ml/">Fundamentals of Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="episodes/3-scientific-data-for-ml/">Scientific Data for Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="episodes/4-data-preparation-for-ml/">Data Preparation for Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="episodes/5-classification/">Classification</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">Practical Machine Learning</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Practical Machine Learning</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/BlackJacks-Nook/content/blob/main/content/index.md" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="episodes/1-intro-to-ml/" class="btn btn-neutral float-right" title="Introduction to Machine Learning" accesskey="n">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="practical-machine-learning">
+<h1>Practical Machine Learning<a class="headerlink" href="#practical-machine-learning" title="Link to this heading"></a></h1>
+<p>Machine learning (ML) is a rapidly growing field within artificial intelligence (AI) that focuses on building systems capable of learning from data. Instead of being explicitly programmed with detailed rules, ML models identify patterns and make predictions or decisions based on historical data. This approach has revolutionized many industries, including healthcare, finance, marketing, and technology, enabling applications like personalized recommendations, fraud detection, and speech recognition. As volume of data continues to grow, understanding ML concepts and techniques becomes increasingly important for anyone interested in working with data or building intelligent systems.</p>
+<p>This course provides a gentle introduction to fundamental principles and techniques of ML. We begin with fundamentals of ML, covering main types of ML, essential learning tasks, general workflow, commonly used libraries, and key steps in data preparation and processing. Then we dive into four core learning tasks (classification and regression in supervised learning, and clustering and dimensionality reduction in unsupervised learning) and demonstrate how to apply differnet algorithms to construct learning models, train them on datasets, evaluate their performance, visualize results, and fine-tune hyperparameters to improve model’s accuracy and efficiency.</p>
+<p>This course is intended for researchers and engineers transitioning into ML learning domain with no prior experience, beginners in data science or machine learning who want a practical starting point, and software developers and data professionals looking to add machine learning to their skillset. Whether you’re new to ML or looking to strengthen your foundations and practical skills, this course will help you get started quickly and confidently through a computationally-intensive approach.</p>
+<div class="admonition-prerequisites prerequisites admonition" id="prerequisites-0">
+<p class="admonition-title">Prerequisites</p>
+<ul class="simple">
+<li><p>Familiarity with Python basics (lists, dictionaries, loops, functions) and libraries like NumPy, Pandas, and Matplotlib/Seaborn.</p></li>
+<li><p>Familiarity with basic math concepts (high-school level algebra, functions, vectors, matrices, matrix operations (multiplication, transpose, inverse), eigenvalues, and coordinate systems; no advanced math required).</p></li>
+<li><p>Elementary understanding of statistics (mean, variance, correlation, basic probability).</p></li>
+<li><p>Basic command-line or Jupyter Notebook experience (navigating files, running scripts, installing packages).</p></li>
+<li><p>(Optional but useful): derivatives, gradients, and optimization (especially for understanding gradient descent).</p></li>
+<li><p>(Optional) personal computer with Python environment (<em>e.g.</em>, Anaconda, Jupyter Notebook, or Google Colab) and required libraries (NumPy, Pandas, Scikit-learn, <em>etc.</em>) installed.</p></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Lesson Episodes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="episodes/1-intro-to-ml/">Introduction to Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="episodes/2-fundamentals-of-ml/">Fundamentals of Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="episodes/3-scientific-data-for-ml/">Scientific Data for Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="episodes/4-data-preparation-for-ml/">Data Preparation for Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="episodes/5-classification/">Classification</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="episodes/1-intro-to-ml/" class="btn btn-neutral float-right" title="Introduction to Machine Learning" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright | BlackJack&#39;s Nook | 2026.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

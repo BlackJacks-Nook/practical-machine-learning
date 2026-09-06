@@ -1,0 +1,3186 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Preparation for Machine Learning &mdash; Practical Machine Learning</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx_lesson.css?v=e9df6548" />
+      <link rel="stylesheet" type="text/css" href="../../_static/term_role_formatting.css?v=4194e21c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx_rtd_theme_ext_color_contrast.css?v=8e8ea19f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/overrides.css?v=77c0d755" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=187304be"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=35a8b989"></script>
+      <script src="../../_static/minipres.js?v=a0d29692"></script>
+      <script>let toggleHintShow = 'Click to show';</script>
+      <script>let toggleHintHide = 'Click to hide';</script>
+      <script>let toggleOpenOnPrint = 'true';</script>
+      <script src="../../_static/togglebutton.js?v=b8b12719"></script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex/" />
+    <link rel="search" title="Search" href="../../search/" />
+    <link rel="next" title="Classification" href="../5-classification/" />
+    <link rel="prev" title="Scientific Data for Machine Learning" href="../3-scientific-data-for-ml/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../" class="icon icon-home">
+            Practical Machine Learning
+              <img src="../../_static/blackjack-s-nook.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Lesson Episodes</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../1-intro-to-ml/">Introduction to Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2-fundamentals-of-ml/">Fundamentals of Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../3-scientific-data-for-ml/">Scientific Data for Machine Learning</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Data Preparation for Machine Learning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-is-data-preparation">1. What is Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#collecting-data-from-multiple-sources">2. Collecting Data from Multiple Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#palmer-penguins-dataset">3. Palmer Penguins Dataset</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#loading-dataset">3.1 Loading Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#handling-missing-values">3.2 Handling Missing Values</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#handling-missing-numerical-data">3.2.1 Handling missing numerical data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#handling-missing-categorical-data">3.2.2 Handling missing categorical data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#remove-missing-values">3.2.3 Remove missing values</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#handling-outliers">3.3. Handling Outliers</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#creating-outliers">3.3.1 Creating outliers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#the-inter-quartile-range-iqr-method">3.3.2 The Inter quartile range (IQR) method</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#the-mean-standard-deviation-method">3.3.3 The mean-standard deviation method</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#encoding-categorical-variables">3.4 Encoding Categorical Variables</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#one-hot-encoding-ohe">3.4.1 One hot encoding (OHE)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#label-encoding">3.4.2 Label encoding</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#the-get-dummies-function-in-pandas">3.4.3 The <code class="docutils literal notranslate"><span class="pre">get_dummies()</span></code> function in Pandas</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#feature-engineering">4. Feature Engineering</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../5-classification/">Classification</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../">Practical Machine Learning</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Data Preparation for Machine Learning</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/BlackJacks-Nook/content/blob/main/content/episodes/4-data-preparation-for-ml.ipynb" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="../3-scientific-data-for-ml/" class="btn btn-neutral float-left" title="Scientific Data for Machine Learning" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../5-classification/" class="btn btn-neutral float-right" title="Classification" accesskey="n">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="data-preparation-for-machine-learning">
+<h1>Data Preparation for Machine Learning<a class="headerlink" href="#data-preparation-for-machine-learning" title="Link to this heading"></a></h1>
+<div class='alert alert-info'>
+<div class="admonition-objectives objectives admonition" id="objectives-0">
+<p class="admonition-title">Objectives</p>
+<ul class="simple">
+<li><p>Provide an overview of data preparation.</p></li>
+<li><p>Load Penguins dataset.</p></li>
+<li><p>Use pandas and seaborn to analyze and visualize data.</p></li>
+<li><p>Identify and manage missing values and outliers in dataset.</p></li>
+<li><p>Encode categorical variables into numerical values suitable for ML models.</p></li>
+</ul>
+</div>
+</div><div class='alert alert-success'>
+<div class="admonition-instructor-note instructor-note admonition" id="instructor-note-0">
+<p class="admonition-title">Instructor note</p>
+<ul class="simple">
+<li><p>20 min teaching</p></li>
+<li><p>20 min exercises/discussion</p></li>
+</ul>
+</div>
+</div><p>In <a class="reference internal" href="../2-fundamentals-of-ml/"><span class="std std-doc">Episode 2: Fundamentals of Machine Learning</span></a>, it is clearly shown that data preparation and processing often consume a significant portion of the ML workflow — often more time than the actual model training, evaluation, and optimization. Cleaning, transforming, and structuring raw data into a usable format ensures that algorithms can efficiently extract valuable insights. Additionally, the choice of data formats, such as CSV for simplicity or HDF5 for large-scale datasets, can significantly impact data storage, accessibility, and computational efficiency during both model training and deployment.</p>
+<p>In this episode, we will provide an overview of data preparation and introduce available public datasets. Using the <a class="reference external" href="https://zenodo.org/records/3960218">Palmer Penguins dataset</a> as an example, we will offer demonstrations and hands-on exercises to develop a comprehensive understanding of data preparation including handling missing values and outliers, encoding categorical variables, and other essential preprocessing techniques for ML workflows.</p>
+<section id="what-is-data-preparation">
+<h2>1. What is Data Preparation<a class="headerlink" href="#what-is-data-preparation" title="Link to this heading"></a></h2>
+<p>Data preparation refers to the process of cleaning, structuring, and transforming raw data into a structured, high-quality format ready for statistical analysis and ML. It’s one of the most critical steps in the ML workflow because high-quality data leads to better model performance.</p>
+<p>Key procedures include:</p>
+<ul class="simple">
+<li><p>Collecting data from multiple sources,</p></li>
+<li><p>Handling missing values (imputation or removal),</p></li>
+<li><p>Detecting and treating outliers,</p></li>
+<li><p>Encoding categorical variables,</p></li>
+<li><p>Normalizing or scaling features,</p></li>
+<li><p>Feature selection and feature engineering.</p></li>
+</ul>
+</section>
+<section id="collecting-data-from-multiple-sources">
+<h2>2. Collecting Data from Multiple Sources<a class="headerlink" href="#collecting-data-from-multiple-sources" title="Link to this heading"></a></h2>
+<p>Data preparation begins with collecting raw data from a wide variety of sources, including databases, sensors, APIs, web scraping, surveys, and existing public datasets.</p>
+<p>During the data collection process, it is important to ensure consistency and compatibility across all sources. Different sources may have different formats, units, naming conventions, or levels of quality. Careful integration, cleaning, and normalization are required to create a unified dataset suitable for analysis or modeling. Proper documentation of sources and collection methods is also essential to maintain reproducibility and data governance.</p>
+<p>Public datasets provide an excellent resource for learning, experimentation, and benchmarking. Some widely used datasets across different domains include:</p>
+<ul class="simple">
+<li><p>Tabular datasets: Iris, <strong>Penguins</strong>, Titanic, Boston Housing, Wine, <em>etc.</em></p></li>
+<li><p>Image datasets: <a class="reference external" href="https://en.wikipedia.org/wiki/MNIST_database">MNIST</a>, <a class="reference external" href="https://www.cs.toronto.edu/~kriz/cifar.html">CIFAR-10</a>, <a class="reference external" href="https://www.cs.toronto.edu/~kriz/cifar.html">CIFAR-100</a>, <a class="reference external" href="https://cocodataset.org/#home">COCO</a>, <a class="reference external" href="https://www.image-net.org/index.php">ImageNet</a>.</p></li>
+<li><p>Text datasets: <a class="reference external" href="https://www.kaggle.com/datasets/lakshmi25npathi/imdb-dataset-of-50k-movie-reviews">IMDB Reviews</a>, <a class="reference external" href="https://scikit-learn.org/0.19/datasets/twenty_newsgroups.html">20 Newsgroups</a>, <a class="reference external" href="https://www.tensorflow.org/datasets/catalog/sentiment140">Sentiment140</a>.</p></li>
+<li><p>Audio datasets: <a class="reference external" href="https://www.openslr.org/12">LibriSpeech</a>, <a class="reference external" href="https://urbansounddataset.weebly.com/urbansound8k.html">UrbanSound8K</a>, <a class="reference external" href="https://www.kaggle.com/datasets/mmoreaux/environmental-sound-classification-50">ESC-50</a>.</p></li>
+<li><p>Video datasets: <a class="reference external" href="https://www.crcv.ucf.edu/data/UCF101.php">UCF101</a>, <a class="reference external" href="https://www.kaggle.com/datasets/rohanmallick/kinetics-train-5per">Kinetics</a>, <a class="reference external" href="https://www.kaggle.com/datasets/easonlll/hmdb51">HMDB51</a>.</p></li>
+</ul>
+<p>These datasets are available on platforms like <a class="reference external" href="https://www.kaggle.com/">Kaggle</a>, <a class="reference external" href="https://archive.ics.uci.edu/">UCI Machine Learning Repository</a>, <a class="reference external" href="https://www.tensorflow.org/datasets">TensorFlow Datasets</a>, and <a class="reference external" href="https://huggingface.co/docs/datasets/en/index">Hugging Face Datasets</a>, providing accessible resources for practice and innovation.</p>
+<p>It should be noted that most of the data available by default is too raw to perform statistical analysis. Proper preprocessing is essential before the data can be used to identify meaningful patterns or to train models for prediction. In the following sections, we use the Penguins dataset as an example to demonstrate essential data preprocessing steps. These include handling missing values, detecting and treating outliers, encoding categorical variables, and performing other necessary transformations to prepare the dataset for ML tasks. Proper preprocessing ensures data quality, reduces bias, and improves the performance and reliability of the models we build.</p>
+</section>
+<section id="palmer-penguins-dataset">
+<h2>3. Palmer Penguins Dataset<a class="headerlink" href="#palmer-penguins-dataset" title="Link to this heading"></a></h2>
+<p><a class="reference external" href="https://zenodo.org/records/3960218">Palmer Penguins dataset</a> is a widely used open dataset in data science and ML education. This dataset contains information on three penguin species that inhabit islands near the Palmer Archipelago in Antarctica: Adelie, Chinstrap, and Gentoo. Each row in the dataset corresponds to a single penguin and records both physical measurements and categorical attributes. The key numerical features include flipper length (mm), culmen length and depth (bill measurements, in mm), and body mass (g). Alongside these, categorical variables such as species, island, and sex are provided.</p>
+<p>These data were collected from 2007 - 2009 by Dr. Kristen Gorman with the <a class="reference external" href="https://lternet.edu/site/palmer-antarctica-lter/">Palmer Station Long Term Ecological Research Program</a>, part of the <a class="reference external" href="https://lternet.edu/">US Long Term Ecological Research Network</a>. It contains measurements for 344 penguins from three species – Adelie, Chinstrap, and Gentoo – collected from three islands (Biscoe, Dream, and Torgersen) in the Palmer Archipelago, Antarctica.</p>
+<p>The data were imported directly from the <a class="reference external" href="https://edirepository.org/">Environmental Data Initiative (EDI)</a> Data Portal, and are available for use by CC0 license (“No Rights Reserved”) in accordance with the <a class="reference external" href="https://lternet.edu/data-access-policy/">Palmer Station Data Policy</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">display</span>
+<span class="n">display</span><span class="p">(</span><span class="n">Image</span><span class="p">(</span><span class="s2">"../images/data/penguins.png"</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">1240</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../../_images/09b8d656b7e432aff84e961af5a3bbb46cf0291ee08f43dd42224dcf2abb7245.png"><img alt="../../_images/09b8d656b7e432aff84e961af5a3bbb46cf0291ee08f43dd42224dcf2abb7245.png" src="../../_images/09b8d656b7e432aff84e961af5a3bbb46cf0291ee08f43dd42224dcf2abb7245.png" style="width: 1240px;" />
+</a>
+</div>
+</div>
+<section id="loading-dataset">
+<h3>3.1 Loading Dataset<a class="headerlink" href="#loading-dataset" title="Link to this heading"></a></h3>
+<p>Seaborn provides the Penguins dataset through its built-in data-loading functions. We can access it using <code class="docutils literal notranslate"><span class="pre">sns.load_dataset('penguin')</span></code> and then have a quick look at the data.</p>
+<div class='alert alert-info'>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you have your own dataset stored in a CSV file, you can easily load it into Python using Pandas with the <code class="docutils literal notranslate"><span class="pre">read_csv()</span></code> function. This is one of the most common ways to bring tabular data into a DataFrame for further analysis and processing.</p>
+<p>Beyond CSV files, Pandas also supports a wide variety of other file formats, making it a powerful and flexible tool for data handling. For example, you can use <code class="docutils literal notranslate"><span class="pre">read_excel()</span></code> to import data from Microsoft Excel spreadsheets, <code class="docutils literal notranslate"><span class="pre">read_hdf()</span></code> to work with HDF5 binary stores, and <code class="docutils literal notranslate"><span class="pre">read_json()</span></code> to load data from JSON files. Each of these formats also has a corresponding method for saving data back to disk, such as <code class="docutils literal notranslate"><span class="pre">to_csv()</span></code>, <code class="docutils literal notranslate"><span class="pre">to_excel()</span></code>, <code class="docutils literal notranslate"><span class="pre">to_hdf()</span></code>, and <code class="docutils literal notranslate"><span class="pre">to_json()</span></code>.</p>
+</div>
+</div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># penguins = pd.read_csv("./penguins_dataset.csv")</span>
+
+<span class="c1"># URL of the Penguins dataset (CSV file)</span>
+<span class="c1"># url = "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/penguins.csv"</span>
+<span class="c1"># penguins = pd.read_csv(url)</span>
+
+<span class="n">penguins</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="s1">'penguins'</span><span class="p">)</span>
+<span class="n">penguins</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>species</th>
+      <th>island</th>
+      <th>bill_length_mm</th>
+      <th>bill_depth_mm</th>
+      <th>flipper_length_mm</th>
+      <th>body_mass_g</th>
+      <th>sex</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>39.1</td>
+      <td>18.7</td>
+      <td>181.0</td>
+      <td>3750.0</td>
+      <td>Male</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>39.5</td>
+      <td>17.4</td>
+      <td>186.0</td>
+      <td>3800.0</td>
+      <td>Female</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>40.3</td>
+      <td>18.0</td>
+      <td>195.0</td>
+      <td>3250.0</td>
+      <td>Female</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>36.7</td>
+      <td>19.3</td>
+      <td>193.0</td>
+      <td>3450.0</td>
+      <td>Female</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>339</th>
+      <td>Gentoo</td>
+      <td>Biscoe</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>340</th>
+      <td>Gentoo</td>
+      <td>Biscoe</td>
+      <td>46.8</td>
+      <td>14.3</td>
+      <td>215.0</td>
+      <td>4850.0</td>
+      <td>Female</td>
+    </tr>
+    <tr>
+      <th>341</th>
+      <td>Gentoo</td>
+      <td>Biscoe</td>
+      <td>50.4</td>
+      <td>15.7</td>
+      <td>222.0</td>
+      <td>5750.0</td>
+      <td>Male</td>
+    </tr>
+    <tr>
+      <th>342</th>
+      <td>Gentoo</td>
+      <td>Biscoe</td>
+      <td>45.2</td>
+      <td>14.8</td>
+      <td>212.0</td>
+      <td>5200.0</td>
+      <td>Female</td>
+    </tr>
+    <tr>
+      <th>343</th>
+      <td>Gentoo</td>
+      <td>Biscoe</td>
+      <td>49.9</td>
+      <td>16.1</td>
+      <td>213.0</td>
+      <td>5400.0</td>
+      <td>Male</td>
+    </tr>
+  </tbody>
+</table>
+<p>344 rows × 7 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">penguins</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 344 entries, 0 to 343
+Data columns (total 7 columns):
+ #   Column             Non-Null Count  Dtype  
+---  ------             --------------  -----  
+ 0   species            344 non-null    object 
+ 1   island             344 non-null    object 
+ 2   bill_length_mm     342 non-null    float64
+ 3   bill_depth_mm      342 non-null    float64
+ 4   flipper_length_mm  342 non-null    float64
+ 5   body_mass_g        342 non-null    float64
+ 6   sex                333 non-null    object 
+dtypes: float64(4), object(3)
+memory usage: 18.9+ KB
+</pre></div>
+</div>
+</div>
+</div>
+<p>There are seven columns include:</p>
+<ul class="simple">
+<li><p><em>species</em>: penguin species (Adelie, Chinstrap, Gentoo)</p></li>
+<li><p><em>island</em>: island where the penguin was found (Biscoe, Dream, Torgersen)</p></li>
+<li><p><em>bill_length_mm</em>: length of the bill</p></li>
+<li><p><em>bill_depth_mm</em>: depth of the bill</p></li>
+<li><p><em>flipper_length_mm</em>: length of the flipper</p></li>
+<li><p><em>body_mass_g</em>: body mass in grams</p></li>
+<li><p><em>sex</em>: male or female</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">penguins</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>bill_length_mm</th>
+      <th>bill_depth_mm</th>
+      <th>flipper_length_mm</th>
+      <th>body_mass_g</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>342.000000</td>
+      <td>342.000000</td>
+      <td>342.000000</td>
+      <td>342.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>43.921930</td>
+      <td>17.151170</td>
+      <td>200.915205</td>
+      <td>4201.754386</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>5.459584</td>
+      <td>1.974793</td>
+      <td>14.061714</td>
+      <td>801.954536</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>32.100000</td>
+      <td>13.100000</td>
+      <td>172.000000</td>
+      <td>2700.000000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>39.225000</td>
+      <td>15.600000</td>
+      <td>190.000000</td>
+      <td>3550.000000</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>44.450000</td>
+      <td>17.300000</td>
+      <td>197.000000</td>
+      <td>4050.000000</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>48.500000</td>
+      <td>18.700000</td>
+      <td>213.000000</td>
+      <td>4750.000000</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>59.600000</td>
+      <td>21.500000</td>
+      <td>231.000000</td>
+      <td>6300.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Looking only at the raw numbers in the <code class="docutils literal notranslate"><span class="pre">penguins</span></code> DataFrame, or even examining the statistical summaries provided by <code class="docutils literal notranslate"><span class="pre">penguins.info()</span></code> and <code class="docutils literal notranslate"><span class="pre">penguins.describe()</span></code>, often does not give us a clear intuition about the patterns and relationships in the data. To truly understand the dataset, we generally prefer to visualize the data, since graphical representations can reveal trends, groupings, and anomalies that may remain hidden in numerical summaries alone.</p>
+<p>One nice visualization for datasets with relatively few attributes is <strong>Pair Plot</strong>, which can be created using <code class="docutils literal notranslate"><span class="pre">sns.pairplot(...)</span></code>. It shows a scatterplot of each attribute plotted against each of the other attributes. By using the <code class="docutils literal notranslate"><span class="pre">hue='species'</span></code> setting for the pairplot the graphs on the diagonal are layered kernel density estimate plots for the different values of the <code class="docutils literal notranslate"><span class="pre">species</span></code> column.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">pairplot</span><span class="p">(</span><span class="n">penguins</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s2">"sex"</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;seaborn.axisgrid.PairGrid at 0x217b1511ea0&gt;
+</pre></div>
+</div>
+<img alt="../../_images/efd31425915279c757aab2378bf852b26b2f69bb30b0c7a65575624e3bbef00d.png" src="../../_images/efd31425915279c757aab2378bf852b26b2f69bb30b0c7a65575624e3bbef00d.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">pairplot</span><span class="p">(</span><span class="n">penguins</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s2">"island"</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;seaborn.axisgrid.PairGrid at 0x217b1512830&gt;
+</pre></div>
+</div>
+<img alt="../../_images/43f6f55582c2aa72ccaa54b045db594a8a06cfbae95ac4b6c49b3a2600b7ea10.png" src="../../_images/43f6f55582c2aa72ccaa54b045db594a8a06cfbae95ac4b6c49b3a2600b7ea10.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">pairplot</span><span class="p">(</span><span class="n">penguins</span><span class="p">[[</span><span class="s2">"species"</span><span class="p">,</span> <span class="s2">"bill_length_mm"</span><span class="p">,</span> <span class="s2">"bill_depth_mm"</span><span class="p">,</span> <span class="s2">"flipper_length_mm"</span><span class="p">,</span> <span class="s2">"body_mass_g"</span><span class="p">]],</span> <span class="n">hue</span><span class="o">=</span><span class="s2">"species"</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;seaborn.axisgrid.PairGrid at 0x217b6f97160&gt;
+</pre></div>
+</div>
+<img alt="../../_images/5289077803ce130547fe2c028ba287f62df9c52ed4e00ff38740ab4b9dd9a0cb.png" src="../../_images/5289077803ce130547fe2c028ba287f62df9c52ed4e00ff38740ab4b9dd9a0cb.png" />
+</div>
+</div>
+<div class='alert alert-success'>
+<div class="admonition-discussion discussion important admonition" id="discussion-0">
+<p class="admonition-title">Discussion</p>
+<p>Take a look at the pairplot we created. Consider the following questions:</p>
+<ul class="simple">
+<li><p>Is there any class that is easily distinguishable from the others?</p></li>
+<li><p>Which combination of attributes shows the best separation for all 3 class labels at once?</p></li>
+<li><p>For pairplot with <code class="docutils literal notranslate"><span class="pre">hue=&quot;sex&quot;</span></code>, which combination of features distinguishes the two sexes best?</p></li>
+<li><p>What about the one with <code class="docutils literal notranslate"><span class="pre">hue=&quot;island&quot;</span></code>?</p></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="handling-missing-values">
+<h3>3.2 Handling Missing Values<a class="headerlink" href="#handling-missing-values" title="Link to this heading"></a></h3>
+<p>Upon loading the Penguins dataset into a pandas DataFrame, the initial examination reveals the presence of <code class="docutils literal notranslate"><span class="pre">NaN</span></code> (Not a Number) values within several rows (highlighted in the Jupyter notebook). These placeholders explicitly indicate missing or unavailable data for certain measurements, such as bill length or the sex of particular penguins. Recognizing these missing values is an important first step, as they must be properly handled before performing any data analysis.</p>
+<p>For numerical features such as bill length, bill depth, flipper length, and body mass, several strategies can be applied. A straightforward approach is to <strong>remove any rows with missing values</strong>, but this is often wasteful and reduces the sample size.</p>
+<p>A more effective method is imputation: replacing missing numerical values with a suitable estimate. Common choices include the <code class="docutils literal notranslate"><span class="pre">mean</span></code> or <code class="docutils literal notranslate"><span class="pre">median</span></code> of the feature, depending on distribution.
+Before applying imputation to handle missing numerical values, it is important to first identify where the NaN values occur in the dataset. We can run <code class="docutils literal notranslate"><span class="pre">penguins_test.style.highlight_null(color</span> <span class="pre">=</span> <span class="pre">'red')</span></code>, where NaN values are hightlighed in the output.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">penguins_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">penguins</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">penguins</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">5</span><span class="p">)])</span>
+<span class="n">penguins_test</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">highlight_null</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s1">'red'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style type="text/css">
+#T_38334_row3_col2, #T_38334_row3_col3, #T_38334_row3_col4, #T_38334_row3_col5, #T_38334_row3_col6, #T_38334_row5_col2, #T_38334_row5_col3, #T_38334_row5_col4, #T_38334_row5_col5, #T_38334_row5_col6 {
+  background-color: red;
+}
+</style>
+<table id="T_38334">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_38334_level0_col0" class="col_heading level0 col0" >species</th>
+      <th id="T_38334_level0_col1" class="col_heading level0 col1" >island</th>
+      <th id="T_38334_level0_col2" class="col_heading level0 col2" >bill_length_mm</th>
+      <th id="T_38334_level0_col3" class="col_heading level0 col3" >bill_depth_mm</th>
+      <th id="T_38334_level0_col4" class="col_heading level0 col4" >flipper_length_mm</th>
+      <th id="T_38334_level0_col5" class="col_heading level0 col5" >body_mass_g</th>
+      <th id="T_38334_level0_col6" class="col_heading level0 col6" >sex</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_38334_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_38334_row0_col0" class="data row0 col0" >Adelie</td>
+      <td id="T_38334_row0_col1" class="data row0 col1" >Torgersen</td>
+      <td id="T_38334_row0_col2" class="data row0 col2" >39.100000</td>
+      <td id="T_38334_row0_col3" class="data row0 col3" >18.700000</td>
+      <td id="T_38334_row0_col4" class="data row0 col4" >181.000000</td>
+      <td id="T_38334_row0_col5" class="data row0 col5" >3750.000000</td>
+      <td id="T_38334_row0_col6" class="data row0 col6" >Male</td>
+    </tr>
+    <tr>
+      <th id="T_38334_level0_row1" class="row_heading level0 row1" >1</th>
+      <td id="T_38334_row1_col0" class="data row1 col0" >Adelie</td>
+      <td id="T_38334_row1_col1" class="data row1 col1" >Torgersen</td>
+      <td id="T_38334_row1_col2" class="data row1 col2" >39.500000</td>
+      <td id="T_38334_row1_col3" class="data row1 col3" >17.400000</td>
+      <td id="T_38334_row1_col4" class="data row1 col4" >186.000000</td>
+      <td id="T_38334_row1_col5" class="data row1 col5" >3800.000000</td>
+      <td id="T_38334_row1_col6" class="data row1 col6" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_38334_level0_row2" class="row_heading level0 row2" >2</th>
+      <td id="T_38334_row2_col0" class="data row2 col0" >Adelie</td>
+      <td id="T_38334_row2_col1" class="data row2 col1" >Torgersen</td>
+      <td id="T_38334_row2_col2" class="data row2 col2" >40.300000</td>
+      <td id="T_38334_row2_col3" class="data row2 col3" >18.000000</td>
+      <td id="T_38334_row2_col4" class="data row2 col4" >195.000000</td>
+      <td id="T_38334_row2_col5" class="data row2 col5" >3250.000000</td>
+      <td id="T_38334_row2_col6" class="data row2 col6" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_38334_level0_row3" class="row_heading level0 row3" >3</th>
+      <td id="T_38334_row3_col0" class="data row3 col0" >Adelie</td>
+      <td id="T_38334_row3_col1" class="data row3 col1" >Torgersen</td>
+      <td id="T_38334_row3_col2" class="data row3 col2" >nan</td>
+      <td id="T_38334_row3_col3" class="data row3 col3" >nan</td>
+      <td id="T_38334_row3_col4" class="data row3 col4" >nan</td>
+      <td id="T_38334_row3_col5" class="data row3 col5" >nan</td>
+      <td id="T_38334_row3_col6" class="data row3 col6" >nan</td>
+    </tr>
+    <tr>
+      <th id="T_38334_level0_row4" class="row_heading level0 row4" >4</th>
+      <td id="T_38334_row4_col0" class="data row4 col0" >Adelie</td>
+      <td id="T_38334_row4_col1" class="data row4 col1" >Torgersen</td>
+      <td id="T_38334_row4_col2" class="data row4 col2" >36.700000</td>
+      <td id="T_38334_row4_col3" class="data row4 col3" >19.300000</td>
+      <td id="T_38334_row4_col4" class="data row4 col4" >193.000000</td>
+      <td id="T_38334_row4_col5" class="data row4 col5" >3450.000000</td>
+      <td id="T_38334_row4_col6" class="data row4 col6" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_38334_level0_row5" class="row_heading level0 row5" >339</th>
+      <td id="T_38334_row5_col0" class="data row5 col0" >Gentoo</td>
+      <td id="T_38334_row5_col1" class="data row5 col1" >Biscoe</td>
+      <td id="T_38334_row5_col2" class="data row5 col2" >nan</td>
+      <td id="T_38334_row5_col3" class="data row5 col3" >nan</td>
+      <td id="T_38334_row5_col4" class="data row5 col4" >nan</td>
+      <td id="T_38334_row5_col5" class="data row5 col5" >nan</td>
+      <td id="T_38334_row5_col6" class="data row5 col6" >nan</td>
+    </tr>
+    <tr>
+      <th id="T_38334_level0_row6" class="row_heading level0 row6" >340</th>
+      <td id="T_38334_row6_col0" class="data row6 col0" >Gentoo</td>
+      <td id="T_38334_row6_col1" class="data row6 col1" >Biscoe</td>
+      <td id="T_38334_row6_col2" class="data row6 col2" >46.800000</td>
+      <td id="T_38334_row6_col3" class="data row6 col3" >14.300000</td>
+      <td id="T_38334_row6_col4" class="data row6 col4" >215.000000</td>
+      <td id="T_38334_row6_col5" class="data row6 col5" >4850.000000</td>
+      <td id="T_38334_row6_col6" class="data row6 col6" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_38334_level0_row7" class="row_heading level0 row7" >341</th>
+      <td id="T_38334_row7_col0" class="data row7 col0" >Gentoo</td>
+      <td id="T_38334_row7_col1" class="data row7 col1" >Biscoe</td>
+      <td id="T_38334_row7_col2" class="data row7 col2" >50.400000</td>
+      <td id="T_38334_row7_col3" class="data row7 col3" >15.700000</td>
+      <td id="T_38334_row7_col4" class="data row7 col4" >222.000000</td>
+      <td id="T_38334_row7_col5" class="data row7 col5" >5750.000000</td>
+      <td id="T_38334_row7_col6" class="data row7 col6" >Male</td>
+    </tr>
+    <tr>
+      <th id="T_38334_level0_row8" class="row_heading level0 row8" >342</th>
+      <td id="T_38334_row8_col0" class="data row8 col0" >Gentoo</td>
+      <td id="T_38334_row8_col1" class="data row8 col1" >Biscoe</td>
+      <td id="T_38334_row8_col2" class="data row8 col2" >45.200000</td>
+      <td id="T_38334_row8_col3" class="data row8 col3" >14.800000</td>
+      <td id="T_38334_row8_col4" class="data row8 col4" >212.000000</td>
+      <td id="T_38334_row8_col5" class="data row8 col5" >5200.000000</td>
+      <td id="T_38334_row8_col6" class="data row8 col6" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_38334_level0_row9" class="row_heading level0 row9" >343</th>
+      <td id="T_38334_row9_col0" class="data row9 col0" >Gentoo</td>
+      <td id="T_38334_row9_col1" class="data row9 col1" >Biscoe</td>
+      <td id="T_38334_row9_col2" class="data row9 col2" >49.900000</td>
+      <td id="T_38334_row9_col3" class="data row9 col3" >16.100000</td>
+      <td id="T_38334_row9_col4" class="data row9 col4" >213.000000</td>
+      <td id="T_38334_row9_col5" class="data row9 col5" >5400.000000</td>
+      <td id="T_38334_row9_col6" class="data row9 col6" >Male</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<section id="handling-missing-numerical-data">
+<h4>3.2.1 Handling missing numerical data<a class="headerlink" href="#handling-missing-numerical-data" title="Link to this heading"></a></h4>
+<section id="mean-or-median-imputation">
+<h5><mark><strong>Mean or Median Imputation</strong></mark><a class="headerlink" href="#mean-or-median-imputation" title="Link to this heading"></a></h5>
+<p>Here we calculate <code class="docutils literal notranslate"><span class="pre">mean</span></code> and <code class="docutils literal notranslate"><span class="pre">median</span></code> values for numerical features. To illustrate this process, we take <code class="docutils literal notranslate"><span class="pre">body_mass_g</span></code> feature as an example.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">body_mass_g_mean</span> <span class="o">=</span> <span class="n">penguins_test</span><span class="o">.</span><span class="n">body_mass_g</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">body_mass_g_median</span> <span class="o">=</span> <span class="n">penguins_test</span><span class="o">.</span><span class="n">body_mass_g</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  mean value of body_mass_g is </span><span class="si">{</span><span class="n">body_mass_g_mean</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"median value of body_mass_g is </span><span class="si">{</span><span class="n">body_mass_g_median</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  mean value of body_mass_g is 4431.25
+median value of body_mass_g is 4325.0
+</pre></div>
+</div>
+</div>
+</div>
+<p>Rather than directly replacing missing values, we concatenate new columns containing <code class="docutils literal notranslate"><span class="pre">mean</span></code> and <code class="docutils literal notranslate"><span class="pre">median</span></code> values for the <code class="docutils literal notranslate"><span class="pre">body_mass_g</span></code> feature to end of Penguins dataset, and than visualize distribution of this feature.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">penguins_test</span><span class="p">[</span><span class="s1">'BMG_mean'</span><span class="p">]</span> <span class="o">=</span> <span class="n">penguins_test</span><span class="o">.</span><span class="n">body_mass_g</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">body_mass_g_mean</span><span class="p">)</span>
+<span class="n">penguins_test</span><span class="p">[</span><span class="s1">'BMG_median'</span><span class="p">]</span> <span class="o">=</span> <span class="n">penguins_test</span><span class="o">.</span><span class="n">body_mass_g</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">body_mass_g_median</span><span class="p">)</span>
+<span class="n">penguins_test</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">highlight_null</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s1">'green'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style type="text/css">
+#T_304c8_row3_col2, #T_304c8_row3_col3, #T_304c8_row3_col4, #T_304c8_row3_col5, #T_304c8_row3_col6, #T_304c8_row5_col2, #T_304c8_row5_col3, #T_304c8_row5_col4, #T_304c8_row5_col5, #T_304c8_row5_col6 {
+  background-color: green;
+}
+</style>
+<table id="T_304c8">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_304c8_level0_col0" class="col_heading level0 col0" >species</th>
+      <th id="T_304c8_level0_col1" class="col_heading level0 col1" >island</th>
+      <th id="T_304c8_level0_col2" class="col_heading level0 col2" >bill_length_mm</th>
+      <th id="T_304c8_level0_col3" class="col_heading level0 col3" >bill_depth_mm</th>
+      <th id="T_304c8_level0_col4" class="col_heading level0 col4" >flipper_length_mm</th>
+      <th id="T_304c8_level0_col5" class="col_heading level0 col5" >body_mass_g</th>
+      <th id="T_304c8_level0_col6" class="col_heading level0 col6" >sex</th>
+      <th id="T_304c8_level0_col7" class="col_heading level0 col7" >BMG_mean</th>
+      <th id="T_304c8_level0_col8" class="col_heading level0 col8" >BMG_median</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_304c8_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_304c8_row0_col0" class="data row0 col0" >Adelie</td>
+      <td id="T_304c8_row0_col1" class="data row0 col1" >Torgersen</td>
+      <td id="T_304c8_row0_col2" class="data row0 col2" >39.100000</td>
+      <td id="T_304c8_row0_col3" class="data row0 col3" >18.700000</td>
+      <td id="T_304c8_row0_col4" class="data row0 col4" >181.000000</td>
+      <td id="T_304c8_row0_col5" class="data row0 col5" >3750.000000</td>
+      <td id="T_304c8_row0_col6" class="data row0 col6" >Male</td>
+      <td id="T_304c8_row0_col7" class="data row0 col7" >3750.000000</td>
+      <td id="T_304c8_row0_col8" class="data row0 col8" >3750.000000</td>
+    </tr>
+    <tr>
+      <th id="T_304c8_level0_row1" class="row_heading level0 row1" >1</th>
+      <td id="T_304c8_row1_col0" class="data row1 col0" >Adelie</td>
+      <td id="T_304c8_row1_col1" class="data row1 col1" >Torgersen</td>
+      <td id="T_304c8_row1_col2" class="data row1 col2" >39.500000</td>
+      <td id="T_304c8_row1_col3" class="data row1 col3" >17.400000</td>
+      <td id="T_304c8_row1_col4" class="data row1 col4" >186.000000</td>
+      <td id="T_304c8_row1_col5" class="data row1 col5" >3800.000000</td>
+      <td id="T_304c8_row1_col6" class="data row1 col6" >Female</td>
+      <td id="T_304c8_row1_col7" class="data row1 col7" >3800.000000</td>
+      <td id="T_304c8_row1_col8" class="data row1 col8" >3800.000000</td>
+    </tr>
+    <tr>
+      <th id="T_304c8_level0_row2" class="row_heading level0 row2" >2</th>
+      <td id="T_304c8_row2_col0" class="data row2 col0" >Adelie</td>
+      <td id="T_304c8_row2_col1" class="data row2 col1" >Torgersen</td>
+      <td id="T_304c8_row2_col2" class="data row2 col2" >40.300000</td>
+      <td id="T_304c8_row2_col3" class="data row2 col3" >18.000000</td>
+      <td id="T_304c8_row2_col4" class="data row2 col4" >195.000000</td>
+      <td id="T_304c8_row2_col5" class="data row2 col5" >3250.000000</td>
+      <td id="T_304c8_row2_col6" class="data row2 col6" >Female</td>
+      <td id="T_304c8_row2_col7" class="data row2 col7" >3250.000000</td>
+      <td id="T_304c8_row2_col8" class="data row2 col8" >3250.000000</td>
+    </tr>
+    <tr>
+      <th id="T_304c8_level0_row3" class="row_heading level0 row3" >3</th>
+      <td id="T_304c8_row3_col0" class="data row3 col0" >Adelie</td>
+      <td id="T_304c8_row3_col1" class="data row3 col1" >Torgersen</td>
+      <td id="T_304c8_row3_col2" class="data row3 col2" >nan</td>
+      <td id="T_304c8_row3_col3" class="data row3 col3" >nan</td>
+      <td id="T_304c8_row3_col4" class="data row3 col4" >nan</td>
+      <td id="T_304c8_row3_col5" class="data row3 col5" >nan</td>
+      <td id="T_304c8_row3_col6" class="data row3 col6" >nan</td>
+      <td id="T_304c8_row3_col7" class="data row3 col7" >4431.250000</td>
+      <td id="T_304c8_row3_col8" class="data row3 col8" >4325.000000</td>
+    </tr>
+    <tr>
+      <th id="T_304c8_level0_row4" class="row_heading level0 row4" >4</th>
+      <td id="T_304c8_row4_col0" class="data row4 col0" >Adelie</td>
+      <td id="T_304c8_row4_col1" class="data row4 col1" >Torgersen</td>
+      <td id="T_304c8_row4_col2" class="data row4 col2" >36.700000</td>
+      <td id="T_304c8_row4_col3" class="data row4 col3" >19.300000</td>
+      <td id="T_304c8_row4_col4" class="data row4 col4" >193.000000</td>
+      <td id="T_304c8_row4_col5" class="data row4 col5" >3450.000000</td>
+      <td id="T_304c8_row4_col6" class="data row4 col6" >Female</td>
+      <td id="T_304c8_row4_col7" class="data row4 col7" >3450.000000</td>
+      <td id="T_304c8_row4_col8" class="data row4 col8" >3450.000000</td>
+    </tr>
+    <tr>
+      <th id="T_304c8_level0_row5" class="row_heading level0 row5" >339</th>
+      <td id="T_304c8_row5_col0" class="data row5 col0" >Gentoo</td>
+      <td id="T_304c8_row5_col1" class="data row5 col1" >Biscoe</td>
+      <td id="T_304c8_row5_col2" class="data row5 col2" >nan</td>
+      <td id="T_304c8_row5_col3" class="data row5 col3" >nan</td>
+      <td id="T_304c8_row5_col4" class="data row5 col4" >nan</td>
+      <td id="T_304c8_row5_col5" class="data row5 col5" >nan</td>
+      <td id="T_304c8_row5_col6" class="data row5 col6" >nan</td>
+      <td id="T_304c8_row5_col7" class="data row5 col7" >4431.250000</td>
+      <td id="T_304c8_row5_col8" class="data row5 col8" >4325.000000</td>
+    </tr>
+    <tr>
+      <th id="T_304c8_level0_row6" class="row_heading level0 row6" >340</th>
+      <td id="T_304c8_row6_col0" class="data row6 col0" >Gentoo</td>
+      <td id="T_304c8_row6_col1" class="data row6 col1" >Biscoe</td>
+      <td id="T_304c8_row6_col2" class="data row6 col2" >46.800000</td>
+      <td id="T_304c8_row6_col3" class="data row6 col3" >14.300000</td>
+      <td id="T_304c8_row6_col4" class="data row6 col4" >215.000000</td>
+      <td id="T_304c8_row6_col5" class="data row6 col5" >4850.000000</td>
+      <td id="T_304c8_row6_col6" class="data row6 col6" >Female</td>
+      <td id="T_304c8_row6_col7" class="data row6 col7" >4850.000000</td>
+      <td id="T_304c8_row6_col8" class="data row6 col8" >4850.000000</td>
+    </tr>
+    <tr>
+      <th id="T_304c8_level0_row7" class="row_heading level0 row7" >341</th>
+      <td id="T_304c8_row7_col0" class="data row7 col0" >Gentoo</td>
+      <td id="T_304c8_row7_col1" class="data row7 col1" >Biscoe</td>
+      <td id="T_304c8_row7_col2" class="data row7 col2" >50.400000</td>
+      <td id="T_304c8_row7_col3" class="data row7 col3" >15.700000</td>
+      <td id="T_304c8_row7_col4" class="data row7 col4" >222.000000</td>
+      <td id="T_304c8_row7_col5" class="data row7 col5" >5750.000000</td>
+      <td id="T_304c8_row7_col6" class="data row7 col6" >Male</td>
+      <td id="T_304c8_row7_col7" class="data row7 col7" >5750.000000</td>
+      <td id="T_304c8_row7_col8" class="data row7 col8" >5750.000000</td>
+    </tr>
+    <tr>
+      <th id="T_304c8_level0_row8" class="row_heading level0 row8" >342</th>
+      <td id="T_304c8_row8_col0" class="data row8 col0" >Gentoo</td>
+      <td id="T_304c8_row8_col1" class="data row8 col1" >Biscoe</td>
+      <td id="T_304c8_row8_col2" class="data row8 col2" >45.200000</td>
+      <td id="T_304c8_row8_col3" class="data row8 col3" >14.800000</td>
+      <td id="T_304c8_row8_col4" class="data row8 col4" >212.000000</td>
+      <td id="T_304c8_row8_col5" class="data row8 col5" >5200.000000</td>
+      <td id="T_304c8_row8_col6" class="data row8 col6" >Female</td>
+      <td id="T_304c8_row8_col7" class="data row8 col7" >5200.000000</td>
+      <td id="T_304c8_row8_col8" class="data row8 col8" >5200.000000</td>
+    </tr>
+    <tr>
+      <th id="T_304c8_level0_row9" class="row_heading level0 row9" >343</th>
+      <td id="T_304c8_row9_col0" class="data row9 col0" >Gentoo</td>
+      <td id="T_304c8_row9_col1" class="data row9 col1" >Biscoe</td>
+      <td id="T_304c8_row9_col2" class="data row9 col2" >49.900000</td>
+      <td id="T_304c8_row9_col3" class="data row9 col3" >16.100000</td>
+      <td id="T_304c8_row9_col4" class="data row9 col4" >213.000000</td>
+      <td id="T_304c8_row9_col5" class="data row9 col5" >5400.000000</td>
+      <td id="T_304c8_row9_col6" class="data row9 col6" >Male</td>
+      <td id="T_304c8_row9_col7" class="data row9 col7" >5400.000000</td>
+      <td id="T_304c8_row9_col8" class="data row9 col8" >5400.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="n">penguins_test</span><span class="p">[</span><span class="s1">'body_mass_g'</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">'kde'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'tab:green'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"body_mass_g"</span><span class="p">)</span>
+<span class="n">penguins_test</span><span class="p">[</span><span class="s1">'BMG_mean'</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">'kde'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'tab:orange'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"BMG_mean"</span><span class="p">)</span>
+<span class="n">penguins_test</span><span class="p">[</span><span class="s1">'BMG_median'</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">'kde'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'tab:blue'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"BMG_median"</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">'best'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/061969ec0d9c8092d0b5abe078a8f6bff14efaad1801b201c3a223ae153fd283.png" src="../../_images/061969ec0d9c8092d0b5abe078a8f6bff14efaad1801b201c3a223ae153fd283.png" />
+</div>
+</div>
+</section>
+<section id="end-of-distribution-imputation">
+<h5><mark><strong>End of Distribution Imputation</strong></mark><a class="headerlink" href="#end-of-distribution-imputation" title="Link to this heading"></a></h5>
+<ul class="simple">
+<li><p>Sometimes one would want to replace missing data with values at the tail of distribution of variable.</p></li>
+<li><p>Advantage is that it is quick and captures importance of missing values (if one suspects missing data is valuable).</p></li>
+<li><p>EoD’s extreme value means the mean value with 3rd stander deviation, <code class="docutils literal notranslate"><span class="pre">(mean</span> <span class="pre">+</span> <span class="pre">(3*std))</span></code>)</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eod_value</span> <span class="o">=</span> <span class="n">penguins_test</span><span class="p">[</span><span class="s1">'body_mass_g'</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">penguins_test</span><span class="p">[</span><span class="s1">'body_mass_g'</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+<span class="n">eod_value</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>7358.515606085554
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">penguins_test</span><span class="p">[</span><span class="s1">'BMG_EoD'</span><span class="p">]</span> <span class="o">=</span> <span class="n">penguins_test</span><span class="o">.</span><span class="n">body_mass_g</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">eod_value</span><span class="p">)</span>
+<span class="n">penguins_test</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">highlight_null</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s1">'green'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style type="text/css">
+#T_12c83_row3_col2, #T_12c83_row3_col3, #T_12c83_row3_col4, #T_12c83_row3_col5, #T_12c83_row3_col6, #T_12c83_row5_col2, #T_12c83_row5_col3, #T_12c83_row5_col4, #T_12c83_row5_col5, #T_12c83_row5_col6 {
+  background-color: green;
+}
+</style>
+<table id="T_12c83">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_12c83_level0_col0" class="col_heading level0 col0" >species</th>
+      <th id="T_12c83_level0_col1" class="col_heading level0 col1" >island</th>
+      <th id="T_12c83_level0_col2" class="col_heading level0 col2" >bill_length_mm</th>
+      <th id="T_12c83_level0_col3" class="col_heading level0 col3" >bill_depth_mm</th>
+      <th id="T_12c83_level0_col4" class="col_heading level0 col4" >flipper_length_mm</th>
+      <th id="T_12c83_level0_col5" class="col_heading level0 col5" >body_mass_g</th>
+      <th id="T_12c83_level0_col6" class="col_heading level0 col6" >sex</th>
+      <th id="T_12c83_level0_col7" class="col_heading level0 col7" >BMG_mean</th>
+      <th id="T_12c83_level0_col8" class="col_heading level0 col8" >BMG_median</th>
+      <th id="T_12c83_level0_col9" class="col_heading level0 col9" >BMG_EoD</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_12c83_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_12c83_row0_col0" class="data row0 col0" >Adelie</td>
+      <td id="T_12c83_row0_col1" class="data row0 col1" >Torgersen</td>
+      <td id="T_12c83_row0_col2" class="data row0 col2" >39.100000</td>
+      <td id="T_12c83_row0_col3" class="data row0 col3" >18.700000</td>
+      <td id="T_12c83_row0_col4" class="data row0 col4" >181.000000</td>
+      <td id="T_12c83_row0_col5" class="data row0 col5" >3750.000000</td>
+      <td id="T_12c83_row0_col6" class="data row0 col6" >Male</td>
+      <td id="T_12c83_row0_col7" class="data row0 col7" >3750.000000</td>
+      <td id="T_12c83_row0_col8" class="data row0 col8" >3750.000000</td>
+      <td id="T_12c83_row0_col9" class="data row0 col9" >3750.000000</td>
+    </tr>
+    <tr>
+      <th id="T_12c83_level0_row1" class="row_heading level0 row1" >1</th>
+      <td id="T_12c83_row1_col0" class="data row1 col0" >Adelie</td>
+      <td id="T_12c83_row1_col1" class="data row1 col1" >Torgersen</td>
+      <td id="T_12c83_row1_col2" class="data row1 col2" >39.500000</td>
+      <td id="T_12c83_row1_col3" class="data row1 col3" >17.400000</td>
+      <td id="T_12c83_row1_col4" class="data row1 col4" >186.000000</td>
+      <td id="T_12c83_row1_col5" class="data row1 col5" >3800.000000</td>
+      <td id="T_12c83_row1_col6" class="data row1 col6" >Female</td>
+      <td id="T_12c83_row1_col7" class="data row1 col7" >3800.000000</td>
+      <td id="T_12c83_row1_col8" class="data row1 col8" >3800.000000</td>
+      <td id="T_12c83_row1_col9" class="data row1 col9" >3800.000000</td>
+    </tr>
+    <tr>
+      <th id="T_12c83_level0_row2" class="row_heading level0 row2" >2</th>
+      <td id="T_12c83_row2_col0" class="data row2 col0" >Adelie</td>
+      <td id="T_12c83_row2_col1" class="data row2 col1" >Torgersen</td>
+      <td id="T_12c83_row2_col2" class="data row2 col2" >40.300000</td>
+      <td id="T_12c83_row2_col3" class="data row2 col3" >18.000000</td>
+      <td id="T_12c83_row2_col4" class="data row2 col4" >195.000000</td>
+      <td id="T_12c83_row2_col5" class="data row2 col5" >3250.000000</td>
+      <td id="T_12c83_row2_col6" class="data row2 col6" >Female</td>
+      <td id="T_12c83_row2_col7" class="data row2 col7" >3250.000000</td>
+      <td id="T_12c83_row2_col8" class="data row2 col8" >3250.000000</td>
+      <td id="T_12c83_row2_col9" class="data row2 col9" >3250.000000</td>
+    </tr>
+    <tr>
+      <th id="T_12c83_level0_row3" class="row_heading level0 row3" >3</th>
+      <td id="T_12c83_row3_col0" class="data row3 col0" >Adelie</td>
+      <td id="T_12c83_row3_col1" class="data row3 col1" >Torgersen</td>
+      <td id="T_12c83_row3_col2" class="data row3 col2" >nan</td>
+      <td id="T_12c83_row3_col3" class="data row3 col3" >nan</td>
+      <td id="T_12c83_row3_col4" class="data row3 col4" >nan</td>
+      <td id="T_12c83_row3_col5" class="data row3 col5" >nan</td>
+      <td id="T_12c83_row3_col6" class="data row3 col6" >nan</td>
+      <td id="T_12c83_row3_col7" class="data row3 col7" >4431.250000</td>
+      <td id="T_12c83_row3_col8" class="data row3 col8" >4325.000000</td>
+      <td id="T_12c83_row3_col9" class="data row3 col9" >7358.515606</td>
+    </tr>
+    <tr>
+      <th id="T_12c83_level0_row4" class="row_heading level0 row4" >4</th>
+      <td id="T_12c83_row4_col0" class="data row4 col0" >Adelie</td>
+      <td id="T_12c83_row4_col1" class="data row4 col1" >Torgersen</td>
+      <td id="T_12c83_row4_col2" class="data row4 col2" >36.700000</td>
+      <td id="T_12c83_row4_col3" class="data row4 col3" >19.300000</td>
+      <td id="T_12c83_row4_col4" class="data row4 col4" >193.000000</td>
+      <td id="T_12c83_row4_col5" class="data row4 col5" >3450.000000</td>
+      <td id="T_12c83_row4_col6" class="data row4 col6" >Female</td>
+      <td id="T_12c83_row4_col7" class="data row4 col7" >3450.000000</td>
+      <td id="T_12c83_row4_col8" class="data row4 col8" >3450.000000</td>
+      <td id="T_12c83_row4_col9" class="data row4 col9" >3450.000000</td>
+    </tr>
+    <tr>
+      <th id="T_12c83_level0_row5" class="row_heading level0 row5" >339</th>
+      <td id="T_12c83_row5_col0" class="data row5 col0" >Gentoo</td>
+      <td id="T_12c83_row5_col1" class="data row5 col1" >Biscoe</td>
+      <td id="T_12c83_row5_col2" class="data row5 col2" >nan</td>
+      <td id="T_12c83_row5_col3" class="data row5 col3" >nan</td>
+      <td id="T_12c83_row5_col4" class="data row5 col4" >nan</td>
+      <td id="T_12c83_row5_col5" class="data row5 col5" >nan</td>
+      <td id="T_12c83_row5_col6" class="data row5 col6" >nan</td>
+      <td id="T_12c83_row5_col7" class="data row5 col7" >4431.250000</td>
+      <td id="T_12c83_row5_col8" class="data row5 col8" >4325.000000</td>
+      <td id="T_12c83_row5_col9" class="data row5 col9" >7358.515606</td>
+    </tr>
+    <tr>
+      <th id="T_12c83_level0_row6" class="row_heading level0 row6" >340</th>
+      <td id="T_12c83_row6_col0" class="data row6 col0" >Gentoo</td>
+      <td id="T_12c83_row6_col1" class="data row6 col1" >Biscoe</td>
+      <td id="T_12c83_row6_col2" class="data row6 col2" >46.800000</td>
+      <td id="T_12c83_row6_col3" class="data row6 col3" >14.300000</td>
+      <td id="T_12c83_row6_col4" class="data row6 col4" >215.000000</td>
+      <td id="T_12c83_row6_col5" class="data row6 col5" >4850.000000</td>
+      <td id="T_12c83_row6_col6" class="data row6 col6" >Female</td>
+      <td id="T_12c83_row6_col7" class="data row6 col7" >4850.000000</td>
+      <td id="T_12c83_row6_col8" class="data row6 col8" >4850.000000</td>
+      <td id="T_12c83_row6_col9" class="data row6 col9" >4850.000000</td>
+    </tr>
+    <tr>
+      <th id="T_12c83_level0_row7" class="row_heading level0 row7" >341</th>
+      <td id="T_12c83_row7_col0" class="data row7 col0" >Gentoo</td>
+      <td id="T_12c83_row7_col1" class="data row7 col1" >Biscoe</td>
+      <td id="T_12c83_row7_col2" class="data row7 col2" >50.400000</td>
+      <td id="T_12c83_row7_col3" class="data row7 col3" >15.700000</td>
+      <td id="T_12c83_row7_col4" class="data row7 col4" >222.000000</td>
+      <td id="T_12c83_row7_col5" class="data row7 col5" >5750.000000</td>
+      <td id="T_12c83_row7_col6" class="data row7 col6" >Male</td>
+      <td id="T_12c83_row7_col7" class="data row7 col7" >5750.000000</td>
+      <td id="T_12c83_row7_col8" class="data row7 col8" >5750.000000</td>
+      <td id="T_12c83_row7_col9" class="data row7 col9" >5750.000000</td>
+    </tr>
+    <tr>
+      <th id="T_12c83_level0_row8" class="row_heading level0 row8" >342</th>
+      <td id="T_12c83_row8_col0" class="data row8 col0" >Gentoo</td>
+      <td id="T_12c83_row8_col1" class="data row8 col1" >Biscoe</td>
+      <td id="T_12c83_row8_col2" class="data row8 col2" >45.200000</td>
+      <td id="T_12c83_row8_col3" class="data row8 col3" >14.800000</td>
+      <td id="T_12c83_row8_col4" class="data row8 col4" >212.000000</td>
+      <td id="T_12c83_row8_col5" class="data row8 col5" >5200.000000</td>
+      <td id="T_12c83_row8_col6" class="data row8 col6" >Female</td>
+      <td id="T_12c83_row8_col7" class="data row8 col7" >5200.000000</td>
+      <td id="T_12c83_row8_col8" class="data row8 col8" >5200.000000</td>
+      <td id="T_12c83_row8_col9" class="data row8 col9" >5200.000000</td>
+    </tr>
+    <tr>
+      <th id="T_12c83_level0_row9" class="row_heading level0 row9" >343</th>
+      <td id="T_12c83_row9_col0" class="data row9 col0" >Gentoo</td>
+      <td id="T_12c83_row9_col1" class="data row9 col1" >Biscoe</td>
+      <td id="T_12c83_row9_col2" class="data row9 col2" >49.900000</td>
+      <td id="T_12c83_row9_col3" class="data row9 col3" >16.100000</td>
+      <td id="T_12c83_row9_col4" class="data row9 col4" >213.000000</td>
+      <td id="T_12c83_row9_col5" class="data row9 col5" >5400.000000</td>
+      <td id="T_12c83_row9_col6" class="data row9 col6" >Male</td>
+      <td id="T_12c83_row9_col7" class="data row9 col7" >5400.000000</td>
+      <td id="T_12c83_row9_col8" class="data row9 col8" >5400.000000</td>
+      <td id="T_12c83_row9_col9" class="data row9 col9" >5400.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="n">penguins_test</span><span class="p">[</span><span class="s1">'body_mass_g'</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">'kde'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'tab:green'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"body_mass_g"</span><span class="p">)</span>
+<span class="n">penguins_test</span><span class="p">[</span><span class="s1">'BMG_mean'</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">'kde'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'tab:orange'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"BMG_mean"</span><span class="p">)</span>
+<span class="n">penguins_test</span><span class="p">[</span><span class="s1">'BMG_median'</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">'kde'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'tab:blue'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"BMG_median"</span><span class="p">)</span>
+<span class="n">penguins_test</span><span class="p">[</span><span class="s1">'BMG_EoD'</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">'kde'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'tab:red'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"BMG_eod"</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">'best'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/77cde3025756ff79c166fde7fb22066ebf125498b3c8934f53c5886674923bf8.png" src="../../_images/77cde3025756ff79c166fde7fb22066ebf125498b3c8934f53c5886674923bf8.png" />
+</div>
+</div>
+<div class='alert alert-warning'>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>In certain scenarios, imputing missing data with values at <strong>end of distribution</strong> (EoD) of a variable can be a considered strategy. This approach offers advantage of computational speed and can theoretically capture significance of missing entries. Typically, EoD is calculated as an extreme value such as <code class="docutils literal notranslate"><span class="pre">mean</span> <span class="pre">+</span> <span class="pre">3*std</span></code>, where <code class="docutils literal notranslate"><span class="pre">mean</span></code> and <code class="docutils literal notranslate"><span class="pre">std</span></code> of feature can be obtained using <code class="docutils literal notranslate"><span class="pre">.describe()</span></code> method.</p>
+<p>However, as demonstrated here, this type of imputation often generates unrealistic values and distorts original distribution, particularly for features like <code class="docutils literal notranslate"><span class="pre">body_mass_g</span></code>. Consequently, it can lead to biased analyses and should be used with caution.</p>
+</div>
+</div></section>
+</section>
+<section id="handling-missing-categorical-data">
+<h4>3.2.2 Handling missing categorical data<a class="headerlink" href="#handling-missing-categorical-data" title="Link to this heading"></a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">penguins_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">penguins</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">penguins</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">5</span><span class="p">)])</span>
+<span class="n">penguins_test</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">highlight_null</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s1">'red'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style type="text/css">
+#T_770a8_row3_col2, #T_770a8_row3_col3, #T_770a8_row3_col4, #T_770a8_row3_col5, #T_770a8_row3_col6, #T_770a8_row5_col2, #T_770a8_row5_col3, #T_770a8_row5_col4, #T_770a8_row5_col5, #T_770a8_row5_col6 {
+  background-color: red;
+}
+</style>
+<table id="T_770a8">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_770a8_level0_col0" class="col_heading level0 col0" >species</th>
+      <th id="T_770a8_level0_col1" class="col_heading level0 col1" >island</th>
+      <th id="T_770a8_level0_col2" class="col_heading level0 col2" >bill_length_mm</th>
+      <th id="T_770a8_level0_col3" class="col_heading level0 col3" >bill_depth_mm</th>
+      <th id="T_770a8_level0_col4" class="col_heading level0 col4" >flipper_length_mm</th>
+      <th id="T_770a8_level0_col5" class="col_heading level0 col5" >body_mass_g</th>
+      <th id="T_770a8_level0_col6" class="col_heading level0 col6" >sex</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_770a8_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_770a8_row0_col0" class="data row0 col0" >Adelie</td>
+      <td id="T_770a8_row0_col1" class="data row0 col1" >Torgersen</td>
+      <td id="T_770a8_row0_col2" class="data row0 col2" >39.100000</td>
+      <td id="T_770a8_row0_col3" class="data row0 col3" >18.700000</td>
+      <td id="T_770a8_row0_col4" class="data row0 col4" >181.000000</td>
+      <td id="T_770a8_row0_col5" class="data row0 col5" >3750.000000</td>
+      <td id="T_770a8_row0_col6" class="data row0 col6" >Male</td>
+    </tr>
+    <tr>
+      <th id="T_770a8_level0_row1" class="row_heading level0 row1" >1</th>
+      <td id="T_770a8_row1_col0" class="data row1 col0" >Adelie</td>
+      <td id="T_770a8_row1_col1" class="data row1 col1" >Torgersen</td>
+      <td id="T_770a8_row1_col2" class="data row1 col2" >39.500000</td>
+      <td id="T_770a8_row1_col3" class="data row1 col3" >17.400000</td>
+      <td id="T_770a8_row1_col4" class="data row1 col4" >186.000000</td>
+      <td id="T_770a8_row1_col5" class="data row1 col5" >3800.000000</td>
+      <td id="T_770a8_row1_col6" class="data row1 col6" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_770a8_level0_row2" class="row_heading level0 row2" >2</th>
+      <td id="T_770a8_row2_col0" class="data row2 col0" >Adelie</td>
+      <td id="T_770a8_row2_col1" class="data row2 col1" >Torgersen</td>
+      <td id="T_770a8_row2_col2" class="data row2 col2" >40.300000</td>
+      <td id="T_770a8_row2_col3" class="data row2 col3" >18.000000</td>
+      <td id="T_770a8_row2_col4" class="data row2 col4" >195.000000</td>
+      <td id="T_770a8_row2_col5" class="data row2 col5" >3250.000000</td>
+      <td id="T_770a8_row2_col6" class="data row2 col6" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_770a8_level0_row3" class="row_heading level0 row3" >3</th>
+      <td id="T_770a8_row3_col0" class="data row3 col0" >Adelie</td>
+      <td id="T_770a8_row3_col1" class="data row3 col1" >Torgersen</td>
+      <td id="T_770a8_row3_col2" class="data row3 col2" >nan</td>
+      <td id="T_770a8_row3_col3" class="data row3 col3" >nan</td>
+      <td id="T_770a8_row3_col4" class="data row3 col4" >nan</td>
+      <td id="T_770a8_row3_col5" class="data row3 col5" >nan</td>
+      <td id="T_770a8_row3_col6" class="data row3 col6" >nan</td>
+    </tr>
+    <tr>
+      <th id="T_770a8_level0_row4" class="row_heading level0 row4" >4</th>
+      <td id="T_770a8_row4_col0" class="data row4 col0" >Adelie</td>
+      <td id="T_770a8_row4_col1" class="data row4 col1" >Torgersen</td>
+      <td id="T_770a8_row4_col2" class="data row4 col2" >36.700000</td>
+      <td id="T_770a8_row4_col3" class="data row4 col3" >19.300000</td>
+      <td id="T_770a8_row4_col4" class="data row4 col4" >193.000000</td>
+      <td id="T_770a8_row4_col5" class="data row4 col5" >3450.000000</td>
+      <td id="T_770a8_row4_col6" class="data row4 col6" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_770a8_level0_row5" class="row_heading level0 row5" >339</th>
+      <td id="T_770a8_row5_col0" class="data row5 col0" >Gentoo</td>
+      <td id="T_770a8_row5_col1" class="data row5 col1" >Biscoe</td>
+      <td id="T_770a8_row5_col2" class="data row5 col2" >nan</td>
+      <td id="T_770a8_row5_col3" class="data row5 col3" >nan</td>
+      <td id="T_770a8_row5_col4" class="data row5 col4" >nan</td>
+      <td id="T_770a8_row5_col5" class="data row5 col5" >nan</td>
+      <td id="T_770a8_row5_col6" class="data row5 col6" >nan</td>
+    </tr>
+    <tr>
+      <th id="T_770a8_level0_row6" class="row_heading level0 row6" >340</th>
+      <td id="T_770a8_row6_col0" class="data row6 col0" >Gentoo</td>
+      <td id="T_770a8_row6_col1" class="data row6 col1" >Biscoe</td>
+      <td id="T_770a8_row6_col2" class="data row6 col2" >46.800000</td>
+      <td id="T_770a8_row6_col3" class="data row6 col3" >14.300000</td>
+      <td id="T_770a8_row6_col4" class="data row6 col4" >215.000000</td>
+      <td id="T_770a8_row6_col5" class="data row6 col5" >4850.000000</td>
+      <td id="T_770a8_row6_col6" class="data row6 col6" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_770a8_level0_row7" class="row_heading level0 row7" >341</th>
+      <td id="T_770a8_row7_col0" class="data row7 col0" >Gentoo</td>
+      <td id="T_770a8_row7_col1" class="data row7 col1" >Biscoe</td>
+      <td id="T_770a8_row7_col2" class="data row7 col2" >50.400000</td>
+      <td id="T_770a8_row7_col3" class="data row7 col3" >15.700000</td>
+      <td id="T_770a8_row7_col4" class="data row7 col4" >222.000000</td>
+      <td id="T_770a8_row7_col5" class="data row7 col5" >5750.000000</td>
+      <td id="T_770a8_row7_col6" class="data row7 col6" >Male</td>
+    </tr>
+    <tr>
+      <th id="T_770a8_level0_row8" class="row_heading level0 row8" >342</th>
+      <td id="T_770a8_row8_col0" class="data row8 col0" >Gentoo</td>
+      <td id="T_770a8_row8_col1" class="data row8 col1" >Biscoe</td>
+      <td id="T_770a8_row8_col2" class="data row8 col2" >45.200000</td>
+      <td id="T_770a8_row8_col3" class="data row8 col3" >14.800000</td>
+      <td id="T_770a8_row8_col4" class="data row8 col4" >212.000000</td>
+      <td id="T_770a8_row8_col5" class="data row8 col5" >5200.000000</td>
+      <td id="T_770a8_row8_col6" class="data row8 col6" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_770a8_level0_row9" class="row_heading level0 row9" >343</th>
+      <td id="T_770a8_row9_col0" class="data row9 col0" >Gentoo</td>
+      <td id="T_770a8_row9_col1" class="data row9 col1" >Biscoe</td>
+      <td id="T_770a8_row9_col2" class="data row9 col2" >49.900000</td>
+      <td id="T_770a8_row9_col3" class="data row9 col3" >16.100000</td>
+      <td id="T_770a8_row9_col4" class="data row9 col4" >213.000000</td>
+      <td id="T_770a8_row9_col5" class="data row9 col5" >5400.000000</td>
+      <td id="T_770a8_row9_col6" class="data row9 col6" >Male</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>For categorical features such as sex, approach differs.</p>
+<ul class="simple">
+<li><p>One simple method is to replace missing categories with most frequent value (<code class="docutils literal notranslate"><span class="pre">mode</span></code>), which assumes missing value follows majority distribution.</p></li>
+<li><p>Alternatively, missing values can be treated as a separate category, labeled for example as “Unknown” or “Missing” which allows models to learn if missingness itself carries information.</p></li>
+<li><p>Another option is to apply model-based imputation, where missing categorical values are predicted from other features using classification algorithms.</p></li>
+</ul>
+<section id="imputation-with-most-frequent-value-mode">
+<h5><mark><strong>Imputation with most frequent value (<code class="docutils literal notranslate"><span class="pre">mode</span></code>)</strong></mark><a class="headerlink" href="#imputation-with-most-frequent-value-mode" title="Link to this heading"></a></h5>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">penguins_test</span><span class="o">.</span><span class="n">sex</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">'Sex'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">'Number of Penguins'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"mode for sex feature: </span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">penguins_test</span><span class="o">.</span><span class="n">sex</span><span class="o">.</span><span class="n">mode</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>mode for sex feature: 
+ 0    Female
+Name: sex, dtype: object
+</pre></div>
+</div>
+<img alt="../../_images/c9d25c585f6eabeb8970ce96f033517ed204fc2d13639372a5ebb2b0c9b46143.png" src="../../_images/c9d25c585f6eabeb8970ce96f033517ed204fc2d13639372a5ebb2b0c9b46143.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">penguins_test</span><span class="p">[</span><span class="s1">'Sex_mode'</span><span class="p">]</span> <span class="o">=</span> <span class="n">penguins_test</span><span class="p">[</span><span class="s1">'sex'</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">penguins_test</span><span class="o">.</span><span class="n">sex</span><span class="o">.</span><span class="n">mode</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">penguins_test</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">highlight_null</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s1">'green'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style type="text/css">
+#T_dafff_row3_col2, #T_dafff_row3_col3, #T_dafff_row3_col4, #T_dafff_row3_col5, #T_dafff_row3_col6, #T_dafff_row5_col2, #T_dafff_row5_col3, #T_dafff_row5_col4, #T_dafff_row5_col5, #T_dafff_row5_col6 {
+  background-color: green;
+}
+</style>
+<table id="T_dafff">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_dafff_level0_col0" class="col_heading level0 col0" >species</th>
+      <th id="T_dafff_level0_col1" class="col_heading level0 col1" >island</th>
+      <th id="T_dafff_level0_col2" class="col_heading level0 col2" >bill_length_mm</th>
+      <th id="T_dafff_level0_col3" class="col_heading level0 col3" >bill_depth_mm</th>
+      <th id="T_dafff_level0_col4" class="col_heading level0 col4" >flipper_length_mm</th>
+      <th id="T_dafff_level0_col5" class="col_heading level0 col5" >body_mass_g</th>
+      <th id="T_dafff_level0_col6" class="col_heading level0 col6" >sex</th>
+      <th id="T_dafff_level0_col7" class="col_heading level0 col7" >Sex_mode</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_dafff_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_dafff_row0_col0" class="data row0 col0" >Adelie</td>
+      <td id="T_dafff_row0_col1" class="data row0 col1" >Torgersen</td>
+      <td id="T_dafff_row0_col2" class="data row0 col2" >39.100000</td>
+      <td id="T_dafff_row0_col3" class="data row0 col3" >18.700000</td>
+      <td id="T_dafff_row0_col4" class="data row0 col4" >181.000000</td>
+      <td id="T_dafff_row0_col5" class="data row0 col5" >3750.000000</td>
+      <td id="T_dafff_row0_col6" class="data row0 col6" >Male</td>
+      <td id="T_dafff_row0_col7" class="data row0 col7" >Male</td>
+    </tr>
+    <tr>
+      <th id="T_dafff_level0_row1" class="row_heading level0 row1" >1</th>
+      <td id="T_dafff_row1_col0" class="data row1 col0" >Adelie</td>
+      <td id="T_dafff_row1_col1" class="data row1 col1" >Torgersen</td>
+      <td id="T_dafff_row1_col2" class="data row1 col2" >39.500000</td>
+      <td id="T_dafff_row1_col3" class="data row1 col3" >17.400000</td>
+      <td id="T_dafff_row1_col4" class="data row1 col4" >186.000000</td>
+      <td id="T_dafff_row1_col5" class="data row1 col5" >3800.000000</td>
+      <td id="T_dafff_row1_col6" class="data row1 col6" >Female</td>
+      <td id="T_dafff_row1_col7" class="data row1 col7" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_dafff_level0_row2" class="row_heading level0 row2" >2</th>
+      <td id="T_dafff_row2_col0" class="data row2 col0" >Adelie</td>
+      <td id="T_dafff_row2_col1" class="data row2 col1" >Torgersen</td>
+      <td id="T_dafff_row2_col2" class="data row2 col2" >40.300000</td>
+      <td id="T_dafff_row2_col3" class="data row2 col3" >18.000000</td>
+      <td id="T_dafff_row2_col4" class="data row2 col4" >195.000000</td>
+      <td id="T_dafff_row2_col5" class="data row2 col5" >3250.000000</td>
+      <td id="T_dafff_row2_col6" class="data row2 col6" >Female</td>
+      <td id="T_dafff_row2_col7" class="data row2 col7" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_dafff_level0_row3" class="row_heading level0 row3" >3</th>
+      <td id="T_dafff_row3_col0" class="data row3 col0" >Adelie</td>
+      <td id="T_dafff_row3_col1" class="data row3 col1" >Torgersen</td>
+      <td id="T_dafff_row3_col2" class="data row3 col2" >nan</td>
+      <td id="T_dafff_row3_col3" class="data row3 col3" >nan</td>
+      <td id="T_dafff_row3_col4" class="data row3 col4" >nan</td>
+      <td id="T_dafff_row3_col5" class="data row3 col5" >nan</td>
+      <td id="T_dafff_row3_col6" class="data row3 col6" >nan</td>
+      <td id="T_dafff_row3_col7" class="data row3 col7" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_dafff_level0_row4" class="row_heading level0 row4" >4</th>
+      <td id="T_dafff_row4_col0" class="data row4 col0" >Adelie</td>
+      <td id="T_dafff_row4_col1" class="data row4 col1" >Torgersen</td>
+      <td id="T_dafff_row4_col2" class="data row4 col2" >36.700000</td>
+      <td id="T_dafff_row4_col3" class="data row4 col3" >19.300000</td>
+      <td id="T_dafff_row4_col4" class="data row4 col4" >193.000000</td>
+      <td id="T_dafff_row4_col5" class="data row4 col5" >3450.000000</td>
+      <td id="T_dafff_row4_col6" class="data row4 col6" >Female</td>
+      <td id="T_dafff_row4_col7" class="data row4 col7" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_dafff_level0_row5" class="row_heading level0 row5" >339</th>
+      <td id="T_dafff_row5_col0" class="data row5 col0" >Gentoo</td>
+      <td id="T_dafff_row5_col1" class="data row5 col1" >Biscoe</td>
+      <td id="T_dafff_row5_col2" class="data row5 col2" >nan</td>
+      <td id="T_dafff_row5_col3" class="data row5 col3" >nan</td>
+      <td id="T_dafff_row5_col4" class="data row5 col4" >nan</td>
+      <td id="T_dafff_row5_col5" class="data row5 col5" >nan</td>
+      <td id="T_dafff_row5_col6" class="data row5 col6" >nan</td>
+      <td id="T_dafff_row5_col7" class="data row5 col7" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_dafff_level0_row6" class="row_heading level0 row6" >340</th>
+      <td id="T_dafff_row6_col0" class="data row6 col0" >Gentoo</td>
+      <td id="T_dafff_row6_col1" class="data row6 col1" >Biscoe</td>
+      <td id="T_dafff_row6_col2" class="data row6 col2" >46.800000</td>
+      <td id="T_dafff_row6_col3" class="data row6 col3" >14.300000</td>
+      <td id="T_dafff_row6_col4" class="data row6 col4" >215.000000</td>
+      <td id="T_dafff_row6_col5" class="data row6 col5" >4850.000000</td>
+      <td id="T_dafff_row6_col6" class="data row6 col6" >Female</td>
+      <td id="T_dafff_row6_col7" class="data row6 col7" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_dafff_level0_row7" class="row_heading level0 row7" >341</th>
+      <td id="T_dafff_row7_col0" class="data row7 col0" >Gentoo</td>
+      <td id="T_dafff_row7_col1" class="data row7 col1" >Biscoe</td>
+      <td id="T_dafff_row7_col2" class="data row7 col2" >50.400000</td>
+      <td id="T_dafff_row7_col3" class="data row7 col3" >15.700000</td>
+      <td id="T_dafff_row7_col4" class="data row7 col4" >222.000000</td>
+      <td id="T_dafff_row7_col5" class="data row7 col5" >5750.000000</td>
+      <td id="T_dafff_row7_col6" class="data row7 col6" >Male</td>
+      <td id="T_dafff_row7_col7" class="data row7 col7" >Male</td>
+    </tr>
+    <tr>
+      <th id="T_dafff_level0_row8" class="row_heading level0 row8" >342</th>
+      <td id="T_dafff_row8_col0" class="data row8 col0" >Gentoo</td>
+      <td id="T_dafff_row8_col1" class="data row8 col1" >Biscoe</td>
+      <td id="T_dafff_row8_col2" class="data row8 col2" >45.200000</td>
+      <td id="T_dafff_row8_col3" class="data row8 col3" >14.800000</td>
+      <td id="T_dafff_row8_col4" class="data row8 col4" >212.000000</td>
+      <td id="T_dafff_row8_col5" class="data row8 col5" >5200.000000</td>
+      <td id="T_dafff_row8_col6" class="data row8 col6" >Female</td>
+      <td id="T_dafff_row8_col7" class="data row8 col7" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_dafff_level0_row9" class="row_heading level0 row9" >343</th>
+      <td id="T_dafff_row9_col0" class="data row9 col0" >Gentoo</td>
+      <td id="T_dafff_row9_col1" class="data row9 col1" >Biscoe</td>
+      <td id="T_dafff_row9_col2" class="data row9 col2" >49.900000</td>
+      <td id="T_dafff_row9_col3" class="data row9 col3" >16.100000</td>
+      <td id="T_dafff_row9_col4" class="data row9 col4" >213.000000</td>
+      <td id="T_dafff_row9_col5" class="data row9 col5" >5400.000000</td>
+      <td id="T_dafff_row9_col6" class="data row9 col6" >Male</td>
+      <td id="T_dafff_row9_col7" class="data row9 col7" >Male</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="imputation-with-constant-value">
+<h5><mark><strong>Imputation with constant value</strong></mark><a class="headerlink" href="#imputation-with-constant-value" title="Link to this heading"></a></h5>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">penguins_test</span><span class="p">[</span><span class="s1">'Sex_ConstValue'</span><span class="p">]</span> <span class="o">=</span> <span class="n">penguins_test</span><span class="p">[</span><span class="s1">'sex'</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">"Missing"</span><span class="p">)</span>
+<span class="n">penguins_test</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">highlight_null</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s1">'green'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style type="text/css">
+#T_59e25_row3_col2, #T_59e25_row3_col3, #T_59e25_row3_col4, #T_59e25_row3_col5, #T_59e25_row3_col6, #T_59e25_row5_col2, #T_59e25_row5_col3, #T_59e25_row5_col4, #T_59e25_row5_col5, #T_59e25_row5_col6 {
+  background-color: green;
+}
+</style>
+<table id="T_59e25">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_59e25_level0_col0" class="col_heading level0 col0" >species</th>
+      <th id="T_59e25_level0_col1" class="col_heading level0 col1" >island</th>
+      <th id="T_59e25_level0_col2" class="col_heading level0 col2" >bill_length_mm</th>
+      <th id="T_59e25_level0_col3" class="col_heading level0 col3" >bill_depth_mm</th>
+      <th id="T_59e25_level0_col4" class="col_heading level0 col4" >flipper_length_mm</th>
+      <th id="T_59e25_level0_col5" class="col_heading level0 col5" >body_mass_g</th>
+      <th id="T_59e25_level0_col6" class="col_heading level0 col6" >sex</th>
+      <th id="T_59e25_level0_col7" class="col_heading level0 col7" >Sex_mode</th>
+      <th id="T_59e25_level0_col8" class="col_heading level0 col8" >Sex_ConstValue</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_59e25_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_59e25_row0_col0" class="data row0 col0" >Adelie</td>
+      <td id="T_59e25_row0_col1" class="data row0 col1" >Torgersen</td>
+      <td id="T_59e25_row0_col2" class="data row0 col2" >39.100000</td>
+      <td id="T_59e25_row0_col3" class="data row0 col3" >18.700000</td>
+      <td id="T_59e25_row0_col4" class="data row0 col4" >181.000000</td>
+      <td id="T_59e25_row0_col5" class="data row0 col5" >3750.000000</td>
+      <td id="T_59e25_row0_col6" class="data row0 col6" >Male</td>
+      <td id="T_59e25_row0_col7" class="data row0 col7" >Male</td>
+      <td id="T_59e25_row0_col8" class="data row0 col8" >Male</td>
+    </tr>
+    <tr>
+      <th id="T_59e25_level0_row1" class="row_heading level0 row1" >1</th>
+      <td id="T_59e25_row1_col0" class="data row1 col0" >Adelie</td>
+      <td id="T_59e25_row1_col1" class="data row1 col1" >Torgersen</td>
+      <td id="T_59e25_row1_col2" class="data row1 col2" >39.500000</td>
+      <td id="T_59e25_row1_col3" class="data row1 col3" >17.400000</td>
+      <td id="T_59e25_row1_col4" class="data row1 col4" >186.000000</td>
+      <td id="T_59e25_row1_col5" class="data row1 col5" >3800.000000</td>
+      <td id="T_59e25_row1_col6" class="data row1 col6" >Female</td>
+      <td id="T_59e25_row1_col7" class="data row1 col7" >Female</td>
+      <td id="T_59e25_row1_col8" class="data row1 col8" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_59e25_level0_row2" class="row_heading level0 row2" >2</th>
+      <td id="T_59e25_row2_col0" class="data row2 col0" >Adelie</td>
+      <td id="T_59e25_row2_col1" class="data row2 col1" >Torgersen</td>
+      <td id="T_59e25_row2_col2" class="data row2 col2" >40.300000</td>
+      <td id="T_59e25_row2_col3" class="data row2 col3" >18.000000</td>
+      <td id="T_59e25_row2_col4" class="data row2 col4" >195.000000</td>
+      <td id="T_59e25_row2_col5" class="data row2 col5" >3250.000000</td>
+      <td id="T_59e25_row2_col6" class="data row2 col6" >Female</td>
+      <td id="T_59e25_row2_col7" class="data row2 col7" >Female</td>
+      <td id="T_59e25_row2_col8" class="data row2 col8" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_59e25_level0_row3" class="row_heading level0 row3" >3</th>
+      <td id="T_59e25_row3_col0" class="data row3 col0" >Adelie</td>
+      <td id="T_59e25_row3_col1" class="data row3 col1" >Torgersen</td>
+      <td id="T_59e25_row3_col2" class="data row3 col2" >nan</td>
+      <td id="T_59e25_row3_col3" class="data row3 col3" >nan</td>
+      <td id="T_59e25_row3_col4" class="data row3 col4" >nan</td>
+      <td id="T_59e25_row3_col5" class="data row3 col5" >nan</td>
+      <td id="T_59e25_row3_col6" class="data row3 col6" >nan</td>
+      <td id="T_59e25_row3_col7" class="data row3 col7" >Female</td>
+      <td id="T_59e25_row3_col8" class="data row3 col8" >Missing</td>
+    </tr>
+    <tr>
+      <th id="T_59e25_level0_row4" class="row_heading level0 row4" >4</th>
+      <td id="T_59e25_row4_col0" class="data row4 col0" >Adelie</td>
+      <td id="T_59e25_row4_col1" class="data row4 col1" >Torgersen</td>
+      <td id="T_59e25_row4_col2" class="data row4 col2" >36.700000</td>
+      <td id="T_59e25_row4_col3" class="data row4 col3" >19.300000</td>
+      <td id="T_59e25_row4_col4" class="data row4 col4" >193.000000</td>
+      <td id="T_59e25_row4_col5" class="data row4 col5" >3450.000000</td>
+      <td id="T_59e25_row4_col6" class="data row4 col6" >Female</td>
+      <td id="T_59e25_row4_col7" class="data row4 col7" >Female</td>
+      <td id="T_59e25_row4_col8" class="data row4 col8" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_59e25_level0_row5" class="row_heading level0 row5" >339</th>
+      <td id="T_59e25_row5_col0" class="data row5 col0" >Gentoo</td>
+      <td id="T_59e25_row5_col1" class="data row5 col1" >Biscoe</td>
+      <td id="T_59e25_row5_col2" class="data row5 col2" >nan</td>
+      <td id="T_59e25_row5_col3" class="data row5 col3" >nan</td>
+      <td id="T_59e25_row5_col4" class="data row5 col4" >nan</td>
+      <td id="T_59e25_row5_col5" class="data row5 col5" >nan</td>
+      <td id="T_59e25_row5_col6" class="data row5 col6" >nan</td>
+      <td id="T_59e25_row5_col7" class="data row5 col7" >Female</td>
+      <td id="T_59e25_row5_col8" class="data row5 col8" >Missing</td>
+    </tr>
+    <tr>
+      <th id="T_59e25_level0_row6" class="row_heading level0 row6" >340</th>
+      <td id="T_59e25_row6_col0" class="data row6 col0" >Gentoo</td>
+      <td id="T_59e25_row6_col1" class="data row6 col1" >Biscoe</td>
+      <td id="T_59e25_row6_col2" class="data row6 col2" >46.800000</td>
+      <td id="T_59e25_row6_col3" class="data row6 col3" >14.300000</td>
+      <td id="T_59e25_row6_col4" class="data row6 col4" >215.000000</td>
+      <td id="T_59e25_row6_col5" class="data row6 col5" >4850.000000</td>
+      <td id="T_59e25_row6_col6" class="data row6 col6" >Female</td>
+      <td id="T_59e25_row6_col7" class="data row6 col7" >Female</td>
+      <td id="T_59e25_row6_col8" class="data row6 col8" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_59e25_level0_row7" class="row_heading level0 row7" >341</th>
+      <td id="T_59e25_row7_col0" class="data row7 col0" >Gentoo</td>
+      <td id="T_59e25_row7_col1" class="data row7 col1" >Biscoe</td>
+      <td id="T_59e25_row7_col2" class="data row7 col2" >50.400000</td>
+      <td id="T_59e25_row7_col3" class="data row7 col3" >15.700000</td>
+      <td id="T_59e25_row7_col4" class="data row7 col4" >222.000000</td>
+      <td id="T_59e25_row7_col5" class="data row7 col5" >5750.000000</td>
+      <td id="T_59e25_row7_col6" class="data row7 col6" >Male</td>
+      <td id="T_59e25_row7_col7" class="data row7 col7" >Male</td>
+      <td id="T_59e25_row7_col8" class="data row7 col8" >Male</td>
+    </tr>
+    <tr>
+      <th id="T_59e25_level0_row8" class="row_heading level0 row8" >342</th>
+      <td id="T_59e25_row8_col0" class="data row8 col0" >Gentoo</td>
+      <td id="T_59e25_row8_col1" class="data row8 col1" >Biscoe</td>
+      <td id="T_59e25_row8_col2" class="data row8 col2" >45.200000</td>
+      <td id="T_59e25_row8_col3" class="data row8 col3" >14.800000</td>
+      <td id="T_59e25_row8_col4" class="data row8 col4" >212.000000</td>
+      <td id="T_59e25_row8_col5" class="data row8 col5" >5200.000000</td>
+      <td id="T_59e25_row8_col6" class="data row8 col6" >Female</td>
+      <td id="T_59e25_row8_col7" class="data row8 col7" >Female</td>
+      <td id="T_59e25_row8_col8" class="data row8 col8" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_59e25_level0_row9" class="row_heading level0 row9" >343</th>
+      <td id="T_59e25_row9_col0" class="data row9 col0" >Gentoo</td>
+      <td id="T_59e25_row9_col1" class="data row9 col1" >Biscoe</td>
+      <td id="T_59e25_row9_col2" class="data row9 col2" >49.900000</td>
+      <td id="T_59e25_row9_col3" class="data row9 col3" >16.100000</td>
+      <td id="T_59e25_row9_col4" class="data row9 col4" >213.000000</td>
+      <td id="T_59e25_row9_col5" class="data row9 col5" >5400.000000</td>
+      <td id="T_59e25_row9_col6" class="data row9 col6" >Male</td>
+      <td id="T_59e25_row9_col7" class="data row9 col7" >Male</td>
+      <td id="T_59e25_row9_col8" class="data row9 col8" >Male</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">penguins_test</span><span class="p">[</span><span class="s2">"Sex_ConstValue"</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">'Sex'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">'Number of Penguins'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/ed488c8a6ffea95b204ace540fc943549878657a56881b2feed2eaa4393517b0.png" src="../../_images/ed488c8a6ffea95b204ace540fc943549878657a56881b2feed2eaa4393517b0.png" />
+</div>
+</div>
+<div class='alert alert-info'>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For the other dataset, strategy for handling missing values is not one-size-fits-all; it depends heavily on whether missing data is numerical or categorical and underlying mechanism causing data to be missing. Ignoring these missing entries, such as by simply dropping affected rows, may introduce significant bias, reduce statistical power, and ultimately lead to inaccurate or misleading conclusions.</p>
+<p>After any imputation, it is essential to perform sanity checks to ensure the imputed values are plausible and to document the methodology transparently. Properly handling missing data in this way transforms an incomplete dataset into a robust and reliable foundation for generating accurate insights and building powerful predictive models.</p>
+</div>
+</div></section>
+</section>
+<section id="remove-missing-values">
+<h4>3.2.3 Remove missing values<a class="headerlink" href="#remove-missing-values" title="Link to this heading"></a></h4>
+<p>For all ML tasks we will perform in the following episodes, we adopt a straightforward approach of removing any rows that contain missing values (<code class="docutils literal notranslate"><span class="pre">penguins_test.dropna()</span></code>). This ensures that the dataset is complete and avoids potential errors or biases caused by NaN entries. Although more sophisticated imputation methods exist, dropping rows is a simple and effective strategy when the proportion of missing data is relatively small.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">penguins_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">penguins</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">penguins</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">5</span><span class="p">)])</span>
+<span class="n">penguins_test</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">highlight_null</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s1">'red'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style type="text/css">
+#T_c72d5_row3_col2, #T_c72d5_row3_col3, #T_c72d5_row3_col4, #T_c72d5_row3_col5, #T_c72d5_row3_col6, #T_c72d5_row5_col2, #T_c72d5_row5_col3, #T_c72d5_row5_col4, #T_c72d5_row5_col5, #T_c72d5_row5_col6 {
+  background-color: red;
+}
+</style>
+<table id="T_c72d5">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_c72d5_level0_col0" class="col_heading level0 col0" >species</th>
+      <th id="T_c72d5_level0_col1" class="col_heading level0 col1" >island</th>
+      <th id="T_c72d5_level0_col2" class="col_heading level0 col2" >bill_length_mm</th>
+      <th id="T_c72d5_level0_col3" class="col_heading level0 col3" >bill_depth_mm</th>
+      <th id="T_c72d5_level0_col4" class="col_heading level0 col4" >flipper_length_mm</th>
+      <th id="T_c72d5_level0_col5" class="col_heading level0 col5" >body_mass_g</th>
+      <th id="T_c72d5_level0_col6" class="col_heading level0 col6" >sex</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_c72d5_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_c72d5_row0_col0" class="data row0 col0" >Adelie</td>
+      <td id="T_c72d5_row0_col1" class="data row0 col1" >Torgersen</td>
+      <td id="T_c72d5_row0_col2" class="data row0 col2" >39.100000</td>
+      <td id="T_c72d5_row0_col3" class="data row0 col3" >18.700000</td>
+      <td id="T_c72d5_row0_col4" class="data row0 col4" >181.000000</td>
+      <td id="T_c72d5_row0_col5" class="data row0 col5" >3750.000000</td>
+      <td id="T_c72d5_row0_col6" class="data row0 col6" >Male</td>
+    </tr>
+    <tr>
+      <th id="T_c72d5_level0_row1" class="row_heading level0 row1" >1</th>
+      <td id="T_c72d5_row1_col0" class="data row1 col0" >Adelie</td>
+      <td id="T_c72d5_row1_col1" class="data row1 col1" >Torgersen</td>
+      <td id="T_c72d5_row1_col2" class="data row1 col2" >39.500000</td>
+      <td id="T_c72d5_row1_col3" class="data row1 col3" >17.400000</td>
+      <td id="T_c72d5_row1_col4" class="data row1 col4" >186.000000</td>
+      <td id="T_c72d5_row1_col5" class="data row1 col5" >3800.000000</td>
+      <td id="T_c72d5_row1_col6" class="data row1 col6" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_c72d5_level0_row2" class="row_heading level0 row2" >2</th>
+      <td id="T_c72d5_row2_col0" class="data row2 col0" >Adelie</td>
+      <td id="T_c72d5_row2_col1" class="data row2 col1" >Torgersen</td>
+      <td id="T_c72d5_row2_col2" class="data row2 col2" >40.300000</td>
+      <td id="T_c72d5_row2_col3" class="data row2 col3" >18.000000</td>
+      <td id="T_c72d5_row2_col4" class="data row2 col4" >195.000000</td>
+      <td id="T_c72d5_row2_col5" class="data row2 col5" >3250.000000</td>
+      <td id="T_c72d5_row2_col6" class="data row2 col6" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_c72d5_level0_row3" class="row_heading level0 row3" >3</th>
+      <td id="T_c72d5_row3_col0" class="data row3 col0" >Adelie</td>
+      <td id="T_c72d5_row3_col1" class="data row3 col1" >Torgersen</td>
+      <td id="T_c72d5_row3_col2" class="data row3 col2" >nan</td>
+      <td id="T_c72d5_row3_col3" class="data row3 col3" >nan</td>
+      <td id="T_c72d5_row3_col4" class="data row3 col4" >nan</td>
+      <td id="T_c72d5_row3_col5" class="data row3 col5" >nan</td>
+      <td id="T_c72d5_row3_col6" class="data row3 col6" >nan</td>
+    </tr>
+    <tr>
+      <th id="T_c72d5_level0_row4" class="row_heading level0 row4" >4</th>
+      <td id="T_c72d5_row4_col0" class="data row4 col0" >Adelie</td>
+      <td id="T_c72d5_row4_col1" class="data row4 col1" >Torgersen</td>
+      <td id="T_c72d5_row4_col2" class="data row4 col2" >36.700000</td>
+      <td id="T_c72d5_row4_col3" class="data row4 col3" >19.300000</td>
+      <td id="T_c72d5_row4_col4" class="data row4 col4" >193.000000</td>
+      <td id="T_c72d5_row4_col5" class="data row4 col5" >3450.000000</td>
+      <td id="T_c72d5_row4_col6" class="data row4 col6" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_c72d5_level0_row5" class="row_heading level0 row5" >339</th>
+      <td id="T_c72d5_row5_col0" class="data row5 col0" >Gentoo</td>
+      <td id="T_c72d5_row5_col1" class="data row5 col1" >Biscoe</td>
+      <td id="T_c72d5_row5_col2" class="data row5 col2" >nan</td>
+      <td id="T_c72d5_row5_col3" class="data row5 col3" >nan</td>
+      <td id="T_c72d5_row5_col4" class="data row5 col4" >nan</td>
+      <td id="T_c72d5_row5_col5" class="data row5 col5" >nan</td>
+      <td id="T_c72d5_row5_col6" class="data row5 col6" >nan</td>
+    </tr>
+    <tr>
+      <th id="T_c72d5_level0_row6" class="row_heading level0 row6" >340</th>
+      <td id="T_c72d5_row6_col0" class="data row6 col0" >Gentoo</td>
+      <td id="T_c72d5_row6_col1" class="data row6 col1" >Biscoe</td>
+      <td id="T_c72d5_row6_col2" class="data row6 col2" >46.800000</td>
+      <td id="T_c72d5_row6_col3" class="data row6 col3" >14.300000</td>
+      <td id="T_c72d5_row6_col4" class="data row6 col4" >215.000000</td>
+      <td id="T_c72d5_row6_col5" class="data row6 col5" >4850.000000</td>
+      <td id="T_c72d5_row6_col6" class="data row6 col6" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_c72d5_level0_row7" class="row_heading level0 row7" >341</th>
+      <td id="T_c72d5_row7_col0" class="data row7 col0" >Gentoo</td>
+      <td id="T_c72d5_row7_col1" class="data row7 col1" >Biscoe</td>
+      <td id="T_c72d5_row7_col2" class="data row7 col2" >50.400000</td>
+      <td id="T_c72d5_row7_col3" class="data row7 col3" >15.700000</td>
+      <td id="T_c72d5_row7_col4" class="data row7 col4" >222.000000</td>
+      <td id="T_c72d5_row7_col5" class="data row7 col5" >5750.000000</td>
+      <td id="T_c72d5_row7_col6" class="data row7 col6" >Male</td>
+    </tr>
+    <tr>
+      <th id="T_c72d5_level0_row8" class="row_heading level0 row8" >342</th>
+      <td id="T_c72d5_row8_col0" class="data row8 col0" >Gentoo</td>
+      <td id="T_c72d5_row8_col1" class="data row8 col1" >Biscoe</td>
+      <td id="T_c72d5_row8_col2" class="data row8 col2" >45.200000</td>
+      <td id="T_c72d5_row8_col3" class="data row8 col3" >14.800000</td>
+      <td id="T_c72d5_row8_col4" class="data row8 col4" >212.000000</td>
+      <td id="T_c72d5_row8_col5" class="data row8 col5" >5200.000000</td>
+      <td id="T_c72d5_row8_col6" class="data row8 col6" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_c72d5_level0_row9" class="row_heading level0 row9" >343</th>
+      <td id="T_c72d5_row9_col0" class="data row9 col0" >Gentoo</td>
+      <td id="T_c72d5_row9_col1" class="data row9 col1" >Biscoe</td>
+      <td id="T_c72d5_row9_col2" class="data row9 col2" >49.900000</td>
+      <td id="T_c72d5_row9_col3" class="data row9 col3" >16.100000</td>
+      <td id="T_c72d5_row9_col4" class="data row9 col4" >213.000000</td>
+      <td id="T_c72d5_row9_col5" class="data row9 col5" >5400.000000</td>
+      <td id="T_c72d5_row9_col6" class="data row9 col6" >Male</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">penguins_test_remove</span> <span class="o">=</span> <span class="n">penguins_test</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span> <span class="c1"># axis=1</span>
+<span class="n">penguins_test_remove</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">highlight_null</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s1">'red'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style type="text/css">
+</style>
+<table id="T_9bd9c">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_9bd9c_level0_col0" class="col_heading level0 col0" >species</th>
+      <th id="T_9bd9c_level0_col1" class="col_heading level0 col1" >island</th>
+      <th id="T_9bd9c_level0_col2" class="col_heading level0 col2" >bill_length_mm</th>
+      <th id="T_9bd9c_level0_col3" class="col_heading level0 col3" >bill_depth_mm</th>
+      <th id="T_9bd9c_level0_col4" class="col_heading level0 col4" >flipper_length_mm</th>
+      <th id="T_9bd9c_level0_col5" class="col_heading level0 col5" >body_mass_g</th>
+      <th id="T_9bd9c_level0_col6" class="col_heading level0 col6" >sex</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_9bd9c_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_9bd9c_row0_col0" class="data row0 col0" >Adelie</td>
+      <td id="T_9bd9c_row0_col1" class="data row0 col1" >Torgersen</td>
+      <td id="T_9bd9c_row0_col2" class="data row0 col2" >39.100000</td>
+      <td id="T_9bd9c_row0_col3" class="data row0 col3" >18.700000</td>
+      <td id="T_9bd9c_row0_col4" class="data row0 col4" >181.000000</td>
+      <td id="T_9bd9c_row0_col5" class="data row0 col5" >3750.000000</td>
+      <td id="T_9bd9c_row0_col6" class="data row0 col6" >Male</td>
+    </tr>
+    <tr>
+      <th id="T_9bd9c_level0_row1" class="row_heading level0 row1" >1</th>
+      <td id="T_9bd9c_row1_col0" class="data row1 col0" >Adelie</td>
+      <td id="T_9bd9c_row1_col1" class="data row1 col1" >Torgersen</td>
+      <td id="T_9bd9c_row1_col2" class="data row1 col2" >39.500000</td>
+      <td id="T_9bd9c_row1_col3" class="data row1 col3" >17.400000</td>
+      <td id="T_9bd9c_row1_col4" class="data row1 col4" >186.000000</td>
+      <td id="T_9bd9c_row1_col5" class="data row1 col5" >3800.000000</td>
+      <td id="T_9bd9c_row1_col6" class="data row1 col6" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_9bd9c_level0_row2" class="row_heading level0 row2" >2</th>
+      <td id="T_9bd9c_row2_col0" class="data row2 col0" >Adelie</td>
+      <td id="T_9bd9c_row2_col1" class="data row2 col1" >Torgersen</td>
+      <td id="T_9bd9c_row2_col2" class="data row2 col2" >40.300000</td>
+      <td id="T_9bd9c_row2_col3" class="data row2 col3" >18.000000</td>
+      <td id="T_9bd9c_row2_col4" class="data row2 col4" >195.000000</td>
+      <td id="T_9bd9c_row2_col5" class="data row2 col5" >3250.000000</td>
+      <td id="T_9bd9c_row2_col6" class="data row2 col6" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_9bd9c_level0_row3" class="row_heading level0 row3" >4</th>
+      <td id="T_9bd9c_row3_col0" class="data row3 col0" >Adelie</td>
+      <td id="T_9bd9c_row3_col1" class="data row3 col1" >Torgersen</td>
+      <td id="T_9bd9c_row3_col2" class="data row3 col2" >36.700000</td>
+      <td id="T_9bd9c_row3_col3" class="data row3 col3" >19.300000</td>
+      <td id="T_9bd9c_row3_col4" class="data row3 col4" >193.000000</td>
+      <td id="T_9bd9c_row3_col5" class="data row3 col5" >3450.000000</td>
+      <td id="T_9bd9c_row3_col6" class="data row3 col6" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_9bd9c_level0_row4" class="row_heading level0 row4" >340</th>
+      <td id="T_9bd9c_row4_col0" class="data row4 col0" >Gentoo</td>
+      <td id="T_9bd9c_row4_col1" class="data row4 col1" >Biscoe</td>
+      <td id="T_9bd9c_row4_col2" class="data row4 col2" >46.800000</td>
+      <td id="T_9bd9c_row4_col3" class="data row4 col3" >14.300000</td>
+      <td id="T_9bd9c_row4_col4" class="data row4 col4" >215.000000</td>
+      <td id="T_9bd9c_row4_col5" class="data row4 col5" >4850.000000</td>
+      <td id="T_9bd9c_row4_col6" class="data row4 col6" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_9bd9c_level0_row5" class="row_heading level0 row5" >341</th>
+      <td id="T_9bd9c_row5_col0" class="data row5 col0" >Gentoo</td>
+      <td id="T_9bd9c_row5_col1" class="data row5 col1" >Biscoe</td>
+      <td id="T_9bd9c_row5_col2" class="data row5 col2" >50.400000</td>
+      <td id="T_9bd9c_row5_col3" class="data row5 col3" >15.700000</td>
+      <td id="T_9bd9c_row5_col4" class="data row5 col4" >222.000000</td>
+      <td id="T_9bd9c_row5_col5" class="data row5 col5" >5750.000000</td>
+      <td id="T_9bd9c_row5_col6" class="data row5 col6" >Male</td>
+    </tr>
+    <tr>
+      <th id="T_9bd9c_level0_row6" class="row_heading level0 row6" >342</th>
+      <td id="T_9bd9c_row6_col0" class="data row6 col0" >Gentoo</td>
+      <td id="T_9bd9c_row6_col1" class="data row6 col1" >Biscoe</td>
+      <td id="T_9bd9c_row6_col2" class="data row6 col2" >45.200000</td>
+      <td id="T_9bd9c_row6_col3" class="data row6 col3" >14.800000</td>
+      <td id="T_9bd9c_row6_col4" class="data row6 col4" >212.000000</td>
+      <td id="T_9bd9c_row6_col5" class="data row6 col5" >5200.000000</td>
+      <td id="T_9bd9c_row6_col6" class="data row6 col6" >Female</td>
+    </tr>
+    <tr>
+      <th id="T_9bd9c_level0_row7" class="row_heading level0 row7" >343</th>
+      <td id="T_9bd9c_row7_col0" class="data row7 col0" >Gentoo</td>
+      <td id="T_9bd9c_row7_col1" class="data row7 col1" >Biscoe</td>
+      <td id="T_9bd9c_row7_col2" class="data row7 col2" >49.900000</td>
+      <td id="T_9bd9c_row7_col3" class="data row7 col3" >16.100000</td>
+      <td id="T_9bd9c_row7_col4" class="data row7 col4" >213.000000</td>
+      <td id="T_9bd9c_row7_col5" class="data row7 col5" >5400.000000</td>
+      <td id="T_9bd9c_row7_col6" class="data row7 col6" >Male</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+</section>
+<section id="handling-outliers">
+<h3>3.3. Handling Outliers<a class="headerlink" href="#handling-outliers" title="Link to this heading"></a></h3>
+<p>Outliers are values that are too far from rest of observations in columns. For instance, if body mass of most of penguins in dataset varies between 3000-6000 g, an observation of 7500 g will be considered as an outlier since such an observation occurs rarely.</p>
+<section id="creating-outliers">
+<h4>3.3.1 Creating outliers<a class="headerlink" href="#creating-outliers" title="Link to this heading"></a></h4>
+<p>We have calculated EoD value of <code class="docutils literal notranslate"><span class="pre">body_mass_g</span></code> feature and then check if this value is outlier for this feature.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Here we use the EoD value as an example to create two outlier points</span>
+
+<span class="n">penguins_test_BMG_outlier</span> <span class="o">=</span> <span class="n">penguins</span><span class="p">[[</span><span class="s2">"species"</span><span class="p">,</span> <span class="s2">"bill_length_mm"</span><span class="p">,</span> <span class="s2">"body_mass_g"</span><span class="p">]]</span>
+
+<span class="n">eod_value</span> <span class="o">=</span> <span class="n">penguins_test</span><span class="p">[</span><span class="s1">'body_mass_g'</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">penguins_test</span><span class="p">[</span><span class="s1">'body_mass_g'</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"EoD value = </span><span class="si">{</span><span class="n">eod_value</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="n">penguins_test_BMG_outlier</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s2">"body_mass_g"</span><span class="p">]</span> <span class="o">=</span> <span class="n">penguins_test_BMG_outlier</span><span class="p">[</span><span class="s2">"body_mass_g"</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">eod_value</span><span class="p">)</span>
+<span class="n">penguins_test_BMG_outlier</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>EoD value = 7358.515606085554
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>species</th>
+      <th>bill_length_mm</th>
+      <th>body_mass_g</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Adelie</td>
+      <td>39.1</td>
+      <td>3750.000000</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Adelie</td>
+      <td>39.5</td>
+      <td>3800.000000</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Adelie</td>
+      <td>40.3</td>
+      <td>3250.000000</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Adelie</td>
+      <td>NaN</td>
+      <td>7358.515606</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Adelie</td>
+      <td>36.7</td>
+      <td>3450.000000</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>339</th>
+      <td>Gentoo</td>
+      <td>NaN</td>
+      <td>7358.515606</td>
+    </tr>
+    <tr>
+      <th>340</th>
+      <td>Gentoo</td>
+      <td>46.8</td>
+      <td>4850.000000</td>
+    </tr>
+    <tr>
+      <th>341</th>
+      <td>Gentoo</td>
+      <td>50.4</td>
+      <td>5750.000000</td>
+    </tr>
+    <tr>
+      <th>342</th>
+      <td>Gentoo</td>
+      <td>45.2</td>
+      <td>5200.000000</td>
+    </tr>
+    <tr>
+      <th>343</th>
+      <td>Gentoo</td>
+      <td>49.9</td>
+      <td>5400.000000</td>
+    </tr>
+  </tbody>
+</table>
+<p>344 rows × 3 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">swarmplot</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">penguins_test_BMG_outlier</span><span class="p">[</span><span class="s2">"species"</span><span class="p">],</span> <span class="n">x</span><span class="o">=</span><span class="n">penguins_test_BMG_outlier</span><span class="p">[</span><span class="s2">"body_mass_g"</span><span class="p">],</span>
+              <span class="n">color</span><span class="o">=</span><span class="s2">"lightgreen"</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">"o"</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">penguins_test_BMG_outlier</span><span class="p">[</span><span class="s2">"species"</span><span class="p">],</span> <span class="n">x</span><span class="o">=</span><span class="n">penguins_test_BMG_outlier</span><span class="p">[</span><span class="s2">"body_mass_g"</span><span class="p">],</span> 
+            <span class="n">palette</span><span class="o">=</span><span class="s2">"coolwarm"</span><span class="p">,</span> <span class="n">notch</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> 
+            <span class="n">hue</span><span class="o">=</span><span class="n">penguins_test_BMG_outlier</span><span class="o">.</span><span class="n">species</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"Body mass (g)"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"Species"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">'x'</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">'y'</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/79e96edddb5cfefaf7af48f1c14e41ba841a2655d5c2f8602cbe26d6c239d1c9.png" src="../../_images/79e96edddb5cfefaf7af48f1c14e41ba841a2655d5c2f8602cbe26d6c239d1c9.png" />
+</div>
+</div>
+<p>There are several approaches to identify outliers, and two of most commonly used methods are <strong>Interquartile Range (IQR)</strong> method and <strong>Mean-Standard Deviation</strong> method.</p>
+</section>
+<section id="the-inter-quartile-range-iqr-method">
+<h4>3.3.2 The Inter quartile range (IQR) method<a class="headerlink" href="#the-inter-quartile-range-iqr-method" title="Link to this heading"></a></h4>
+<p>IQR measures spread of middle 50% of data and is calculated by subtracting 1st quartile (25th percentile, Q1) from 3rd quartile (75th percentile, Q3).</p>
+<ul class="simple">
+<li><p>Once IQR is obtained, we can determine boundaries for detecting outliers.</p></li>
+<li><p>Lower limit is defined as Q1 minus 1.5 times IQR.</p></li>
+<li><p>Upper limit is defined as Q3 plus 1.5 times IQR.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">penguins_test_BMG_outlier</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>bill_length_mm</th>
+      <th>body_mass_g</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>342.000000</td>
+      <td>344.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>43.921930</td>
+      <td>4220.107649</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>5.459584</td>
+      <td>834.954489</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>32.100000</td>
+      <td>2700.000000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>39.225000</td>
+      <td>3550.000000</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>44.450000</td>
+      <td>4050.000000</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>48.500000</td>
+      <td>4781.250000</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>59.600000</td>
+      <td>7358.515606</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"25% quantile = </span><span class="si">{</span><span class="n">penguins_test_BMG_outlier</span><span class="p">[</span><span class="s1">'body_mass_g'</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"75% quantile = </span><span class="si">{</span><span class="n">penguins_test_BMG_outlier</span><span class="p">[</span><span class="s1">'body_mass_g'</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.75</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="n">IQR</span> <span class="o">=</span> <span class="n">penguins_test_BMG_outlier</span><span class="p">[</span><span class="s2">"body_mass_g"</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.75</span><span class="p">)</span> <span class="o">-</span> <span class="n">penguins_test_BMG_outlier</span><span class="p">[</span><span class="s2">"body_mass_g"</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span>
+<span class="n">lower_bmg_limit</span> <span class="o">=</span> <span class="n">penguins_test_BMG_outlier</span><span class="p">[</span><span class="s2">"body_mass_g"</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="mf">1.5</span> <span class="o">*</span> <span class="n">IQR</span><span class="p">)</span>
+<span class="n">upper_bmg_limit</span> <span class="o">=</span> <span class="n">penguins_test_BMG_outlier</span><span class="p">[</span><span class="s2">"body_mass_g"</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.75</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.5</span> <span class="o">*</span> <span class="n">IQR</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"lower limt of IQR = </span><span class="si">{</span><span class="n">lower_bmg_limit</span><span class="si">}</span><span class="s2"> and upper limit of IQR = </span><span class="si">{</span><span class="n">upper_bmg_limit</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>25% quantile = 3550.0
+75% quantile = 4781.25
+
+lower limt of IQR = 1703.125 and upper limit of IQR = 6628.125
+</pre></div>
+</div>
+</div>
+</div>
+<p>Any data points that fall below lower limit or above upper limit are considered outliers, and these points are subsequently removed from dataset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># check data points larger than the upper limit of the IQR range</span>
+
+<span class="n">penguins_test_BMG_outlier</span><span class="p">[</span><span class="n">penguins_test_BMG_outlier</span><span class="p">[</span><span class="s2">"body_mass_g"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">upper_bmg_limit</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>species</th>
+      <th>bill_length_mm</th>
+      <th>body_mass_g</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>3</th>
+      <td>Adelie</td>
+      <td>NaN</td>
+      <td>7358.515606</td>
+    </tr>
+    <tr>
+      <th>339</th>
+      <td>Gentoo</td>
+      <td>NaN</td>
+      <td>7358.515606</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># check data points smaller than the lower limit of the IQR range</span>
+
+<span class="n">penguins_test_BMG_outlier</span><span class="p">[</span><span class="n">penguins_test_BMG_outlier</span><span class="p">[</span><span class="s2">"body_mass_g"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">lower_bmg_limit</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>species</th>
+      <th>bill_length_mm</th>
+      <th>body_mass_g</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># remove the outliers</span>
+
+<span class="n">penguins_test_BMG_outlier_remove_IQR</span> <span class="o">=</span> <span class="n">penguins_test_BMG_outlier</span><span class="p">[</span><span class="n">penguins_test_BMG_outlier</span><span class="p">[</span><span class="s2">"body_mass_g"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">upper_bmg_limit</span><span class="p">]</span>
+<span class="n">penguins_test_BMG_outlier_remove_IQR</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>species</th>
+      <th>bill_length_mm</th>
+      <th>body_mass_g</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Adelie</td>
+      <td>39.1</td>
+      <td>3750.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Adelie</td>
+      <td>39.5</td>
+      <td>3800.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Adelie</td>
+      <td>40.3</td>
+      <td>3250.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Adelie</td>
+      <td>36.7</td>
+      <td>3450.0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Adelie</td>
+      <td>39.3</td>
+      <td>3650.0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>338</th>
+      <td>Gentoo</td>
+      <td>47.2</td>
+      <td>4925.0</td>
+    </tr>
+    <tr>
+      <th>340</th>
+      <td>Gentoo</td>
+      <td>46.8</td>
+      <td>4850.0</td>
+    </tr>
+    <tr>
+      <th>341</th>
+      <td>Gentoo</td>
+      <td>50.4</td>
+      <td>5750.0</td>
+    </tr>
+    <tr>
+      <th>342</th>
+      <td>Gentoo</td>
+      <td>45.2</td>
+      <td>5200.0</td>
+    </tr>
+    <tr>
+      <th>343</th>
+      <td>Gentoo</td>
+      <td>49.9</td>
+      <td>5400.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>342 rows × 3 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">swarmplot</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">penguins_test_BMG_outlier_remove_IQR</span><span class="p">[</span><span class="s2">"species"</span><span class="p">],</span> <span class="n">x</span><span class="o">=</span><span class="n">penguins_test_BMG_outlier_remove_IQR</span><span class="p">[</span><span class="s2">"body_mass_g"</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">"lightgreen"</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">"o"</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">penguins_test_BMG_outlier_remove_IQR</span><span class="p">[</span><span class="s2">"species"</span><span class="p">],</span> <span class="n">x</span><span class="o">=</span><span class="n">penguins_test_BMG_outlier_remove_IQR</span><span class="p">[</span><span class="s2">"body_mass_g"</span><span class="p">],</span> 
+            <span class="n">palette</span><span class="o">=</span><span class="s2">"coolwarm"</span><span class="p">,</span> <span class="n">notch</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> 
+            <span class="n">hue</span><span class="o">=</span><span class="n">penguins_test_BMG_outlier_remove_IQR</span><span class="o">.</span><span class="n">species</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/b610027879f34046a234171974fabfdcf8e88ae738d07d63e8a1b55e0c7c19d8.png" src="../../_images/b610027879f34046a234171974fabfdcf8e88ae738d07d63e8a1b55e0c7c19d8.png" />
+</div>
+</div>
+</section>
+<section id="the-mean-standard-deviation-method">
+<h4>3.3.3 The mean-standard deviation method<a class="headerlink" href="#the-mean-standard-deviation-method" title="Link to this heading"></a></h4>
+<p>Instead of using IQR method, upper and lower thresholds for detecting outliers can also be calculated with mean-std deviation approach.</p>
+<ul class="simple">
+<li><p>Here we compute <code class="docutils literal notranslate"><span class="pre">mean</span></code> and <code class="docutils literal notranslate"><span class="pre">std</span></code> of <code class="docutils literal notranslate"><span class="pre">body_mass_g</span></code> feature.</p></li>
+<li><p>Calculate upper and lower limits for outlier detection using formulas.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">lower</span> <span class="pre">limit</span> <span class="pre">=</span> <span class="pre">mean</span> <span class="pre">-</span> <span class="pre">3.0</span> <span class="pre">\times</span> <span class="pre">std</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">upper</span> <span class="pre">limit</span> <span class="pre">=</span> <span class="pre">mean</span> <span class="pre">+</span> <span class="pre">3.0</span> <span class="pre">\times</span> <span class="pre">std</span></code></p></li>
+</ul>
+</li>
+<li><p>Identify outliers and replace them with either <code class="docutils literal notranslate"><span class="pre">mean</span></code> or <code class="docutils literal notranslate"><span class="pre">median</span></code> values of <code class="docutils literal notranslate"><span class="pre">body_mass_g</span></code> feature.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">penguins_test_BMG_outlier</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>species</th>
+      <th>bill_length_mm</th>
+      <th>body_mass_g</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Adelie</td>
+      <td>39.1</td>
+      <td>3750.000000</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Adelie</td>
+      <td>39.5</td>
+      <td>3800.000000</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Adelie</td>
+      <td>40.3</td>
+      <td>3250.000000</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Adelie</td>
+      <td>NaN</td>
+      <td>7358.515606</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Adelie</td>
+      <td>36.7</td>
+      <td>3450.000000</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>339</th>
+      <td>Gentoo</td>
+      <td>NaN</td>
+      <td>7358.515606</td>
+    </tr>
+    <tr>
+      <th>340</th>
+      <td>Gentoo</td>
+      <td>46.8</td>
+      <td>4850.000000</td>
+    </tr>
+    <tr>
+      <th>341</th>
+      <td>Gentoo</td>
+      <td>50.4</td>
+      <td>5750.000000</td>
+    </tr>
+    <tr>
+      <th>342</th>
+      <td>Gentoo</td>
+      <td>45.2</td>
+      <td>5200.000000</td>
+    </tr>
+    <tr>
+      <th>343</th>
+      <td>Gentoo</td>
+      <td>49.9</td>
+      <td>5400.000000</td>
+    </tr>
+  </tbody>
+</table>
+<p>344 rows × 3 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># calculate mean and std values</span>
+
+<span class="n">mean</span> <span class="o">=</span> <span class="n">penguins_test_BMG_outlier</span><span class="p">[</span><span class="s2">"body_mass_g"</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">std</span> <span class="o">=</span> <span class="n">penguins_test_BMG_outlier</span><span class="p">[</span><span class="s2">"body_mass_g"</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"mean = </span><span class="si">{</span><span class="n">mean</span><span class="si">}</span><span class="s2">, std = </span><span class="si">{</span><span class="n">std</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="s1">'</span><span class="se">\n</span><span class="s1">'</span><span class="p">)</span>
+
+<span class="n">lower_bmg_limit</span> <span class="o">=</span> <span class="n">mean</span> <span class="o">-</span> <span class="p">(</span><span class="mf">3.0</span> <span class="o">*</span> <span class="n">std</span><span class="p">)</span>
+<span class="n">upper_bmg_limit</span> <span class="o">=</span> <span class="n">mean</span> <span class="o">+</span> <span class="p">(</span><span class="mf">3.0</span> <span class="o">*</span> <span class="n">std</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"lower limt of mean-std = </span><span class="si">{</span><span class="n">lower_bmg_limit</span><span class="si">}</span><span class="s2"> and upper limit of mean-std = </span><span class="si">{</span><span class="n">upper_bmg_limit</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>mean = 4220.10764887259, std = 834.9544887876802 
+
+lower limt of mean-std = 1715.2441825095493 and upper limit of mean-std = 6724.971115235631
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># check data points larger than the upper limit of the mean-std range</span>
+
+<span class="n">penguins_test_BMG_outlier</span><span class="p">[</span><span class="n">penguins_test_BMG_outlier</span><span class="p">[</span><span class="s2">"body_mass_g"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">upper_bmg_limit</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>species</th>
+      <th>bill_length_mm</th>
+      <th>body_mass_g</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>3</th>
+      <td>Adelie</td>
+      <td>NaN</td>
+      <td>7358.515606</td>
+    </tr>
+    <tr>
+      <th>339</th>
+      <td>Gentoo</td>
+      <td>NaN</td>
+      <td>7358.515606</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># check data points smaller than the lower limit of the mean-std range</span>
+
+<span class="n">penguins_test_BMG_outlier</span><span class="p">[</span><span class="n">penguins_test_BMG_outlier</span><span class="p">[</span><span class="s2">"body_mass_g"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">lower_bmg_limit</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>species</th>
+      <th>bill_length_mm</th>
+      <th>body_mass_g</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># we can remove these outliers, here we imputate these outliers with mean value of "body_mass_g" feature</span>
+
+<span class="n">penguins_test_BMG_outlier</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">penguins_test_BMG_outlier</span><span class="p">[</span><span class="s2">"body_mass_g"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">lower_bmg_limit</span><span class="p">,</span> <span class="s2">"body_mass_g"</span><span class="p">]</span> <span class="o">=</span> <span class="n">mean</span>
+<span class="n">penguins_test_BMG_outlier</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">penguins_test_BMG_outlier</span><span class="p">[</span><span class="s2">"body_mass_g"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">upper_bmg_limit</span><span class="p">,</span> <span class="s2">"body_mass_g"</span><span class="p">]</span> <span class="o">=</span> <span class="n">mean</span>
+<span class="n">penguins_test_BMG_outlier</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>species</th>
+      <th>bill_length_mm</th>
+      <th>body_mass_g</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Adelie</td>
+      <td>39.1</td>
+      <td>3750.000000</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Adelie</td>
+      <td>39.5</td>
+      <td>3800.000000</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Adelie</td>
+      <td>40.3</td>
+      <td>3250.000000</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Adelie</td>
+      <td>NaN</td>
+      <td>4220.107649</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Adelie</td>
+      <td>36.7</td>
+      <td>3450.000000</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>339</th>
+      <td>Gentoo</td>
+      <td>NaN</td>
+      <td>4220.107649</td>
+    </tr>
+    <tr>
+      <th>340</th>
+      <td>Gentoo</td>
+      <td>46.8</td>
+      <td>4850.000000</td>
+    </tr>
+    <tr>
+      <th>341</th>
+      <td>Gentoo</td>
+      <td>50.4</td>
+      <td>5750.000000</td>
+    </tr>
+    <tr>
+      <th>342</th>
+      <td>Gentoo</td>
+      <td>45.2</td>
+      <td>5200.000000</td>
+    </tr>
+    <tr>
+      <th>343</th>
+      <td>Gentoo</td>
+      <td>49.9</td>
+      <td>5400.000000</td>
+    </tr>
+  </tbody>
+</table>
+<p>344 rows × 3 columns</p>
+</div></div></div>
+</div>
+<div class='alert alert-info'>
+<div class="admonition-there-are-four-main-techniques-for-handling-outliers-in-a-dataset callout admonition" id="callout-0">
+<p class="admonition-title">There are four main techniques for handling outliers in a dataset.</p>
+<ul class="simple">
+<li><p>Remove outliers entirely.</p>
+<ul>
+<li><p>This approach simply deletes rows containing outlier values, which can be effective if outliers are errors or rare events that are not relevant to analysis.</p></li>
+</ul>
+</li>
+<li><p>Treat outliers as missing values.</p>
+<ul>
+<li><p>Outliers can be replaced with <code class="docutils literal notranslate"><span class="pre">NaN</span></code> and then handled using imputation methods described in previous sections, such as replacing them with <code class="docutils literal notranslate"><span class="pre">mean</span></code>, <code class="docutils literal notranslate"><span class="pre">median</span></code>, or <code class="docutils literal notranslate"><span class="pre">mode</span></code>.</p></li>
+</ul>
+</li>
+<li><p>Apply discretization or binning.</p>
+<ul>
+<li><p>By grouping numerical values into bins, outliers are included in tail bins along with other extreme values, which reduces their impact while preserving overall structure of data.</p></li>
+</ul>
+</li>
+<li><p>Cap or censor outliers.</p>
+<ul>
+<li><p>Extreme values can be limited to a maximum or minimum threshold, often derived from statistical techniques such as IQR or standard deviation limits. This approach reduces influence of outliers without completely removing them from dataset.</p></li>
+</ul>
+</li>
+</ul>
+</div>
+</div></section>
+</section>
+<section id="encoding-categorical-variables">
+<h3>3.4 Encoding Categorical Variables<a class="headerlink" href="#encoding-categorical-variables" title="Link to this heading"></a></h3>
+<p>In previous sections, we adopted a straightforward approach to handling missing values by simply removing any rows that contained <code class="docutils literal notranslate"><span class="pre">NaN</span></code> values, whether they were in numerical or categorical features. While this step gives us a cleaner dataset, it is not sufficient on its own to proceed with ML tasks.</p>
+<p>The reason is that most ML algorithms are designed to work only with numerical data. They cannot directly process textual or symbolic categories such as species, island, or sex in the Penguins dataset. To make these categorical variables usable in modeling, we need to encode categorical variables into a numerical format while preserving their information.</p>
+<p>There are two widely used encoding techniques: <strong>One-hot encoding (OHE)</strong> and <strong>Label Encoding</strong>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">penguins_sex</span> <span class="o">=</span> <span class="n">penguins</span><span class="p">[[</span><span class="s2">"species"</span><span class="p">,</span> <span class="s2">"island"</span><span class="p">,</span> <span class="s2">"sex"</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">penguins_sex</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>species</th>
+      <th>island</th>
+      <th>sex</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Male</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Female</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Female</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Female</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Male</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Female</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Male</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<section id="one-hot-encoding-ohe">
+<h4>3.4.1 One hot encoding (OHE)<a class="headerlink" href="#one-hot-encoding-ohe" title="Link to this heading"></a></h4>
+<p>OHE method creates a new binary column for each category in a feature. For example, species feature with values {Female, Male, and NaN} would be transformed into three new columns, each indicating presence (1) or absence (0) of that category for a given row.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">OneHotEncoder</span>
+
+<span class="n">encoder</span> <span class="o">=</span> <span class="n">OneHotEncoder</span><span class="p">(</span><span class="n">sparse_output</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># `sparse_output=False` to get a dense array</span>
+<span class="n">encoded</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">penguins_sex</span><span class="p">[[</span><span class="s1">'sex'</span><span class="p">]])</span>
+
+<span class="n">encoded</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">encoded</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"Female"</span><span class="p">,</span> <span class="s2">"Male"</span><span class="p">,</span> <span class="s2">"NaN"</span><span class="p">])</span>
+
+<span class="n">penguins_sex_onehotencoding</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">penguins_sex</span><span class="p">,</span> <span class="n">encoded</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">penguins_sex_onehotencoding</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>species</th>
+      <th>island</th>
+      <th>sex</th>
+      <th>Female</th>
+      <th>Male</th>
+      <th>NaN</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Male</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Female</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Female</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>NaN</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Female</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Male</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Female</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Male</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>NaN</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>NaN</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class='alert alert-warning'>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>OHE works well when number of categories is small and when categories are unordered. However, it can lead to very large datasets if a feature contains many unique categories (high cardinality), such as a ‘city’ feature in Sweden. Sweden has nearly 300 municipalities and many more towns and localities. If each unique city is turned into its own column, dataset could quickly expand to hundreds of columns, most of which will contain zeros for any given row. This high cardinality increases memory usage, slows down training, and may reduce model’s efficiency.</p>
+</div>
+</div></section>
+<section id="label-encoding">
+<h4>3.4.2 Label encoding<a class="headerlink" href="#label-encoding" title="Link to this heading"></a></h4>
+<p>Label encoding transforms a categorical feature into a single numerical column by assigning a unique integer to each category in a feature. For example, sex feature with values {Female, Male, NaN} could be encoded as Female = 0, Male = 1, and missing values handled separately or imputed beforehand (in our case, NaN is encoded as  NaN = 2).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">LabelEncoder</span>
+
+<span class="n">encoder</span> <span class="o">=</span> <span class="n">LabelEncoder</span><span class="p">()</span>
+<span class="n">encoded</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">penguins_sex</span><span class="p">[</span><span class="s1">'sex'</span><span class="p">])</span>
+<span class="n">encoded</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">encoded</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"sex_LE"</span><span class="p">])</span>
+
+<span class="n">penguins_sex_labelencoding</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">penguins_sex</span><span class="p">,</span> <span class="n">encoded</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">penguins_sex_labelencoding</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>species</th>
+      <th>island</th>
+      <th>sex</th>
+      <th>sex_LE</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Male</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Female</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Female</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>NaN</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Female</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Male</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Female</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Male</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>NaN</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>NaN</td>
+      <td>2</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Unlike OHE, which creates multiple columns, label encoding produces only one column, making it more memory-efficient. However, it introduces an artificial ordinal relationship between categories (<em>e.g.</em>, implying Dream &gt; Biscoe), which may not be meaningful and can affect algorithms that assume numeric order matters, such as linear regression or distance-based methods.</p>
+</section>
+<section id="the-get-dummies-function-in-pandas">
+<h4>3.4.3 The <code class="docutils literal notranslate"><span class="pre">get_dummies()</span></code> function in Pandas<a class="headerlink" href="#the-get-dummies-function-in-pandas" title="Link to this heading"></a></h4>
+<p>In addition to OHE and LE methods, we can also use <code class="docutils literal notranslate"><span class="pre">get_dummies()</span></code> in Pandas to handle categorical variables by converting them into a one-hot encoded (dummy variable) format.</p>
+<div class='alert alert-info'>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function ignores <code class="docutils literal notranslate"><span class="pre">NaN</span></code> values by default (it simply leaves them out).</p>
+</div>
+</div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dummy_encoded</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="n">penguins_sex</span><span class="p">[</span><span class="s1">'sex'</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
+<span class="n">penguins_sex_dummyencoding</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">penguins_sex</span><span class="p">,</span> <span class="n">dummy_encoded</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">penguins_sex_dummyencoding</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>species</th>
+      <th>island</th>
+      <th>sex</th>
+      <th>Female</th>
+      <th>Male</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Male</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Female</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Female</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>NaN</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Female</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Male</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Female</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Male</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>NaN</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>NaN</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class='alert alert-info'>
+<div class="admonition-more-encoding-strategies callout admonition" id="callout-1">
+<p class="admonition-title">More encoding strategies</p>
+<p>Beyond these two common methods, there are several other encoding strategies, especially useful for more complex datasets:</p>
+<ul class="simple">
+<li><p><strong>Ordinal Encoding</strong>: A variation of label encoding designed specifically for variables that have a natural and meaningful order (<em>e.g.</em>, Small = 0, Medium = 1, Large = 2).</p></li>
+<li><p><strong>Binary Encoding</strong>: Converts categories into binary code, achieving a good compromise between one-hot and label encoding for high-cardinality data.</p></li>
+<li><p><strong>Target Encoding</strong> (Mean Encoding): Replaces each category with the average value of the target variable for that category. It is powerful but prone to overfitting if not carefully implemented.</p></li>
+<li><p><strong>Frequency Encoding</strong>: Replaces categories with their frequency of occurrence in the dataset. This can be useful for dealing with high-cardinality features.</p></li>
+</ul>
+<p>The choice of encoding method is a consequential modeling decision. It should be guided by the type of categorical data (nominal <em>vs.</em> ordinal), the number of unique categories, the type of ML algorithm being used. A proper encoding ensures that categorical features are accurately represented in numerical form, allowing algorithms to learn patterns effectively without introducing bias or noise.</p>
+</div>
+</div></section>
+</section>
+</section>
+<section id="feature-engineering">
+<h2>4. Feature Engineering<a class="headerlink" href="#feature-engineering" title="Link to this heading"></a></h2>
+<p>Feature engineering is a part of the broader data processing pipeline in ML workflows. It involves using domain knowledge to select, modify, or create new features — variables or attributes — from existing data to help algorithms better understand patterns and relationships.</p>
+<p>Feature engineering is crucial because the quality of features directly impacts a model’s predictive power. Well-crafted features can simplify complex patterns, reduce overfitting, and improve model interpretability, leading to better generalization and performance on unseen data. By tailoring features to the problem at hand, feature engineering bridges the gap between raw data and actionable insights, often making the difference between a mediocre and a high-performing model.</p>
+<p>Feature engineering is closely related to data preprocessing, but they serve different purposes.</p>
+<ul class="simple">
+<li><p>Data processing (or data preprocessing) is about cleaning and preparing data — handling missing values, removing duplicates, correcting data types, and ensuring consistency. This step makes the data <strong>usable</strong>.</p></li>
+<li><p>Feature engineering, on the other hand, comes after basic processing and focuses on improving the predictive power of dataset.</p></li>
+<li><p>In essence, <strong>data preprocessing ensures data quality</strong>, while <strong>feature engineering enhances data value</strong> for ML models.</p></li>
+<li><p>Both are essential steps in building effective and accurate predictive systems.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../3-scientific-data-for-ml/" class="btn btn-neutral float-left" title="Scientific Data for Machine Learning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../5-classification/" class="btn btn-neutral float-right" title="Classification" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright | BlackJack&#39;s Nook | 2026.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

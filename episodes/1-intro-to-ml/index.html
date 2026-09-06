@@ -1,0 +1,363 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Introduction to Machine Learning &mdash; Practical Machine Learning</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx_lesson.css?v=e9df6548" />
+      <link rel="stylesheet" type="text/css" href="../../_static/term_role_formatting.css?v=4194e21c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx_rtd_theme_ext_color_contrast.css?v=8e8ea19f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/overrides.css?v=77c0d755" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=187304be"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=35a8b989"></script>
+      <script src="../../_static/minipres.js?v=a0d29692"></script>
+      <script>let toggleHintShow = 'Click to show';</script>
+      <script>let toggleHintHide = 'Click to hide';</script>
+      <script>let toggleOpenOnPrint = 'true';</script>
+      <script src="../../_static/togglebutton.js?v=b8b12719"></script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex/" />
+    <link rel="search" title="Search" href="../../search/" />
+    <link rel="next" title="Fundamentals of Machine Learning" href="../2-fundamentals-of-ml/" />
+    <link rel="prev" title="Practical Machine Learning" href="../../" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../" class="icon icon-home">
+            Practical Machine Learning
+              <img src="../../_static/blackjack-s-nook.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Lesson Episodes</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction to Machine Learning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-is-ml">1. What is ML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#why-ml">2. Why ML?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#relation-with-ai-and-dl">3. Relation with AI and DL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ml-in-a-bigger-picture">4. ML in a Bigger Picture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#three-booms-and-two-winters-of-ai">5. Three Booms and Two Winters of AI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ml-applications">6. ML Applications</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../2-fundamentals-of-ml/">Fundamentals of Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../3-scientific-data-for-ml/">Scientific Data for Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../4-data-preparation-for-ml/">Data Preparation for Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../5-classification/">Classification</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../">Practical Machine Learning</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Introduction to Machine Learning</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/BlackJacks-Nook/content/blob/main/content/episodes/1-intro-to-ml.ipynb" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="../../" class="btn btn-neutral float-left" title="Practical Machine Learning" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../2-fundamentals-of-ml/" class="btn btn-neutral float-right" title="Fundamentals of Machine Learning" accesskey="n">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="introduction-to-machine-learning">
+<h1>Introduction to Machine Learning<a class="headerlink" href="#introduction-to-machine-learning" title="Link to this heading"></a></h1>
+<div class='alert alert-info'>
+<div class="admonition-objectives objectives admonition" id="objectives-0">
+<p class="admonition-title">Objectives</p>
+<ul class="simple">
+<li><p>Provide a general overview of ML and why we need ML.</p></li>
+<li><p>Trace historical evolution from AI to ML and DL.</p></li>
+<li><p>Explain relationship between AI, ML, DL.</p></li>
+<li><p>Explore why should use ML and list representative real-world applications of ML.</p></li>
+</ul>
+</div>
+</div><div class='alert alert-success'>
+<div class="admonition-instructor-note instructor-note admonition" id="instructor-note-0">
+<p class="admonition-title">Instructor note</p>
+<ul class="simple">
+<li><p>15 min teaching</p></li>
+<li><p>5 min exercises/discussion</p></li>
+</ul>
+</div>
+</div><section id="what-is-ml">
+<h2>1. What is ML<a class="headerlink" href="#what-is-ml" title="Link to this heading"></a></h2>
+<p>ML is a field of computer science that studies algorithms and techniques enabling computers to learn patterns from data and make predictions or decisions <strong>without being explicitly programmed</strong>, thereby automating solutions to complex problems that are difficult to solve using conventional programming methods.</p>
+<ul class="simple">
+<li><p>In <strong>conventional programming</strong>, programmer explicitly codes logic (rules) to transform inputs (data) into outputs (answers), making it suitable for well-defined, rule-based tasks.</p></li>
+<li><p>In <strong>machine learning</strong>, system learns logic (rules) from data and answers, making it ideal for complex, pattern-based tasks where explicit rules are hard to define.</p></li>
+<li><p>Choice between them depends on problem, data availability, and complexity.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">display</span>
+<span class="n">display</span><span class="p">(</span><span class="n">Image</span><span class="p">(</span><span class="s1">'../images/fundamentals/classic-programming-vs-ml.jpg'</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">800</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../../_images/cd12a0e72eebd6d016c3d4f39e7047bd9685eaa6e449e46d421cdd81aecb192a.jpg"><img alt="../../_images/cd12a0e72eebd6d016c3d4f39e7047bd9685eaa6e449e46d421cdd81aecb192a.jpg" src="../../_images/cd12a0e72eebd6d016c3d4f39e7047bd9685eaa6e449e46d421cdd81aecb192a.jpg" style="width: 600px;" />
+</a>
+</div>
+</div>
+<p><em>Figure: <a class="reference external" href="https://twimlai.com/resources/kubernetes-for-mlops/">Classic programming <em>vs.</em> machine learning</a></em>.</p>
+</section>
+<section id="why-ml">
+<h2>2. Why ML?<a class="headerlink" href="#why-ml" title="Link to this heading"></a></h2>
+<p>ML is transforming how we solve complex problems in real world by enabling systems to learn directly from data, rather than relying on explicitly programmed rules. In many real-world scenarios, such as medical diagnosis, stock market prediction, or NLP, the relationships between inputs and outputs are too complex or dynamic to define manually. ML models can uncover hidden patterns and make accurate predictions or decisions, making them essential tools in fields like healthcare, finance, transportation, and cybersecurity.</p>
+<p>Another crucial advantage of ML is its ability to adapt and improve over time as more data becomes available. Unlike traditional rule-based systems that require constant manual updates, ML models can retrain and adjust themselves to new data, trends, or anomalies, ensuring that the system stays relevant and effective. For example, in fraud detection, ML algorithms can evolve as fraud tactics change, providing a stronger defense compared to static rules that may become outdated. This adaptability makes ML particularly powerful in dynamic, real-time environments where traditional programming methods fall short.</p>
+<p>In addition, ML empowers automation of complex tasks that were previously dependent on human expertise and intuition. From voice recognition in virtual assistants to autonomous driving, ML algorithms can process vast amounts of unstructured data such as text, images, and audio, which are traditionally challenging for computers to handle. By enabling machines to “learn” from experience and improve their performance over time, ML not only enhances productivity but also opens new frontiers for innovation across industries, creating smarter systems that can make meaningful contributions to society.</p>
+</section>
+<section id="relation-with-ai-and-dl">
+<h2>3. Relation with AI and DL<a class="headerlink" href="#relation-with-ai-and-dl" title="Link to this heading"></a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">Image</span><span class="p">(</span><span class="s1">'../images/fundamentals/relationship-ai-ml-dl.png'</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">420</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../../_images/4e5a0523bedadd1938872aeb2ff64fe9049be2d4641e3251bbf43712a1fa8949.png"><img alt="../../_images/4e5a0523bedadd1938872aeb2ff64fe9049be2d4641e3251bbf43712a1fa8949.png" src="../../_images/4e5a0523bedadd1938872aeb2ff64fe9049be2d4641e3251bbf43712a1fa8949.png" style="width: 300px;" />
+</a>
+</div>
+</div>
+<p><em>Figure: <a class="reference external" href="https://carpentries-lab.github.io/deep-learning-intro/">Relationship between AI, ML,and DL</a></em>.</p>
+<p>AI is broadest field, encompassing any technique that enables computers to mimic human intelligence, such as reasoning, problem-solving, perception, and decision-making. AI includes a wide range of approaches, from rule-based systems (like expert systems) to modern data-driven methods. It aims to create systems that can perform tasks that typically require human intelligence, such as playing chess, recognizing images, or understanding language.</p>
+<p>ML is a subset of AI that focuses on algorithms and models that learn patterns from data to make predictions or decisions <strong>without being explicitly programmed</strong>. ML is one of primary ways to achieve AI. It enables systems to improve performance over time by learning from experience (data) rather than relying solely on hardcoded rules. ML includes various techniques like supervised learning (<em>e.g.</em>, regression, classification), unsupervised learning (<em>e.g.</em>, clustering, dimensionality reduction), and reinforcement learning.</p>
+<p>DL is a specialized subset of ML, and it leverages artificial neural networks (NNs) inspired by human brain to tackle tasks like image recognition, speech processing, and natural language understanding. DL excels in handling unstructured data (<em>e.g.</em>, images, audio, text) and requires significant computational power and large datasets for training.</p>
+</section>
+<section id="ml-in-a-bigger-picture">
+<h2>4. ML in a Bigger Picture<a class="headerlink" href="#ml-in-a-bigger-picture" title="Link to this heading"></a></h2>
+<p>ML has been evolving in stages of increasing complexity in following four clearly differentiated steps.</p>
+<ul class="simple">
+<li><p>1st model of ML involved <strong>rule-based decisions</strong> and a simple level of data-based algorithms that includes in itself, and as a prerequisite, all possible ramifications and decision rules, implying that all possible options will be hardcoded into model beforehand by an expert in field.</p>
+<ul>
+<li><p>This structure was implemented in majority of applications developed since first programming languages appeared in 1950.</p></li>
+<li><p>Main data type and function being handled by this kind of algorithm is Boolean, as it exclusively dealt with yes or no decisions.</p></li>
+</ul>
+</li>
+<li><p>During 2nd developmental stage of <strong>statistical reasoning</strong>, we started to let probabilistic characteristics of data have a say, in addition to previous choices set up in advance.</p>
+<ul>
+<li><p>This better reflects fuzzy nature of real-world problems, where outliers are common and where it is more important to take into account nondeterministic tendencies of data than rigid approach of fixed questions.</p></li>
+<li><p>This discipline adds to mix of mathematical tools elements of Bayesian probability theory.</p>
+<ul>
+<li><p>Methods pertaining to this category include curve fitting (usually of linear or polynomial), which has common property of working with numerical data.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>ML stage</strong> is realm in which we are going to be working throughout this book, and it involves more complex tasks than simplest Bayesian elements of previous stage.</p>
+<ul>
+<li><p>Most outstanding feature of ML algorithms is that they can generalize models from data but models are capable of generating their own feature selectors, which aren’t limited by a rigid target function, as they are generated and defined as training process evolves.</p></li>
+<li><p>Another differentiator of this kind of model is that they can take a large variety of data types as input, such as speech, images, video, text, and other data susceptible to being represented as vectors.</p></li>
+</ul>
+</li>
+<li><p><strong>AI</strong> is last step in scale of abstraction capabilities that, in a way, include all previous algorithm types, but with one key difference: AI algorithms are able to apply learned knowledge to solve tasks that had never been considered during training.</p>
+<ul>
+<li><p>Types of data with which this algorithm works are even more generic than types of data supported by ML, and they should be able, by definition, to transfer problem-solving capabilities from one data type to another, without a complete retraining of model.</p></li>
+<li><p>In this way, we could develop an algorithm for object detection in black and white images and model could abstract knowledge to apply model to color images.</p></li>
+</ul>
+</li>
+<li><p>Following diagram represents these four stages of development towards real AI applications.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">Image</span><span class="p">(</span><span class="s1">'../images/fundamentals/ml-in-big-picture.png'</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../../_images/831a64d230f8307131c53e53044019768439b6fe30cd7b649467da04d0eb68cf.png"><img alt="../../_images/831a64d230f8307131c53e53044019768439b6fe30cd7b649467da04d0eb68cf.png" src="../../_images/831a64d230f8307131c53e53044019768439b6fe30cd7b649467da04d0eb68cf.png" style="width: 600px;" />
+</a>
+</div>
+</div>
+</section>
+<section id="three-booms-and-two-winters-of-ai">
+<h2>5. Three Booms and Two Winters of AI<a class="headerlink" href="#three-booms-and-two-winters-of-ai" title="Link to this heading"></a></h2>
+<p>AI从20世纪中叶至今经历了<strong>三次高潮(起)和两次低谷(落)</strong></p>
+<ul class="simple">
+<li><p><strong>第一次起(1956年-1970年左右)</strong></p>
+<ul>
+<li><p>背景：1956年达特茅斯会议被认为是AI正式诞生</p>
+<ul>
+<li><p>那时研究者提出”让机器像人一样思考”的愿景</p></li>
+</ul>
+</li>
+<li><p>代表进展：符号主义(Symbolic AI)、逻辑推理、简单搜索算法（如井字棋、积木世界）</p></li>
+<li><p>原因：计算机刚出现，人们对其潜力抱有极大期待，初期的小规模演示让大家误以为”通用智能”指日可待</p></li>
+</ul>
+</li>
+<li><p><strong>第一次落(1970年代中后期)</strong></p>
+<ul>
+<li><p>原因</p></li>
+<li><p>算力不足：硬件能力远远达不到复杂推理的需求</p></li>
+<li><p>算法局限：符号主义方法只能处理玩具问题，无法扩展到现实世界</p></li>
+<li><p>资金削减：美国和英国政府减少了对AI资助(英国”莱特希尔报告”影响很大)</p></li>
+</ul>
+</li>
+<li><p><strong>第二次起(1980年代中期-1990年代初)</strong></p>
+<ul>
+<li><p>背景：专家系统(Expert Systems)兴起，基于规则的知识库开始在工业和医学中应用</p></li>
+<li><p>代表进展：XCON系统(帮助配置计算机系统)、逻辑推理在企业中获得实际收益</p></li>
+<li><p>原因：商业应用推动，大量投资涌入，AI被认为终于要走向实用</p></li>
+</ul>
+</li>
+<li><p><strong>第二次落(1990年代中后期)</strong></p>
+<ul>
+<li><p>原因：</p></li>
+<li><p>知识获取瓶颈：专家系统需要人工输入海量规则，难以维护和扩展</p></li>
+<li><p>系统脆弱：只在特定场景下有效，无法适应变化</p></li>
+<li><p>过度宣传：炒作过高预期，实际效果不佳，导致<code class="docutils literal notranslate"><span class="pre">第二次AI寒冬</span></code></p></li>
+</ul>
+</li>
+<li><p><strong>第三次起(2006年至今)</strong></p>
+<ul>
+<li><p>背景：深度学习崛起，结合大数据和GPU算力带来突破</p></li>
+<li><p>代表进展：</p>
+<ul>
+<li><p>2006年Hinton提出深度置信网络(DBN)</p></li>
+<li><p>2012年AlexNet在ImageNet大赛上击败传统方法</p></li>
+<li><p>之后语音识别、图像识别、自然语言处理全面爆发</p></li>
+</ul>
+</li>
+<li><p>原因：</p>
+<ul>
+<li><p>算力飞跃(GPU、TPU)</p></li>
+<li><p>大数据驱动</p></li>
+<li><p>算法改进(深度神经网络、反向传播优化)</p></li>
+<li><p>产业推动(互联网巨头+开源框架)</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>总结</strong></p>
+<ul>
+<li><p>第一次落：符号主义方法 + 算力不足</p></li>
+<li><p>第二次落：专家系统的知识获取瓶颈 + 脆弱性 + 过度炒作</p></li>
+<li><p>第三次起：数据、算力、算法三要素齐备，推动深度学习爆发</p></li>
+</ul>
+</li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">Image</span><span class="p">(</span><span class="s2">"../images/fundamentals/three-booms-two-winters-of-ai.jpg"</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">1240</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../../_images/257aa7293b6987ebde33e816aa388099622bde3a53b3c5b03fbe04748554ff57.jpg"><img alt="../../_images/257aa7293b6987ebde33e816aa388099622bde3a53b3c5b03fbe04748554ff57.jpg" src="../../_images/257aa7293b6987ebde33e816aa388099622bde3a53b3c5b03fbe04748554ff57.jpg" style="width: 1240px;" />
+</a>
+</div>
+</div>
+</section>
+<section id="ml-applications">
+<h2>6. ML Applications<a class="headerlink" href="#ml-applications" title="Link to this heading"></a></h2>
+<p>ML is used across a wide range of industries and real-world problems in healthcare, finance, CV, NLP, transportation, manufacturing industry, retail, and cybersecurity. Below are key categories of problems that can be applied using ML/DL.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Application area</p></th>
+<th class="head text-center"><p>Example use Cases</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>Healthcare</p></td>
+<td class="text-center"><p>Disease prediction &amp; diagnosis, <br>medical image analysis, drug discovery</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>Finance</p></td>
+<td class="text-center"><p>Fraud detection, credit scoring, algorithmic trading</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>Retail &amp; e-commerce</p></td>
+<td class="text-center"><p>Product recommendations, customer segmentation, <br>demand forecasting</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>Transportation &amp; autonomous systems</p></td>
+<td class="text-center"><p>Self-driving cars, traffic prediction, route optimization</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>Natural language processing (NLP)</p></td>
+<td class="text-center"><p>Chatbots and virtual assistants, sentiment analysis, <br>language translation</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>Manufacturing &amp; industry</p></td>
+<td class="text-center"><p>Predictive maintenance, quality control, <br>supply chain optimization</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>Computer Vision</p></td>
+<td class="text-center"><p>Facial recognition, object detection, image classification</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../" class="btn btn-neutral float-left" title="Practical Machine Learning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../2-fundamentals-of-ml/" class="btn btn-neutral float-right" title="Fundamentals of Machine Learning" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright | BlackJack&#39;s Nook | 2026.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
