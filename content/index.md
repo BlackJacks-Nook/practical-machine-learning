@@ -25,7 +25,7 @@ This course is intended for researchers and engineers transitioning into ML lear
 :caption: Software Setup
 :maxdepth: 1
 
-0-setting-up-programming-environment.ipynb
+env/0-setting-up.ipynb
 :::
 
 
@@ -38,5 +38,18 @@ episodes/1-intro-to-ml
 episodes/2-fundamentals-of-ml
 episodes/3-scientific-data-for-ml
 episodes/4-data-preparation-for-ml
+episodes/5-classification.ipynb
 :::
+
+
+:::{toctree}
+:caption: Jupyter Notebooks
+:maxdepth: 1
+
+episodes/14-data-preparation-for-ml.ipynb
+:::
+
+
+
+
 

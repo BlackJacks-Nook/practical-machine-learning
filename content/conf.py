@@ -30,7 +30,7 @@ extensions = [
 
 
 # Settings for myst_nb:
-nb_execution_mode = "cache"
+# nb_execution_mode = "cache"
 jupyter_execute_notebooks = "off"
 myst_enable_extensions = [
     "colon_fence",
