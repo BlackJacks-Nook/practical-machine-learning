@@ -29,7 +29,6 @@ env/0-setting-up.ipynb
 :::
 
 
-
 :::{toctree}
 :caption: Lesson Episodes
 :maxdepth: 1
@@ -38,14 +37,7 @@ episodes/1-intro-to-ml
 episodes/2-fundamentals-of-ml
 episodes/3-scientific-data-for-ml
 episodes/4-data-preparation-for-ml
-episodes/5-classification.ipynb
-:::
-
-
-:::{toctree}
-:caption: Jupyter Notebooks
-:maxdepth: 1
-
-episodes/14-data-preparation-for-ml.ipynb
+episodes/5-classification
+episodes/6-regression
 :::
 
