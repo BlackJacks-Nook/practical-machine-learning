@@ -40,5 +40,6 @@ episodes/4-data-preparation-for-ml
 episodes/5-classification
 episodes/6-regression
 episodes/7-clustering
+episodes/8-dimensionality-reduction
 :::
 
