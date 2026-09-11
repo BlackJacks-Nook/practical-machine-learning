@@ -1,0 +1,2107 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unsupervised Learning (II): Dimensionality Reduction &mdash; Practical Machine Learning</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx_lesson.css?v=e9df6548" />
+      <link rel="stylesheet" type="text/css" href="../../_static/term_role_formatting.css?v=4194e21c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx_rtd_theme_ext_color_contrast.css?v=8e8ea19f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/overrides.css?v=77c0d755" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=187304be"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=35a8b989"></script>
+      <script src="../../_static/minipres.js?v=a0d29692"></script>
+      <script>let toggleHintShow = 'Click to show';</script>
+      <script>let toggleHintHide = 'Click to hide';</script>
+      <script>let toggleOpenOnPrint = 'true';</script>
+      <script src="../../_static/togglebutton.js?v=b8b12719"></script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex/" />
+    <link rel="search" title="Search" href="../../search/" />
+    <link rel="prev" title="Unsupervised Learning (I): Clustering" href="../7-clustering/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../" class="icon icon-home">
+            Practical Machine Learning
+              <img src="../../_static/blackjack-s-nook.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Software Setup</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../env/0-setting-up/">Setting Up Programming Environment</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Lesson Episodes</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../1-intro-to-ml/">Introduction to Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2-fundamentals-of-ml/">Fundamentals of Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../3-scientific-data-for-ml/">Scientific Data for Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../4-data-preparation-for-ml/">Data Preparation for Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../5-classification/">Supervised Learning (I): Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../6-regression/">Supervised Learning (II): Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../7-clustering/">Unsupervised Learning (I): Clustering</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Unsupervised Learning (II): Dimensionality Reduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#from-clustering-to-dimensionality-reduction-simplifying-complexity">1. From Clustering to Dimensionality Reduction: Simplifying Complexity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#load-dataset-data-preparation">2. Load Dataset &amp; Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#principal-component-analysis">3. Principal Component Analysis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#what-is-pca">3.1 What is PCA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-a-pca-model">3.2 Build a PCA model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#correlation-circle">3.3 Correlation circle</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#t-distributed-stochastic-neighbor-embedding-t-sne">4. t-Distributed Stochastic Neighbor Embedding (t-SNE)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#what-is-t-sne">4.1 What is t-SNE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-a-t-sne-model">4.2 Build a t-SNE model</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#umap">5. UMAP</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#what-is-umap">5.1 What is UMAP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-a-umap-model">5.2 Build a UMAP model</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#dimensionality-reduction-on-mnist-dataset">6. Dimensionality Reduction on MNIST Dataset</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mnist-dataset">6.1 MNIST dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pca">6.2 PCA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#t-sne">6.3 t-SNE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">6.3 UMAP</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../">Practical Machine Learning</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Unsupervised Learning (II): Dimensionality Reduction</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/BlackJacks-Nook/content/blob/main/content/episodes/8-dimensionality-reduction.ipynb" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="unsupervised-learning-ii-dimensionality-reduction">
+<h1>Unsupervised Learning (II): Dimensionality Reduction<a class="headerlink" href="#unsupervised-learning-ii-dimensionality-reduction" title="Link to this heading"></a></h1>
+<div class='alert alert-info'>
+<div class="admonition-objectives objectives admonition" id="objectives-0">
+<p class="admonition-title">Objectives</p>
+<ul class="simple">
+<li><p>Understand motivation for dimensionality reduction, and representative methods (PCA, t-SNE, UMAP) to reduce dimensionalities in datasets.</p></li>
+<li><p>Describe idea of PCA (linear method that keeps most variance), apply PCA to correlate features with components, interpret explained variance ratio, and decide how many components to keep.</p></li>
+<li><p>Recognize t-SNE and UMAP as nonlinear methods for complex data visualization.</p></li>
+<li><p>Apply PCA, t-SNE, and UMAP to Penguins and MNIST datasets to evaluate their performance in reducing dimensionality while retaining essential information for clustering.</p></li>
+</ul>
+</div>
+</div<div class='alert alert-success'>
+<div class="admonition-instructor-note instructor-note admonition" id="instructor-note-0">
+<p class="admonition-title">Instructor note</p>
+<ul class="simple">
+<li><p>40 min teaching</p></li>
+<li><p>30 min exercises/discussion</p></li>
+</ul>
+</div>
+</div><section id="from-clustering-to-dimensionality-reduction-simplifying-complexity">
+<h2>1. From Clustering to Dimensionality Reduction: Simplifying Complexity<a class="headerlink" href="#from-clustering-to-dimensionality-reduction-simplifying-complexity" title="Link to this heading"></a></h2>
+<p>In episode <a class="reference internal" href="../7-clustering/"><span class="std std-doc">Unsupervised Learning (I): Clustering</span></a>, we talked about clustering, which is a core unsupervised ML technique that groups similar data points into clusters based on their features, without requiring labeled data.</p>
+<ul class="simple">
+<li><p>fundamental value of clustering lies in its ability to reveal segments and patterns that are not immediately obvious, with applications ranging from customer segmentation in marketing to anomaly detection in network security</p></li>
+<li><p>despite its usefulness, clustering comes with notable limitations</p>
+<ul>
+<li><p>a major challenge is determining appropriate number of clusters in advance, as in K-Means, where results can vary depending on initialization</p></li>
+<li><p>clustering results are highly sensitive to choice of distance metric and scaling of features, which can significantly alter outcomes</p></li>
+<li><p>furthermore, clustering often struggles with high-dimensional data due to <strong>curse of dimensionality</strong>, where distance measures lose their discriminative power, making it harder to identify meaningful groups</p></li>
+<li><p>given these challenges, especially around data sensitivity and interpretability, it is often crucial to preprocess data with another form of unsupervised learning before clustering: <strong>dimensionality reduction</strong></p></li>
+</ul>
+</li>
+<li><p><strong>where clustering seeks to group samples, dimensionality reduction focuses on simplifying feature space itself</strong></p>
+<ul>
+<li><p>by transforming a high-dimensional dataset into a lower-dimensional subspace while preserving its most critical relationships, dimensionality reduction can mitigate noise, reduce computational cost, and reveal most discriminative features that define data’s structure</p></li>
+<li><p>this process not only addresses clustering’s sensitivity to irrelevant features but also provides a powerful foundation for visualizing potential clusters in 2D or 3D, making entire analytical process more robust and insightful</p></li>
+</ul>
+</li>
+<li><p>methods such as <strong>PCA</strong> (Principal Component Analysis), <strong>t-SNE</strong> (t-Distributed Stochastic Neighbor Embedding), and <strong>UMAP</strong> (Uniform Manifold Approximation and Projection) make data more manageable, reduce noise, and improve clustering performance</p></li>
+</ul>
+<p>Penguins dataset includes multiple features (bill length, bill depth, flipper length, body mass, species labels, <em>etc.</em>), plotting it directly in 2D can make it difficult to capture all relationships and structures hidden in dataset</p>
+<ul class="simple">
+<li><p>that is why we plot pairplots between all pair of features to achieve a clear visualization of their correlations</p></li>
+<li><p>here we apply dimensionality reduction to this dataset</p></li>
+<li><p>goal is to take dataset’s multiple features, and project them into a simpler, lower-dimensional space for a better visualization</p>
+<ul>
+<li><p>this process not only helps us better understand data but also prepares it for downstream tasks, such as clustering or classification, by reducing noise and highlighting most informative aspects of dataset.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="load-dataset-data-preparation">
+<h2>2. Load Dataset &amp; Data Preparation<a class="headerlink" href="#load-dataset-data-preparation" title="Link to this heading"></a></h2>
+<p>Following the procedures used in previous episodes, we apply the same preprocessing steps to the Penguins dataset, including handling missing values and detecting outliers. For the clustering task, categorical features are not required, so encoding them is unnecessary.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+
+<span class="n">penguins</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="s1">'penguins'</span><span class="p">)</span>
+<span class="n">penguins_dimR</span> <span class="o">=</span> <span class="n">penguins</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+<span class="n">penguins_dimR</span><span class="o">.</span><span class="n">duplicated</span><span class="p">()</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+
+<span class="n">species</span> <span class="o">=</span> <span class="n">penguins_dimR</span><span class="p">[</span><span class="s2">"species"</span><span class="p">]</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">penguins_dimR</span><span class="p">[[</span><span class="s1">'bill_length_mm'</span><span class="p">,</span> <span class="s1">'bill_depth_mm'</span><span class="p">,</span> <span class="s1">'flipper_length_mm'</span><span class="p">,</span> <span class="s1">'body_mass_g'</span><span class="p">]]</span>
+
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">X_scaled</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="principal-component-analysis">
+<h2>3. Principal Component Analysis<a class="headerlink" href="#principal-component-analysis" title="Link to this heading"></a></h2>
+<section id="what-is-pca">
+<h3>3.1 What is PCA<a class="headerlink" href="#what-is-pca" title="Link to this heading"></a></h3>
+<p>PCA is an orthogonal linear transformation used to reduce dimensionality of data while preserving as much variability as possible</p>
+<ul class="simple">
+<li><p>it is achieved by transforming original variables into a new set of uncorrelated variables called <strong>principal components</strong> (<strong>PCs</strong>)</p></li>
+<li><p>each PC is a <strong>linear</strong> combination of original variables, and they are ordered such that 1st few retain most of variation present in original variables</p></li>
+<li><p>PCA is very useful for two major purposes:</p>
+<ul>
+<li><p><strong>visualization</strong></p>
+<ul>
+<li><p>projecting a high-dimensional space into 2D/3D</p></li>
+<li><p>using graphical visualizations, we can have insights about distribution of instances and look at how separable instances from different classes are</p></li>
+</ul>
+</li>
+<li><p><strong>feature selection</strong></p>
+<ul>
+<li><p>since PCA can transform instances from high to lower dimensions, we could use this method to address <strong>curse of dimensionality</strong></p></li>
+<li><p>instead of learning from original set of features, we can transform our instances with PCA and then apply a learning algorithm on top of new feature space</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="build-a-pca-model">
+<h3>3.2 Build a PCA model<a class="headerlink" href="#build-a-pca-model" title="Link to this heading"></a></h3>
+<p>When reducing Penguins dataset from 4D, a natural question arises: how many components are needed to retain sufficient information from original dataset?</p>
+<ul class="simple">
+<li><p>we start with a simple task of preserving full variance by transforming Penguins dataset, which contains four numerical features, into a new dataset with four PCs</p></li>
+<li><p>in this way, all information from original dataset is fully retained in new representation</p></li>
+<li><p>we create a model <code class="docutils literal notranslate"><span class="pre">pca_4</span></code> using <code class="docutils literal notranslate"><span class="pre">PCA</span></code> class from <code class="docutils literal notranslate"><span class="pre">sklearn.decomposition</span></code>, specifying that <code class="docutils literal notranslate"><span class="pre">X_scaled</span></code> data should be converted into a new dataset with four PCs</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.decomposition</span><span class="w"> </span><span class="kn">import</span> <span class="n">PCA</span>
+
+<span class="c1"># build a new PCA model with 4 PCs</span>
+<span class="n">pca_penguin</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">X_pca_penguin</span> <span class="o">=</span> <span class="n">pca_penguin</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_scaled</span><span class="p">)</span>
+
+<span class="n">explained_var_penguin</span> <span class="o">=</span> <span class="n">pca_penguin</span><span class="o">.</span><span class="n">explained_variance_ratio_</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'''The explained variance of PC1 is </span><span class="si">{</span><span class="n">explained_var_penguin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1">.2%</span><span class="si">}</span>
+<span class="s1">The explained variance of PC2 is </span><span class="si">{</span><span class="n">explained_var_penguin</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s1">.2%</span><span class="si">}</span>
+<span class="s1">The explained variance of PC3 is </span><span class="si">{</span><span class="n">explained_var_penguin</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s1">.2%</span><span class="si">}</span>
+<span class="s1">The explained variance of PC4 is </span><span class="si">{</span><span class="n">explained_var_penguin</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="si">:</span><span class="s1">.2%</span><span class="si">}</span><span class="se">\n</span>
+<span class="s1">The explained variance of ALL is </span><span class="si">{</span><span class="n">explained_var_penguin</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">:</span><span class="s1">.2%</span><span class="si">}</span><span class="s1">'''</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The explained variance of PC1 is 68.63%
+The explained variance of PC2 is 19.45%
+The explained variance of PC3 is 9.22%
+The explained variance of PC4 is 2.70%
+
+The explained variance of ALL is 100.00%
+</pre></div>
+</div>
+</div>
+</div>
+<p>Term <code class="docutils literal notranslate"><span class="pre">explained</span> <span class="pre">variance</span> <span class="pre">ratio</span></code> tells us how much of total variability in original Penguins dataset is captured by each PC.</p>
+<ul class="simple">
+<li><p>1st PC has an explained variance ratio of 0.69, which means that 69% of variability in Penguins dataset can be represented by this single component.</p></li>
+<li><p>1st two PCs can retain approximately 90% of information from original Penguins dataset.</p></li>
+</ul>
+<p>What does the data in two principal components represent?</p>
+<ul class="simple">
+<li><p>When we have two components,</p>
+<ul>
+<li><p>PC1 is the direction in feature space along which the data varies the most,</p></li>
+<li><p>PC2 is the direction orthogonal to PC1 that captures the next largest variance.</p></li>
+</ul>
+</li>
+<li><p>When we have three components, PC3 captures the next largest source of variance, orthogonal to both PC1 and PC2.</p>
+<ul>
+<li><p>In such a situation, we have to use 3D visualization to visualize the three components.</p></li>
+</ul>
+</li>
+<li><p>When we have four componnents, PC4 captures the next largest source of variance, orthogonal to both PC1, PC2, and PC3.</p>
+<ul>
+<li><p>It is difficult for us to visualize the four dimensional space.</p></li>
+</ul>
+</li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">display</span>
+<span class="n">display</span><span class="p">(</span><span class="n">Image</span><span class="p">(</span><span class="s2">"../images/dimensionality-reduction/pca-data-representation.png"</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">1024</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../../_images/bf5c8791279e6137bf0b3feb4f283e1abaf906714d1a3c2ba7f518b88c9df921.png"><img alt="../../_images/bf5c8791279e6137bf0b3feb4f283e1abaf906714d1a3c2ba7f518b88c9df921.png" src="../../_images/bf5c8791279e6137bf0b3feb4f283e1abaf906714d1a3c2ba7f518b88c9df921.png" style="width: 1024px;" />
+</a>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create DataFrame for PCA results</span>
+<span class="n">pca_penguin_columns</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">'PC_</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">'</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">X_pca_penguin</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+<span class="n">X_pca_penguin_add_PCs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">X_pca_penguin</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">pca_penguin_columns</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+
+<span class="c1"># concatenate with original DataFrame</span>
+<span class="n">X_penguin_add_PC4</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">X_pca_penguin_add_PCs</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">X_penguin_add_PC4</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>bill_length_mm</th>
+      <th>bill_depth_mm</th>
+      <th>flipper_length_mm</th>
+      <th>body_mass_g</th>
+      <th>PC_1</th>
+      <th>PC_2</th>
+      <th>PC_3</th>
+      <th>PC_4</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>39.1</td>
+      <td>18.7</td>
+      <td>181.0</td>
+      <td>3750.0</td>
+      <td>-1.853593</td>
+      <td>0.032069</td>
+      <td>-0.234902</td>
+      <td>-0.528397</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>39.5</td>
+      <td>17.4</td>
+      <td>186.0</td>
+      <td>3800.0</td>
+      <td>-1.316254</td>
+      <td>-0.443527</td>
+      <td>-0.027470</td>
+      <td>-0.401727</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>40.3</td>
+      <td>18.0</td>
+      <td>195.0</td>
+      <td>3250.0</td>
+      <td>-1.376605</td>
+      <td>-0.161230</td>
+      <td>0.189689</td>
+      <td>0.528662</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>36.7</td>
+      <td>19.3</td>
+      <td>193.0</td>
+      <td>3450.0</td>
+      <td>-1.885288</td>
+      <td>-0.012351</td>
+      <td>-0.628873</td>
+      <td>0.472893</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>39.3</td>
+      <td>20.6</td>
+      <td>190.0</td>
+      <td>3650.0</td>
+      <td>-1.919981</td>
+      <td>0.817598</td>
+      <td>-0.701051</td>
+      <td>0.196416</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>338</th>
+      <td>47.2</td>
+      <td>13.7</td>
+      <td>214.0</td>
+      <td>4925.0</td>
+      <td>1.997716</td>
+      <td>-0.976771</td>
+      <td>0.379425</td>
+      <td>-0.160892</td>
+    </tr>
+    <tr>
+      <th>340</th>
+      <td>46.8</td>
+      <td>14.3</td>
+      <td>215.0</td>
+      <td>4850.0</td>
+      <td>1.832651</td>
+      <td>-0.784510</td>
+      <td>0.240758</td>
+      <td>0.008955</td>
+    </tr>
+    <tr>
+      <th>341</th>
+      <td>50.4</td>
+      <td>15.7</td>
+      <td>222.0</td>
+      <td>5750.0</td>
+      <td>2.751505</td>
+      <td>0.266556</td>
+      <td>-0.419306</td>
+      <td>-0.236256</td>
+    </tr>
+    <tr>
+      <th>342</th>
+      <td>45.2</td>
+      <td>14.8</td>
+      <td>212.0</td>
+      <td>5200.0</td>
+      <td>1.713854</td>
+      <td>-0.725875</td>
+      <td>-0.262764</td>
+      <td>-0.330004</td>
+    </tr>
+    <tr>
+      <th>343</th>
+      <td>49.9</td>
+      <td>16.1</td>
+      <td>213.0</td>
+      <td>5400.0</td>
+      <td>2.018537</td>
+      <td>0.336554</td>
+      <td>-0.155331</td>
+      <td>-0.438802</td>
+    </tr>
+  </tbody>
+</table>
+<p>333 rows × 8 columns</p>
+</div></div></div>
+</div>
+<p>Correlations between original variables (features) andb new PCs are described by <code class="docutils literal notranslate"><span class="pre">corr_var_comp</span></code>, which qualifies how strongly each original variable contributes to a PC</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">corr_var_comp</span></code> ranges from -1 to 1</p></li>
+<li><p>+1 means a perfect positive correlation betweenbvariable and component.</p></li>
+<li><p>0 indicates no linear correlation, and component does not explain that variable at all.</p></li>
+<li><p>-1 suggests a perfect negative correlation</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cp_variables</span> <span class="o">=</span> <span class="n">X_penguin_add_PC4</span><span class="o">.</span><span class="n">columns</span>
+
+<span class="n">n_variables</span> <span class="o">=</span> <span class="n">pca_penguin</span><span class="o">.</span><span class="n">n_features_in_</span>
+
+<span class="c1"># calculate the covariance matrix between veriables and Components</span>
+<span class="n">cov_var_comp</span> <span class="o">=</span> <span class="n">X_penguin_add_PC4</span><span class="o">.</span><span class="n">cov</span><span class="p">()</span>
+<span class="n">cov_var_comp</span> <span class="o">=</span> <span class="n">cov_var_comp</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="n">pca_penguin</span><span class="o">.</span><span class="n">n_features_in_</span><span class="p">,</span> <span class="n">pca_penguin</span><span class="o">.</span><span class="n">n_features_in_</span><span class="p">:]</span>
+
+<span class="c1"># calculate the correlation matrix between variables and Components</span>
+<span class="n">corr_var_comp</span> <span class="o">=</span> <span class="n">X_penguin_add_PC4</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
+<span class="n">corr_var_comp</span> <span class="o">=</span> <span class="n">corr_var_comp</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="n">pca_penguin</span><span class="o">.</span><span class="n">n_features_in_</span><span class="p">,</span> <span class="n">pca_penguin</span><span class="o">.</span><span class="n">n_features_in_</span><span class="p">:]</span>
+
+<span class="n">corr_var_comp</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>PC_1</th>
+      <th>PC_2</th>
+      <th>PC_3</th>
+      <th>PC_4</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>bill_length_mm</th>
+      <td>0.751829</td>
+      <td>0.529438</td>
+      <td>0.390097</td>
+      <td>-0.047682</td>
+    </tr>
+    <tr>
+      <th>bill_depth_mm</th>
+      <td>-0.661186</td>
+      <td>0.702309</td>
+      <td>-0.258529</td>
+      <td>0.052522</td>
+    </tr>
+    <tr>
+      <th>flipper_length_mm</th>
+      <td>0.955748</td>
+      <td>0.005106</td>
+      <td>-0.143347</td>
+      <td>0.256849</td>
+    </tr>
+    <tr>
+      <th>body_mass_g</th>
+      <td>0.910762</td>
+      <td>0.067449</td>
+      <td>-0.359279</td>
+      <td>-0.192045</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>In practical applications, square of correlation between a variable and a component is often denoted cos² (cosine squared)</p>
+<ul class="simple">
+<li><p>cosine of angle between variable vector and component axis tells you how much of variable’s variance is explained by that component</p></li>
+<li><p>squaring it gives proportion of variance of that variable explained by component, hence cos²</p></li>
+<li><p>we square <code class="docutils literal notranslate"><span class="pre">corr_var_comp</span></code> to get proportion of each variable’s variance explained by each PC</p>
+<ul>
+<li><p>figure below allows us to examine and visualize in detail how each original penguine feature contributes to four PCs</p></li>
+<li><p>each PC is a <strong>linear</strong> combination of original features and can be expressed mathematically as</p></li>
+<li><p>$PC1_i = w_1 * bill_length_i + w_2 * bill_depth_i + w_3 * flipper_length_i + w_4 * body_mass_i$</p></li>
+</ul>
+</li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cos2</span> <span class="o">=</span> <span class="n">corr_var_comp</span><span class="o">**</span><span class="mi">2</span>
+
+<span class="c1"># normalize the cos2 matrix by row (each row sums to 1)</span>
+<span class="n">cos2_normalized</span> <span class="o">=</span> <span class="n">cos2</span><span class="o">.</span><span class="n">div</span><span class="p">(</span><span class="n">cos2</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># plot the normalized heatmap</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">heatmap</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">cos2_normalized</span><span class="p">,</span>
+                      <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                      <span class="n">fmt</span><span class="o">=</span><span class="s2">".3f"</span><span class="p">,</span>
+                      <span class="n">cmap</span><span class="o">=</span><span class="s1">'YlGn'</span><span class="p">,</span>
+                      <span class="n">cbar_kws</span><span class="o">=</span><span class="p">{</span><span class="s1">'label'</span><span class="p">:</span> <span class="s1">'Relative Contribution per Feature'</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Relative Contributions of Features to Components'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/67628f36367ceb6827df267ee37481f3367a86eddd90085e80e82388cdf5cef2.png" src="../../_images/67628f36367ceb6827df267ee37481f3367a86eddd90085e80e82388cdf5cef2.png" />
+</div>
+</div>
+<div class='alert alert-warning'>
+<div class="dropdown discussion important admonition" id="discussion-0">
+<p class="admonition-title"><strong>How many PCs are truly necessary to represent dataset effectively?</strong></p>
+<ul class="simple">
+<li><p>there is no single fixed number of PCs that is always “necessary”</p></li>
+<li><p>instead, number of PCs we should keep depends on how much variance we want to preserve and how much structure in data is meaningful for our task</p></li>
+<li><p>some tips to reserve PCs</p>
+<ul>
+<li><p>look at the explained variance ratio</p>
+<ul>
+<li><p>cumulative variance &gt;= 90% is often used in scientific data, imaging, chemistry, biology:</p></li>
+<li><p>cumulative variance &gt;= 95% is good when noise is high</p></li>
+<li><p>cumulative variance &gt;= 99% is used for lossless compression-like scenarios</p></li>
+</ul>
+</li>
+<li><p>use “elbow method”</p>
+<ul>
+<li><p>plot eigenvalues (variance explained by each PC) and cumulative variance curve</p></li>
+<li><p>if see a sharp drop then a plateau, then hoose number of PCs at “elbow”, where adding more components yields minimal additional variance</p></li>
+</ul>
+</li>
+<li><p>consider downstream task performance</p></li>
+<li><p>noise structure matters</p>
+<ul>
+<li><p>if dataset contains many noisy or redundant variables, PCA will compress strongly, meaning that only a few PCs may be meaningful, and remaining PCs mostly capture noise</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>practical rule of thumb - 1</p>
+<ul>
+<li><p>when you don’t know dataset yet</p></li>
+<li><p>keep enough PCs to capture 90–95% variance</p></li>
+<li><p>expect somewhere between 5–50 PCs for most real datasets</p></li>
+</ul>
+</li>
+<li><p>practical rule of thumb - 2</p>
+<ul>
+<li><p>fewer components → lower-dimensional representation → some information is lost, but main patterns remain</p></li>
+<li><p>more components → higher-dimensional representation → more information retained</p></li>
+</ul>
+</li>
+</ul>
+</div>
+</div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_penguin_add_PC4_categorical</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">penguins_dimR</span><span class="p">[[</span><span class="s2">"species"</span><span class="p">,</span> <span class="s1">'island'</span><span class="p">,</span> <span class="s1">'sex'</span><span class="p">]],</span> <span class="n">X_penguin_add_PC4</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">X_penguin_add_PC4_categorical</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>species</th>
+      <th>island</th>
+      <th>sex</th>
+      <th>bill_length_mm</th>
+      <th>bill_depth_mm</th>
+      <th>flipper_length_mm</th>
+      <th>body_mass_g</th>
+      <th>PC_1</th>
+      <th>PC_2</th>
+      <th>PC_3</th>
+      <th>PC_4</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Male</td>
+      <td>39.1</td>
+      <td>18.7</td>
+      <td>181.0</td>
+      <td>3750.0</td>
+      <td>-1.853593</td>
+      <td>0.032069</td>
+      <td>-0.234902</td>
+      <td>-0.528397</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Female</td>
+      <td>39.5</td>
+      <td>17.4</td>
+      <td>186.0</td>
+      <td>3800.0</td>
+      <td>-1.316254</td>
+      <td>-0.443527</td>
+      <td>-0.027470</td>
+      <td>-0.401727</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Female</td>
+      <td>40.3</td>
+      <td>18.0</td>
+      <td>195.0</td>
+      <td>3250.0</td>
+      <td>-1.376605</td>
+      <td>-0.161230</td>
+      <td>0.189689</td>
+      <td>0.528662</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Female</td>
+      <td>36.7</td>
+      <td>19.3</td>
+      <td>193.0</td>
+      <td>3450.0</td>
+      <td>-1.885288</td>
+      <td>-0.012351</td>
+      <td>-0.628873</td>
+      <td>0.472893</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>Male</td>
+      <td>39.3</td>
+      <td>20.6</td>
+      <td>190.0</td>
+      <td>3650.0</td>
+      <td>-1.919981</td>
+      <td>0.817598</td>
+      <td>-0.701051</td>
+      <td>0.196416</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>338</th>
+      <td>Gentoo</td>
+      <td>Biscoe</td>
+      <td>Female</td>
+      <td>47.2</td>
+      <td>13.7</td>
+      <td>214.0</td>
+      <td>4925.0</td>
+      <td>1.997716</td>
+      <td>-0.976771</td>
+      <td>0.379425</td>
+      <td>-0.160892</td>
+    </tr>
+    <tr>
+      <th>340</th>
+      <td>Gentoo</td>
+      <td>Biscoe</td>
+      <td>Female</td>
+      <td>46.8</td>
+      <td>14.3</td>
+      <td>215.0</td>
+      <td>4850.0</td>
+      <td>1.832651</td>
+      <td>-0.784510</td>
+      <td>0.240758</td>
+      <td>0.008955</td>
+    </tr>
+    <tr>
+      <th>341</th>
+      <td>Gentoo</td>
+      <td>Biscoe</td>
+      <td>Male</td>
+      <td>50.4</td>
+      <td>15.7</td>
+      <td>222.0</td>
+      <td>5750.0</td>
+      <td>2.751505</td>
+      <td>0.266556</td>
+      <td>-0.419306</td>
+      <td>-0.236256</td>
+    </tr>
+    <tr>
+      <th>342</th>
+      <td>Gentoo</td>
+      <td>Biscoe</td>
+      <td>Female</td>
+      <td>45.2</td>
+      <td>14.8</td>
+      <td>212.0</td>
+      <td>5200.0</td>
+      <td>1.713854</td>
+      <td>-0.725875</td>
+      <td>-0.262764</td>
+      <td>-0.330004</td>
+    </tr>
+    <tr>
+      <th>343</th>
+      <td>Gentoo</td>
+      <td>Biscoe</td>
+      <td>Male</td>
+      <td>49.9</td>
+      <td>16.1</td>
+      <td>213.0</td>
+      <td>5400.0</td>
+      <td>2.018537</td>
+      <td>0.336554</td>
+      <td>-0.155331</td>
+      <td>-0.438802</td>
+    </tr>
+  </tbody>
+</table>
+<p>333 rows × 11 columns</p>
+</div></div></div>
+</div>
+<p>After transforming Penguins dataset from four features to four PCs, we project data onto any pair of PCs for visualization</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+
+<span class="c1"># left subpolt: hua by species</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">X_penguin_add_PC4_categorical</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">'PC_1'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">'PC_2'</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">'species'</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"PCA Scatterplot by Species"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Principal Component 1"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Principal Component 2"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Species"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">title_fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+<span class="c1"># middle subplot: hue by island</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">X_penguin_add_PC4_categorical</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">'PC_2'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">'PC_3'</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">'island'</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"PCA Scatterplot by Island"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Principal Component 2"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Principal Component 3"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Island"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">title_fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+<span class="c1"># right subplot: hue by sex</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">X_penguin_add_PC4_categorical</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">'PC_3'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">'PC_4'</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">'sex'</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"PCA Scatterplot by Sex"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Principal Component 3"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Principal Component 4"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Sex"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">title_fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/b8789d1ce81bc9ec3d5e3e4dec868560a6a1ea84b192d04952fb91c6a5c0adcd.png" src="../../_images/b8789d1ce81bc9ec3d5e3e4dec868560a6a1ea84b192d04952fb91c6a5c0adcd.png" />
+</div>
+</div>
+</section>
+<section id="correlation-circle">
+<h3>3.3 Correlation circle<a class="headerlink" href="#correlation-circle" title="Link to this heading"></a></h3>
+<p>To gain deeper insight into how original variables relate to principal components, we can use a <strong>correlation circle</strong>, also known as a <strong>variable factor map</strong></p>
+<ul class="simple">
+<li><p>this graphical tool provides a visual representation of contribution and correlation of each original variable with components</p></li>
+<li><p>in a 2D PCA plot (PC1 <em>vs.</em> PC2 in left subplot, and PC3 <em>vs.</em> PC4 in right subplot), each original feature is represented as a vector (arrow) pointing from origin</p>
+<ul>
+<li><p>direction of arrow indicates whether variable (feature) is positively or negatively correlated with principal components</p></li>
+<li><p>length of arrow indicates strength of correlation — longer arrows mean variable (feature) contributes strongly to components</p></li>
+<li><p>circle itself (radius = 1) represents maximum possible correlation between a variable (feature) and components, since PCA projects standardized variables (features)</p></li>
+</ul>
+</li>
+<li><p>in addition, correlations between variables (features) can also be specified</p>
+<ul>
+<li><p>variables (features) pointing in similar directions are positively correlated (body mass and flipper length), that is why we performed regression task using these two features</p></li>
+<li><p>variables (features) pointing in opposite directions are negatively correlated (for specific pairs of components)</p></li>
+<li><p>variables (features) at roughly 90° to each other are nearly uncorrelated</p></li>
+</ul>
+</li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create loadings DataFrame (correlations between variables and components)</span>
+
+<span class="n">loadings</span> <span class="o">=</span> <span class="n">pca_penguin</span><span class="o">.</span><span class="n">components_</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">pca_penguin</span><span class="o">.</span><span class="n">explained_variance_</span><span class="p">)</span>
+<span class="n">loadings_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">loadings</span><span class="p">,</span> 
+                           <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">'PC</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">'</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)],</span> <span class="c1"># n_components</span>
+                           <span class="n">index</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+
+<span class="c1"># create a figure with two subplots side by side</span>
+<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">'Correlation Circle Plots for Principal Components for Penguins Dataset'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+
+<span class="c1"># cunction to create a correlation circle on a given axis</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_correlation_circle</span><span class="p">(</span><span class="n">loadings</span><span class="p">,</span> <span class="n">pc_x</span><span class="p">,</span> <span class="n">pc_y</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
+    <span class="c1"># set the aspect ratio to equal for a perfect circle</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">'equal'</span><span class="p">,</span> <span class="n">adjustable</span><span class="o">=</span><span class="s1">'box'</span><span class="p">)</span>
+    
+    <span class="c1"># create a unit circle</span>
+    <span class="n">circle</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Circle</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'lightblue'</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">'--'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">circle</span><span class="p">)</span>
+    
+    <span class="c1"># plot arrows and labels for each variable</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">feature</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">loadings</span><span class="o">.</span><span class="n">index</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">loadings</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">feature</span><span class="p">,</span> <span class="n">pc_x</span><span class="p">]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">loadings</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">feature</span><span class="p">,</span> <span class="n">pc_y</span><span class="p">]</span>
+        
+        <span class="c1"># plot arrow</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">arrow</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">head_width</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">head_length</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s1">'k'</span><span class="p">,</span> <span class="n">ec</span><span class="o">=</span><span class="s1">'k'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+        
+        <span class="c1"># plot label (offset slightly from the arrow tip)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mf">1.15</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="mf">1.15</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">'center'</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">'center'</span><span class="p">,</span> 
+                <span class="n">fontweight</span><span class="o">=</span><span class="s1">'bold'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                <span class="n">bbox</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="s1">'white'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">boxstyle</span><span class="o">=</span><span class="s1">'round,pad=0.3'</span><span class="p">))</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'k'</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">'-'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'k'</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">'-'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
+    
+    <span class="c1"># calculate variance explained for the specific components</span>
+    <span class="n">pc_x_idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pc_x</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># Extract number from 'PC1' -&gt; 0</span>
+    <span class="n">pc_y_idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pc_y</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># Extract number from 'PC2' -&gt; 1</span>
+    
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">pc_x</span><span class="si">}</span><span class="s1"> (</span><span class="si">{</span><span class="n">pca_penguin</span><span class="o">.</span><span class="n">explained_variance_ratio_</span><span class="p">[</span><span class="n">pc_x_idx</span><span class="p">]</span><span class="si">:</span><span class="s1">.1%</span><span class="si">}</span><span class="s1"> variance)'</span><span class="p">,</span> 
+                 <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">pc_y</span><span class="si">}</span><span class="s1"> (</span><span class="si">{</span><span class="n">pca_penguin</span><span class="o">.</span><span class="n">explained_variance_ratio_</span><span class="p">[</span><span class="n">pc_y_idx</span><span class="p">]</span><span class="si">:</span><span class="s1">.1%</span><span class="si">}</span><span class="s1"> variance)'</span><span class="p">,</span> 
+                 <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">'--'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+
+<span class="c1"># PC1 vs PC2</span>
+<span class="n">plot_correlation_circle</span><span class="p">(</span><span class="n">loadings_df</span><span class="p">,</span> <span class="s1">'PC1'</span><span class="p">,</span> <span class="s1">'PC2'</span><span class="p">,</span> <span class="n">ax1</span><span class="p">,</span> <span class="s1">'Principal Components 1-2 ("Size" vs "Bill Shape")'</span><span class="p">)</span>
+
+<span class="c1"># PC3 vs PC4</span>
+<span class="n">plot_correlation_circle</span><span class="p">(</span><span class="n">loadings_df</span><span class="p">,</span> <span class="s1">'PC3'</span><span class="p">,</span> <span class="s1">'PC4'</span><span class="p">,</span> <span class="n">ax2</span><span class="p">,</span> <span class="s1">'Principal Components 3-4 (Residual Patterns)'</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/66228b382c4d0474ef75c3861237edd805a38ebe8cf50f91035c4cceb5191c58.png" src="../../_images/66228b382c4d0474ef75c3861237edd805a38ebe8cf50f91035c4cceb5191c58.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="t-distributed-stochastic-neighbor-embedding-t-sne">
+<h2>4. t-Distributed Stochastic Neighbor Embedding (t-SNE)<a class="headerlink" href="#t-distributed-stochastic-neighbor-embedding-t-sne" title="Link to this heading"></a></h2>
+<p>Since PCA is based on linear combinations of all features, it has some inherent limitations</p>
+<ul class="simple">
+<li><p>in particular, it may fail to capture complex, non-linear relationships in data, and it primarily focuses on maximizing global variance, which can overlook subtle local structures, intricate clusters, or hierarchical patterns – that are quite common in real-world datasets</p></li>
+<li><p>to address these challenges, we move beyond linear methods and explore advanced non-linear dimensionality reduction techniques.
+Algorithms such as <strong>t-SNE</strong> (t-Distributed Stochastic Neighbor Embedding) and <strong>UMAP</strong> (Uniform Manifold Approximation and Projection) are particularly effective in capturing non-linear patterns in dataset.</p>
+<ul>
+<li><p>These methods are designed to preserve local neighborhood relationships, revealing intricate patterns that PCA might miss and providing a more detailed view of the underlying structure of the penguin population.</p></li>
+</ul>
+</li>
+</ul>
+<section id="what-is-t-sne">
+<h3>4.1 What is t-SNE<a class="headerlink" href="#what-is-t-sne" title="Link to this heading"></a></h3>
+<p>t-SNE is a powerful dimensionality reduction technique primarily used for visualizing high-dimensional data in 2D or 3D</p>
+<ul class="simple">
+<li><p>main idea of t-SNE is to preserve local structure of data, meaning that points that are close in high-dimensional space remain close in lower-dimensional embedding</p></li>
+<li><p>that is, it models pairwise similarities between data points in both high-dimensional and low-dimensional spaces</p></li>
+</ul>
+</section>
+<section id="build-a-t-sne-model">
+<h3>4.2 Build a t-SNE model<a class="headerlink" href="#build-a-t-sne-model" title="Link to this heading"></a></h3>
+<p>We build a t-SNE model with 2 PCs using <code class="docutils literal notranslate"><span class="pre">TSNE</span></code> class in <code class="docutils literal notranslate"><span class="pre">sklearn.manifold</span></code></p>
+<ul class="simple">
+<li><p>hyperparameter <code class="docutils literal notranslate"><span class="pre">perplexity</span></code> controls number of effective neighbors each point considers when learning embedding</p>
+<ul>
+<li><p>higher values emphasize global structure, lower values emphasize local relationships</p></li>
+</ul>
+</li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.manifold</span><span class="w"> </span><span class="kn">import</span> <span class="n">TSNE</span>
+
+<span class="c1"># build a t-SNE model with 2 PCs</span>
+<span class="n">tsne_penguin</span> <span class="o">=</span> <span class="n">TSNE</span><span class="p">(</span><span class="n">n_components</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">perplexity</span> <span class="o">=</span> <span class="mi">50</span><span class="p">)</span>
+<span class="n">X_tsne_penguin</span> <span class="o">=</span> <span class="n">tsne_penguin</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_scaled</span><span class="p">)</span>
+
+<span class="n">X_tsne_penguin_species</span> <span class="o">=</span> <span class="n">penguins_dimR</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">X_tsne_penguin</span><span class="p">,</span> 
+                            <span class="n">index</span> <span class="o">=</span> <span class="n">penguins_dimR</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+                            <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'PC_1'</span><span class="p">,</span> <span class="s1">'PC_2'</span><span class="p">]))</span>
+<span class="n">X_tsne_penguin_species</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>species</th>
+      <th>island</th>
+      <th>bill_length_mm</th>
+      <th>bill_depth_mm</th>
+      <th>flipper_length_mm</th>
+      <th>body_mass_g</th>
+      <th>sex</th>
+      <th>PC_1</th>
+      <th>PC_2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>39.1</td>
+      <td>18.7</td>
+      <td>181.0</td>
+      <td>3750.0</td>
+      <td>Male</td>
+      <td>-12.583183</td>
+      <td>1.296008</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>39.5</td>
+      <td>17.4</td>
+      <td>186.0</td>
+      <td>3800.0</td>
+      <td>Female</td>
+      <td>-10.202713</td>
+      <td>1.233770</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>40.3</td>
+      <td>18.0</td>
+      <td>195.0</td>
+      <td>3250.0</td>
+      <td>Female</td>
+      <td>-8.527937</td>
+      <td>1.971435</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>36.7</td>
+      <td>19.3</td>
+      <td>193.0</td>
+      <td>3450.0</td>
+      <td>Female</td>
+      <td>-12.553984</td>
+      <td>-0.584580</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>39.3</td>
+      <td>20.6</td>
+      <td>190.0</td>
+      <td>3650.0</td>
+      <td>Male</td>
+      <td>-13.948335</td>
+      <td>-2.829005</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>338</th>
+      <td>Gentoo</td>
+      <td>Biscoe</td>
+      <td>47.2</td>
+      <td>13.7</td>
+      <td>214.0</td>
+      <td>4925.0</td>
+      <td>Female</td>
+      <td>27.998510</td>
+      <td>2.550709</td>
+    </tr>
+    <tr>
+      <th>340</th>
+      <td>Gentoo</td>
+      <td>Biscoe</td>
+      <td>46.8</td>
+      <td>14.3</td>
+      <td>215.0</td>
+      <td>4850.0</td>
+      <td>Female</td>
+      <td>27.374943</td>
+      <td>2.283183</td>
+    </tr>
+    <tr>
+      <th>341</th>
+      <td>Gentoo</td>
+      <td>Biscoe</td>
+      <td>50.4</td>
+      <td>15.7</td>
+      <td>222.0</td>
+      <td>5750.0</td>
+      <td>Male</td>
+      <td>22.121027</td>
+      <td>4.712508</td>
+    </tr>
+    <tr>
+      <th>342</th>
+      <td>Gentoo</td>
+      <td>Biscoe</td>
+      <td>45.2</td>
+      <td>14.8</td>
+      <td>212.0</td>
+      <td>5200.0</td>
+      <td>Female</td>
+      <td>26.795017</td>
+      <td>3.393671</td>
+    </tr>
+    <tr>
+      <th>343</th>
+      <td>Gentoo</td>
+      <td>Biscoe</td>
+      <td>49.9</td>
+      <td>16.1</td>
+      <td>213.0</td>
+      <td>5400.0</td>
+      <td>Male</td>
+      <td>23.649200</td>
+      <td>5.150282</td>
+    </tr>
+  </tbody>
+</table>
+<p>333 rows × 9 columns</p>
+</div></div></div>
+</div>
+<p>After fitting the t-SNE model, we can visualize the Penguin dataset in two dimensions, allowing us to explore the relationships between individual data points, identify potential clusters, and observe how different species are distributed across the embedding.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># visualize dataset in 2D</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+
+<span class="c1"># left subpolt: hua by species</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">X_tsne_penguin_species</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">'PC_1'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">'PC_2'</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">'species'</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"t-SNE Scatterplot by Species"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Principal Component 1"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Principal Component 2"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Species"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">title_fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+<span class="c1"># middle subplot: hue by island</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">X_tsne_penguin_species</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">'PC_1'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">'PC_2'</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">'island'</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"t-SNE Scatterplot by Island"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Principal Component 1"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Principal Component 2"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Island"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">title_fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+<span class="c1"># right subplot: hue by sex</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">X_tsne_penguin_species</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">'PC_1'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">'PC_2'</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">'sex'</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"t-SNE Scatterplot by Sex"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Principal Component 1"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Principal Component 2"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Sex"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">title_fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/22a8a75c2fa0d8fa20df6b892f8c8be199d3b52accc66e6f0fe0ffc7340d2f31.png" src="../../_images/22a8a75c2fa0d8fa20df6b892f8c8be199d3b52accc66e6f0fe0ffc7340d2f31.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># use KMeans to clusterize dataset</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.cluster</span><span class="w"> </span><span class="kn">import</span> <span class="n">KMeans</span>
+
+<span class="n">kmeans_temp_3</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">kmeans_temp_3</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_tsne_penguin</span><span class="p">)</span>
+<span class="n">clusters_kmeans_temp_3</span> <span class="o">=</span> <span class="n">kmeans_temp_3</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_tsne_penguin</span><span class="p">)</span>
+
+<span class="n">kmeans_temp_5</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">kmeans_temp_5</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_tsne_penguin</span><span class="p">)</span>
+<span class="n">clusters_kmeans_temp_5</span> <span class="o">=</span> <span class="n">kmeans_temp_5</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_tsne_penguin</span><span class="p">)</span>
+
+<span class="n">kmeans_temp_7</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<span class="n">kmeans_temp_7</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_tsne_penguin</span><span class="p">)</span>
+<span class="n">clusters_kmeans_temp_7</span> <span class="o">=</span> <span class="n">kmeans_temp_7</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_tsne_penguin</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+
+<span class="c1"># left: clustering into 3 groups</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_tsne_penguin</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_tsne_penguin</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">clusters_kmeans_temp_3</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">kmeans_temp_3</span><span class="o">.</span><span class="n">cluster_centers_</span><span class="p">:</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">'r'</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">'x'</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"t-SNE with 3 Clusters"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Principal Component 1"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Principal Component 2"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+<span class="c1"># middle: clustering into 5 groups</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_tsne_penguin</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_tsne_penguin</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">clusters_kmeans_temp_5</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">kmeans_temp_5</span><span class="o">.</span><span class="n">cluster_centers_</span><span class="p">:</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">'r'</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">'x'</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"t-SNE with 5 Clusters"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Principal Component 1"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Principal Component 2"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+<span class="c1"># right: clustering into 7 groups</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_tsne_penguin</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_tsne_penguin</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">clusters_kmeans_temp_7</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">kmeans_temp_7</span><span class="o">.</span><span class="n">cluster_centers_</span><span class="p">:</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">'r'</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">'x'</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"t-SNE with 7 Clusters"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Principal Component 1"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Principal Component 2"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/4c8cd792a19b4f0f55eddb73fe8479b2a022008f5ade68985a27904a604f46cc.png" src="../../_images/4c8cd792a19b4f0f55eddb73fe8479b2a022008f5ade68985a27904a604f46cc.png" />
+</div>
+</div>
+<div class='alert alert-warning'>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It is noted that <strong>t-SNE is primarily a visualization tool rather than a feature extraction method</strong>, and <strong>resulting embedding should not be used directly for downstream tasks (such as classification)</strong></p>
+<ul class="simple">
+<li><p>each time we run t-SNE, coordinates can change slightly due to randomness, even with same data</p></li>
+<li><p>as such, features produced by t-SNE may not be stable or meaningful for predictive modeling.</p></li>
+</ul>
+</div>
+</div></section>
+</section>
+<section id="umap">
+<h2>5. UMAP<a class="headerlink" href="#umap" title="Link to this heading"></a></h2>
+<section id="what-is-umap">
+<h3>5.1 What is UMAP<a class="headerlink" href="#what-is-umap" title="Link to this heading"></a></h3>
+<p>UMAP (Uniform Manifold Approximation and Projection) is a non-linear dimensionality reduction technique</p>
+<ul class="simple">
+<li><p>it is based on <strong>manifold learning</strong> and <strong>graph theory</strong></p>
+<ul>
+<li><p>manifold learning means it assumes that even though data might have many dimensions, real structure of data lies on a lower-dimensional surface (like a curve or sheet) inside that high-dimensional space, and UMAP tries to find and keep that structure</p></li>
+<li><p>graph theory means UMAP represents data as a graph</p>
+<ul>
+<li><p>each point is a node, and connections (edges) show how close points are to each other</p></li>
+<li><p>then it uses math to squeeze this graph down into 2D or 3D while keeping structure as much as possible</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>it is similar in purpose to t-SNE, but with some key differences</p>
+<ul>
+<li><p>it preserves both local and some global structure of data</p></li>
+<li><p>generally faster and more scalable than t-SNE, especially for large datasets</p></li>
+<li><p>can be used for visualization (2D/3D) or as <strong>a preprocessing step for downstream tasks like clustering or classification</strong></p></li>
+</ul>
+</li>
+<li><p>it constructs a high-dimensional graph representation of data and then projects it onto a low-dimensional space, by applying a series of optimization steps</p>
+<ul>
+<li><p>this results in a visual representation of data that is both accurate and interpretable</p></li>
+</ul>
+</li>
+<li><p>in comparison to PCA and t-SNE, UMAP offers a good balance of accuracy, efficiency, and scalability, making it a popular choice for dimensionality reduction in ML and DL tasks</p></li>
+</ul>
+</section>
+<section id="build-a-umap-model">
+<h3>5.2 Build a UMAP model<a class="headerlink" href="#build-a-umap-model" title="Link to this heading"></a></h3>
+<p>Following same procedure as in t-SNE subsection, we build and fit UMAP model, and visualize Penguins dataset in 2D, colored by species, island, and sex</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">umap</span>
+
+<span class="n">umap_penguin</span> <span class="o">=</span> <span class="n">umap</span><span class="o">.</span><span class="n">UMAP</span><span class="p">(</span><span class="n">n_components</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">X_umap_penguin</span> <span class="o">=</span> <span class="n">umap_penguin</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_scaled</span><span class="p">)</span>
+
+<span class="n">X_umap_penguin_species</span> <span class="o">=</span> <span class="n">penguins_dimR</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">X_umap_penguin</span><span class="p">,</span>
+                                                         <span class="n">index</span> <span class="o">=</span> <span class="n">penguins_dimR</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+                                                         <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'PC_1'</span><span class="p">,</span> <span class="s1">'PC_2'</span><span class="p">]))</span>
+<span class="n">X_umap_penguin_species</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>species</th>
+      <th>island</th>
+      <th>bill_length_mm</th>
+      <th>bill_depth_mm</th>
+      <th>flipper_length_mm</th>
+      <th>body_mass_g</th>
+      <th>sex</th>
+      <th>PC_1</th>
+      <th>PC_2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>39.1</td>
+      <td>18.7</td>
+      <td>181.0</td>
+      <td>3750.0</td>
+      <td>Male</td>
+      <td>12.092779</td>
+      <td>6.094970</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>39.5</td>
+      <td>17.4</td>
+      <td>186.0</td>
+      <td>3800.0</td>
+      <td>Female</td>
+      <td>12.579257</td>
+      <td>5.008840</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>40.3</td>
+      <td>18.0</td>
+      <td>195.0</td>
+      <td>3250.0</td>
+      <td>Female</td>
+      <td>12.815824</td>
+      <td>4.844804</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>36.7</td>
+      <td>19.3</td>
+      <td>193.0</td>
+      <td>3450.0</td>
+      <td>Female</td>
+      <td>12.595866</td>
+      <td>7.483640</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Adelie</td>
+      <td>Torgersen</td>
+      <td>39.3</td>
+      <td>20.6</td>
+      <td>190.0</td>
+      <td>3650.0</td>
+      <td>Male</td>
+      <td>11.443077</td>
+      <td>8.832818</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>338</th>
+      <td>Gentoo</td>
+      <td>Biscoe</td>
+      <td>47.2</td>
+      <td>13.7</td>
+      <td>214.0</td>
+      <td>4925.0</td>
+      <td>Female</td>
+      <td>-4.147605</td>
+      <td>9.055198</td>
+    </tr>
+    <tr>
+      <th>340</th>
+      <td>Gentoo</td>
+      <td>Biscoe</td>
+      <td>46.8</td>
+      <td>14.3</td>
+      <td>215.0</td>
+      <td>4850.0</td>
+      <td>Female</td>
+      <td>-4.107390</td>
+      <td>8.724307</td>
+    </tr>
+    <tr>
+      <th>341</th>
+      <td>Gentoo</td>
+      <td>Biscoe</td>
+      <td>50.4</td>
+      <td>15.7</td>
+      <td>222.0</td>
+      <td>5750.0</td>
+      <td>Male</td>
+      <td>-4.172944</td>
+      <td>5.019638</td>
+    </tr>
+    <tr>
+      <th>342</th>
+      <td>Gentoo</td>
+      <td>Biscoe</td>
+      <td>45.2</td>
+      <td>14.8</td>
+      <td>212.0</td>
+      <td>5200.0</td>
+      <td>Female</td>
+      <td>-3.845546</td>
+      <td>7.865406</td>
+    </tr>
+    <tr>
+      <th>343</th>
+      <td>Gentoo</td>
+      <td>Biscoe</td>
+      <td>49.9</td>
+      <td>16.1</td>
+      <td>213.0</td>
+      <td>5400.0</td>
+      <td>Male</td>
+      <td>-3.820135</td>
+      <td>5.863566</td>
+    </tr>
+  </tbody>
+</table>
+<p>333 rows × 9 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+<span class="c1"># left subpolt: hua by species</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">X_umap_penguin_species</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">'PC_1'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">'PC_2'</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">'species'</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"UMAP Scatterplot by Species"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Principal Component 1"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Principal Component 2"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Species"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">title_fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+<span class="c1"># middle subplot: hue by island</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">X_umap_penguin_species</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">'PC_1'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">'PC_2'</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">'island'</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"UMAP Scatterplot by Island"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Principal Component 1"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Principal Component 2"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Island"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">title_fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+<span class="c1"># right subplot: hue by sex</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">X_umap_penguin_species</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">'PC_1'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">'PC_2'</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">'sex'</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"UMAP Scatterplot by Sex"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Principal Component 1"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Principal Component 2"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Sex"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">title_fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/32fb61481876cd16a76848edc184fada153fdd8eea1e8f37a8a32dfb553125cc.png" src="../../_images/32fb61481876cd16a76848edc184fada153fdd8eea1e8f37a8a32dfb553125cc.png" />
+</div>
+</div>
+<p>Here we perform downstream clustering task using K-Means on a dataset reduced to two components obtained from UMAP model</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">kmeans_temp_3</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">kmeans_temp_3</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_umap_penguin</span><span class="p">)</span>
+<span class="n">kmeans_temp_3_clusters</span> <span class="o">=</span> <span class="n">kmeans_temp_3</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_umap_penguin</span><span class="p">)</span>
+
+<span class="n">kmeans_temp_5</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">kmeans_temp_5</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_umap_penguin</span><span class="p">)</span>
+<span class="n">kmeans_temp_5_clusters</span> <span class="o">=</span> <span class="n">kmeans_temp_5</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_umap_penguin</span><span class="p">)</span>
+
+<span class="n">kmeans_temp_7</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<span class="n">kmeans_temp_7</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_umap_penguin</span><span class="p">)</span>
+<span class="n">kmeans_temp_7_clusters</span> <span class="o">=</span> <span class="n">kmeans_temp_7</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_umap_penguin</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+
+<span class="c1"># left: clustering into 3 groups</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_umap_penguin</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_umap_penguin</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">kmeans_temp_3_clusters</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">kmeans_temp_3</span><span class="o">.</span><span class="n">cluster_centers_</span><span class="p">:</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">'r'</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">'x'</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"UMAP with 3 Clusters"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Principal Component 1"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Principal Component 2"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+<span class="c1"># middle: clustering into 5 groups</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_umap_penguin</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_umap_penguin</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">kmeans_temp_5_clusters</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">kmeans_temp_5</span><span class="o">.</span><span class="n">cluster_centers_</span><span class="p">:</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">'r'</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">'x'</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"UMAP with 5 Clusters"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Principal Component 1"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Principal Component 2"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+<span class="c1"># right: clustering into 7 groups</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_umap_penguin</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_umap_penguin</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">kmeans_temp_7_clusters</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">kmeans_temp_7</span><span class="o">.</span><span class="n">cluster_centers_</span><span class="p">:</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">'r'</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">'x'</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"UMAP with 7 Clusters"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Principal Component 1"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Principal Component 2"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/ee8e9837b305289cc9e40a425c95ea911b12fda864a9a3d022e5be90ff227c71.png" src="../../_images/ee8e9837b305289cc9e40a425c95ea911b12fda864a9a3d022e5be90ff227c71.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="dimensionality-reduction-on-mnist-dataset">
+<h2>6. Dimensionality Reduction on MNIST Dataset<a class="headerlink" href="#dimensionality-reduction-on-mnist-dataset" title="Link to this heading"></a></h2>
+<section id="mnist-dataset">
+<h3>6.1 MNIST dataset<a class="headerlink" href="#mnist-dataset" title="Link to this heading"></a></h3>
+<p>MNIST (Modified National Institute of Standards and Technology) dataset is one of most widely used datasets in ML and CV</p>
+<ul class="simple">
+<li><p>it was created in 1998 by Yann LeCun, and contains contains a total of 70000 grayscale images of handwritten digits ranging from 0 to 9, and each image is a 28 × 28 pixel square, giving 784 features when flattened into a vector</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">fetch_openml</span>
+
+<span class="c1"># download MNIST from OpenML</span>
+<span class="n">mnist</span> <span class="o">=</span> <span class="n">fetch_openml</span><span class="p">(</span><span class="s1">'mnist_784'</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">as_frame</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># features and labels</span>
+<span class="n">features</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">mnist</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">mnist</span><span class="o">.</span><span class="n">target</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Number of samples (images): </span><span class="si">{</span><span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">Number of features per sample (image): </span><span class="si">{</span><span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># number of samples (images) for dimensionality reduction application</span>
+<span class="n">num_sample</span> <span class="o">=</span> <span class="mi">4000</span> 
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">features</span><span class="p">[:</span><span class="n">num_sample</span><span class="p">],</span> <span class="n">labels</span><span class="p">[:</span><span class="n">num_sample</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Number of samples (images): 70000 
+Number of features per sample (image): 784
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># data for 2nd image</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0  51 159 253 159  50   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0  48 238 252 252 252 237   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0  54 227 253 252 239 233 252  57   6   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0  10  60 224 252 253 252 202  84 252
+ 253 122   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0 163 252 252 252 253 252 252  96 189 253 167   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0  51 238 253 253 190 114 253 228
+  47  79 255 168   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0  48 238 252 252 179  12  75 121  21   0   0 253 243  50   0   0   0
+   0   0   0   0   0   0   0   0   0   0  38 165 253 233 208  84   0   0
+   0   0   0   0 253 252 165   0   0   0   0   0   0   0   0   0   0   0
+   0   7 178 252 240  71  19  28   0   0   0   0   0   0 253 252 195   0
+   0   0   0   0   0   0   0   0   0   0   0  57 252 252  63   0   0   0
+   0   0   0   0   0   0 253 252 195   0   0   0   0   0   0   0   0   0
+   0   0   0 198 253 190   0   0   0   0   0   0   0   0   0   0 255 253
+ 196   0   0   0   0   0   0   0   0   0   0   0  76 246 252 112   0   0
+   0   0   0   0   0   0   0   0 253 252 148   0   0   0   0   0   0   0
+   0   0   0   0  85 252 230  25   0   0   0   0   0   0   0   0   7 135
+ 253 186  12   0   0   0   0   0   0   0   0   0   0   0  85 252 223   0
+   0   0   0   0   0   0   0   7 131 252 225  71   0   0   0   0   0   0
+   0   0   0   0   0   0  85 252 145   0   0   0   0   0   0   0  48 165
+ 252 173   0   0   0   0   0   0   0   0   0   0   0   0   0   0  86 253
+ 225   0   0   0   0   0   0 114 238 253 162   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0  85 252 249 146  48  29  85 178 225 253
+ 223 167  56   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+  85 252 252 252 229 215 252 252 252 196 130   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0  28 199 252 252 253 252 252 233
+ 145   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0  25 128 252 253 252 141  37   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show 2nd image</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"gray"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Label: </span><span class="si">{</span><span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/f44fc4c6a69f06749b0356e1875bfd9fbbd99f4c64c8f2b5e9d73563f387d900.png" src="../../_images/f44fc4c6a69f06749b0356e1875bfd9fbbd99f4c64c8f2b5e9d73563f387d900.png" />
+</div>
+</div>
+</section>
+<section id="pca">
+<h3>6.2 PCA<a class="headerlink" href="#pca" title="Link to this heading"></a></h3>
+<p>We first apply PCA on 784 features of 4000 grayscale images of handwritten digits and retai two most-major components</p>
+<ul class="simple">
+<li><p>it returns an array of 4000 x 2 where 2 columns are 1st and 2nd PCs of each grayscale images</p></li>
+<li><p>we plot these two PCs against each other</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># PCA with 2 components</span>
+<span class="n">pca_mnist</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">X_pca_mnist</span> <span class="o">=</span> <span class="n">pca_mnist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">X_pca_mnist</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(4000, 2)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_pca_mnist</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X_pca_mnist</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">'tab:green'</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">'k'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"Principle Component 1"</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"Principle Component 2"</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/4c92158124c0674c9c0c557293eedf63a5c1c33f169d841d11edd7f333660cdc.png" src="../../_images/4c92158124c0674c9c0c557293eedf63a5c1c33f169d841d11edd7f333660cdc.png" />
+</div>
+</div>
+<p>Then we apply KMeans clustering algorithm to this 2D representation of MNIST dataset and compare resulting clusters with true image labels</p>
+<ul class="simple">
+<li><p>PCA has made a strong attempt to reduce dimensionality of MNIST dataset from 784D to 2D while preserving key structural information</p></li>
+<li><p>we can observe that digit 0 forms a reasonable pattern, but there is significant overlap among other digits</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># apply clustering on PCA data</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.cluster</span><span class="w"> </span><span class="kn">import</span> <span class="n">KMeans</span>
+
+<span class="n">kmean_pca_mnist</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">kmean_pca_mnist</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_pca_mnist</span><span class="p">)</span>
+<span class="n">clusters_kmeans_pca_mnist</span> <span class="o">=</span> <span class="n">kmean_pca_mnist</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_pca_mnist</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">),</span> 
+    <span class="n">gridspec_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">'width_ratios'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">]}</span>
+<span class="p">)</span>
+
+<span class="c1"># left: clustering results with cluster centers</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_pca_mnist</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X_pca_mnist</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">clusters_kmeans_pca_mnist</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">cluster_x</span><span class="p">,</span> <span class="n">cluster_y</span> <span class="ow">in</span> <span class="n">kmean_pca_mnist</span><span class="o">.</span><span class="n">cluster_centers_</span><span class="p">:</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">cluster_x</span><span class="p">,</span> <span class="n">cluster_y</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">'r'</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">'x'</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"KMeans Clusters"</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Principle Component 1"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Principle Component 2"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+<span class="c1"># right: true labels</span>
+<span class="n">labels_int</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_pca_mnist</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X_pca_mnist</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">labels_int</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"tab10"</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">'k'</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"True Labels"</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Principle Component 1"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Principle Component 2"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+<span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">boundaries</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">set_ticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/21a723ef5866af965472a6674007830ad296f66065bb93c1aac75103a4e47040.png" src="../../_images/21a723ef5866af965472a6674007830ad296f66065bb93c1aac75103a4e47040.png" />
+</div>
+</div>
+</section>
+<section id="t-sne">
+<h3>6.3 t-SNE<a class="headerlink" href="#t-sne" title="Link to this heading"></a></h3>
+<p>t-SNE algorithm is capable of capturing complex non-linear relationships in high-dimensional data</p>
+<ul class="simple">
+<li><p>we apply it to MNIST dataset to reduce its dimensionality (from 784D to 2D!) and visualize underlying structure of handwritten digits</p></li>
+<li><p>as t-SNE is an iterative algorithm that tries to position points in a low-dimensional space (<em>e.g.</em>, 2D), it needs an initial guess for where to start placing points</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">init</span></code> in <code class="docutils literal notranslate"><span class="pre">TSNE(...)</span></code> class refers to how t-SNE initializes embedding before starting its optimization</p>
+<ul>
+<li><p>by default, it use <strong>random initialization</strong> (<code class="docutils literal notranslate"><span class="pre">init='random'</span></code>) to place points randomly in low-dimensional space</p></li>
+</ul>
+</li>
+<li><p>alternatively, it can use PCA initialization (<code class="docutils literal notranslate"><span class="pre">init='pca'</span></code>) as starting point to projects high-dimensional data down to <code class="docutils literal notranslate"><span class="pre">n_components</span></code> dimensions</p>
+<ul>
+<li><p>PCA provides a more structured and stable starting point than random placement</p></li>
+<li><p>it can lead to faster convergence and sometimes better preservation of global structure</p></li>
+<li><p>it’s noted that PCA does not handle outlier data well primarily due to global preservation of structural information</p></li>
+<li><p>therefore initializing t-SNE model with ‘pca’ can explicitly preserve global structures</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tsne_mnist</span> <span class="o">=</span> <span class="n">TSNE</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="s1">'pca'</span><span class="p">)</span> <span class="c1"># or 'random'  # initialising with "pca" explicitly preserves global structure</span>
+<span class="n">X_tsne_mnist</span> <span class="o">=</span> <span class="n">tsne_mnist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_tsne_mnist</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X_tsne_mnist</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">'tab:green'</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">'k'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"Principle Component 1"</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"Principle Component 2"</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/7b92cf02ef23d981dd5ca6b379a071ac273b548dd443100865401bf316849890.png" src="../../_images/7b92cf02ef23d981dd5ca6b379a071ac273b548dd443100865401bf316849890.png" />
+</div>
+</div>
+<p>With obtained t-SNE 2D representation of MNIST dataset, we apply K-Means clustering algorithm and compare resulting clusters with true image labels</p>
+<ul class="simple">
+<li><p>t-SNE method can separate digits 0, 1, 2, 6, 7, and 8 into clusters using a 2D representation (of 784D !) and a simple K-Means clustering algorithm</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">kmean_tsne_mnist</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">kmean_tsne_mnist</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_tsne_mnist</span><span class="p">)</span>
+<span class="n">clusters_kmeans_tsne_mnist</span> <span class="o">=</span> <span class="n">kmean_tsne_mnist</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_tsne_mnist</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">),</span> 
+    <span class="n">gridspec_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">'width_ratios'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">]}</span>
+<span class="p">)</span>
+
+<span class="c1"># left: clustering results with cluster centers</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_tsne_mnist</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X_tsne_mnist</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">clusters_kmeans_tsne_mnist</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">cluster_x</span><span class="p">,</span> <span class="n">cluster_y</span> <span class="ow">in</span> <span class="n">kmean_tsne_mnist</span><span class="o">.</span><span class="n">cluster_centers_</span><span class="p">:</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">cluster_x</span><span class="p">,</span> <span class="n">cluster_y</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">'r'</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">'x'</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"KMeans Clusters"</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Principle Component 1"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Principle Component 2"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+<span class="c1"># right: true labels</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_tsne_mnist</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X_tsne_mnist</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">labels_int</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"tab10"</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">'k'</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"True Labels"</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Principle Component 1"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Principle Component 2"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+<span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">boundaries</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">set_ticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/d58f152307c7197867b7254553c661b65f96e477f9c5416ed17a69170a07c5db.png" src="../../_images/d58f152307c7197867b7254553c661b65f96e477f9c5416ed17a69170a07c5db.png" />
+</div>
+</div>
+</section>
+<section id="id1">
+<h3>6.3 UMAP<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<p>We apply UMAP algorithm to t-SNE representation to further refine embedding, potentially enhancing separation of clusters and revealing additional structure in data</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">umap_mnist</span> <span class="o">=</span> <span class="n">umap</span><span class="o">.</span><span class="n">UMAP</span><span class="p">(</span><span class="n">n_components</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="n">X_tsne_mnist</span><span class="p">)</span> <span class="c1"># init=X_pca or init=X_tsne or init='random'</span>
+<span class="n">X_umap_mnist</span> <span class="o">=</span> <span class="n">umap_mnist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_umap_mnist</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X_umap_mnist</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">'tab:green'</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">'k'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"Principle Component 1"</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"Principle Component 2"</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/68598a74adcaeba85609885f84fbb6b8cde1e6827f0d8db2c0706531182cdcdc.png" src="../../_images/68598a74adcaeba85609885f84fbb6b8cde1e6827f0d8db2c0706531182cdcdc.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">X_pca_mnist</span><span class="p">,</span> <span class="n">X_tsne_mnist</span><span class="p">,</span> <span class="n">X_umap_mnist</span><span class="p">]</span>
+<span class="n">titles</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"PCA"</span><span class="p">,</span> <span class="s2">"t-SNE"</span><span class="p">,</span> <span class="s2">"UMAP"</span><span class="p">]</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">axes</span><span class="p">):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_list</span><span class="p">[</span><span class="n">i</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X_list</span><span class="p">[</span><span class="n">i</span><span class="p">][:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">'tab:green'</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">'k'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">titles</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Principle Component 1"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Principle Component 2"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/91b3c0c491f143bb8ae11cac5ab97565d6808abbbd2aea41cfd24457a79c9d20.png" src="../../_images/91b3c0c491f143bb8ae11cac5ab97565d6808abbbd2aea41cfd24457a79c9d20.png" />
+</div>
+</div>
+<p>With obtained UMAP 2D representation of MNIST dataset, we apply K-Means clustering algorithm and compare resulting clusters with true image labels</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">kmean_umap_mnist</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">kmean_umap_mnist</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_umap_mnist</span><span class="p">)</span>
+<span class="n">clusters_kmeans_umap_mnist</span> <span class="o">=</span> <span class="n">kmean_umap_mnist</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_umap_mnist</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">),</span> 
+    <span class="n">gridspec_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">'width_ratios'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">]}</span>
+<span class="p">)</span>
+
+<span class="c1"># left: clustering results with cluster centers</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_umap_mnist</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X_umap_mnist</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">clusters_kmeans_umap_mnist</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">cluster_x</span><span class="p">,</span> <span class="n">cluster_y</span> <span class="ow">in</span> <span class="n">kmean_umap_mnist</span><span class="o">.</span><span class="n">cluster_centers_</span><span class="p">:</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">cluster_x</span><span class="p">,</span> <span class="n">cluster_y</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">'r'</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">'x'</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"KMeans Clusters"</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Principle Component 1"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Principle Component 2"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+<span class="c1"># right: true labels</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_umap_mnist</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X_umap_mnist</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">labels_int</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"tab10"</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">'k'</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"True Labels"</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Principle Component 1"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Principle Component 2"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+<span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">boundaries</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">set_ticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/53b6dbe5a2beec52fb50ea3c5f383075fc8bdaebb079bd47ca484772516f156e.png" src="../../_images/53b6dbe5a2beec52fb50ea3c5f383075fc8bdaebb079bd47ca484772516f156e.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> 
+    <span class="n">gridspec_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">'width_ratios'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">]}</span>
+<span class="p">)</span>
+
+<span class="c1"># left: true labels on PCA dataset</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_pca_mnist</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X_pca_mnist</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">labels_int</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"tab10"</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">'k'</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"PCA"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Principle Component 1"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Principle Component 2"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+<span class="c1"># middle: true labels on t-SNE datset</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_tsne_mnist</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X_tsne_mnist</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">labels_int</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"tab10"</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">'k'</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"t-SNE"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Principle Component 1"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Principle Component 2"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+<span class="c1"># right: true labels on UMAP datset</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_umap_mnist</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X_umap_mnist</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">labels_int</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"tab10"</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">'k'</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"UMAP"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Principle Component 1"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Principle Component 2"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+<span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">boundaries</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">set_ticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/52919191aa6160b7e03cdbb2bb83a6e36a3811d0ee1d348fa36dd4e6b67460c5.png" src="../../_images/52919191aa6160b7e03cdbb2bb83a6e36a3811d0ee1d348fa36dd4e6b67460c5.png" />
+</div>
+</div>
+<p>A comparison of 2D embeddings shows that UMAP produces a clearer and more well-separated clustering of data than t-SNE, while t-SNE in turn captures structure of data more effectively than PCA, this suggests that</p>
+<ul class="simple">
+<li><p>UMAP is generally better at preserving both local and global patterns</p></li>
+<li><p>t-SNE excels at local neighborhood structure</p></li>
+<li><p>PCA, while useful for linear dimensionality reduction, is less effective in revealing complex non-linear relationships</p></li>
+</ul>
+<div class='alert alert-info'>
+<div class="admonition-keypoints keypoints admonition" id="keypoints-0">
+<p class="admonition-title">Keypoints</p>
+<ul class="simple">
+<li><p>Representative dimensionality reduction methods include PCA, t-SNE, and UMAP.</p></li>
+<li><p>PCA is a method to reduce dimensions via creating new variables called PCs, which are <strong>linear</strong> combinations of original features</p></li>
+<li><p>T-SNE and UMAP are both <strong>nonlinear</strong> dimensionality reduction methods to reduce high-dimensional data to 2D or 3D</p>
+<ul>
+<li><p>T-SNE focuses on keeping similar points close and dissimilar points apart in lower-dimensional space, but <strong>not applicable for predictive modeling</strong></p></li>
+<li><p>UMAP preserves both local relationships (nearby points stay close) and some global structure, scales well to large datasets, and <strong>can perform downstream tasks like clustering and classification</strong></p></li>
+</ul>
+</li>
+<li><p>We first applied these algorithms to Penguins dataset and then to MNIST dataset to evaluate their ability to reduce dimensionality while preserving essential information needed for clustering</p></li>
+</ul>
+</div>
+</div></section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../7-clustering/" class="btn btn-neutral float-left" title="Unsupervised Learning (I): Clustering" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright | BlackJack&#39;s Nook | 2026.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
